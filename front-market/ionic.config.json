@@ -1,0 +1,7 @@
+{
+  "name": "front-market",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react-vite"
+}
