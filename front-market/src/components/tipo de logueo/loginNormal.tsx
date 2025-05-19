@@ -51,11 +51,11 @@ const LoginNormal: React.FC<{ onToggleForm: () => void }> = ({ onToggleForm }) =
             </div>
         <IonItem style={{ '--ion-safe-area-right': '0',}}>
           <IonIcon aria-hidden="true" icon={personOutline} />
-          <IonInput className='inputColor' type='email' value={email} onIonChange={(e) => setEmail(e.detail.value!)} required />
+          <IonInput className='inputColor' type='email'  placeholder="Correo electronico" value={email} onIonChange={(e) => setEmail(e.detail.value!)} required />
         </IonItem>
         <IonItem style={{ '--ion-safe-area-right': '0',}}>
           <IonIcon aria-hidden="true" icon={lockClosedOutline}/>
-          <IonInput className='inputColor' type='password' value={password} onIonChange={(e) => setPassword(e.detail.value!)} required >
+          <IonInput className='inputColor' type='password'  placeholder="Contraseña" value={password} onIonChange={(e) => setPassword(e.detail.value!)} required >
             <IonInputPasswordToggle slot="end"  className="toggle-password-icon"  ></IonInputPasswordToggle>
           </IonInput>
         </IonItem>
