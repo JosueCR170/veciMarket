@@ -1,28 +1,28 @@
 import {  IonLabel,IonTabBar, IonTabButton, IonTabs,  IonIcon, } from "@ionic/react";
-import { ellipse, square, triangle,logOut } from 'ionicons/icons';
+import { personCircle,chatbox, storefront,addCircle } from 'ionicons/icons';
 import "./opciones.css"
 
 export const ButonNavegation = () => {
-
+      
     return (
-    <IonTabBar slot="bottom">
+    <IonTabBar slot="bottom" className="tabsMenu">
           <IonTabButton tab="home" href="/home"> 
-            <IonIcon aria-hidden="true" icon={triangle} />
-            <IonLabel>Home</IonLabel>
+            <IonIcon aria-hidden="true"  className="iconTabs" icon={storefront} />
+           
           </IonTabButton>
-          <IonTabButton tab="agregar" href="/agregar">
-            <IonIcon aria-hidden="true" icon={ellipse} />
-            <IonLabel>Agregar</IonLabel> 
+          <IonTabButton  tab="agregar" href="/agregar">
+            <IonIcon className="iconTabs" aria-hidden="true" icon={addCircle} />
+            
           </IonTabButton>
 
         <IonTabButton tab="chat" href="/chat">
-          <IonIcon aria-hidden="true" icon={square} />
-          <IonLabel>Chat</IonLabel>
+          <IonIcon className="iconTabs" aria-hidden="true" icon={chatbox} />
+         
         </IonTabButton>
 
        <IonTabButton tab="perfil" href="/perfil">
-            <IonIcon aria-hidden="true" icon={ellipse} />
-            <IonLabel>Perfil</IonLabel> 
+            <IonIcon className="iconTabs" aria-hidden="true" icon={personCircle} />
+           
           </IonTabButton>
           {/*<IonTabButton tab="logout-action1" className="papaOut" style={{paddin:"0px"}}>
             <LogoutButton/>

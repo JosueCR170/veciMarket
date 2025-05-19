@@ -1,13 +1,15 @@
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
 import ExploreContainer from '../components/ExploreContainer';
-import './Tab1.css';
+import './Home.css';
 
 const Home: React.FC = () => {
   return (
     <IonPage>
-      <IonHeader>
-        <IonToolbar>
-          <IonTitle>Home</IonTitle>
+      <IonHeader >
+        <IonToolbar className="custom-header">
+          <IonTitle className="custom-title">
+             Vec<span style={{color: "#A8C7FF"}}>i</span>Mark<span style={{color: "#A8C7FF"}}>e</span>t Lite
+          </IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>

@@ -14,7 +14,6 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding: 2rem 1rem;
   }
 
   .titulo-login{
@@ -26,6 +25,7 @@
 .titulo-login h1{
     font-size: 40px;
     margin: 0 0 10px 0;
+    color: #f7f7f7;
 }
   .login-access form {
     width: 100%;
@@ -123,8 +123,11 @@
   }
   .titulos-input{
    font-size: 22px;
+   color: #f7f7f7;
   }
- 
+ .inputColor{
+  color: #f7f7f7;
+ }
   ion-item.input-registrar {
     --highlight-height: 0;  /* Quita la línea inferior */
     --inner-border-width: 0; /* Quita borde interno */

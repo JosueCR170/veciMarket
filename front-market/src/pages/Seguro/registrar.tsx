@@ -1,5 +1,5 @@
-import React from 'react';
-import { IonButton, IonInput, IonItem, IonLabel, IonSelect, IonSelectOption, IonText } from '@ionic/react';
+import React, { useRef, useState } from 'react';
+import { IonButton, IonInput, IonItem, IonLabel, IonSelect, IonSelectOption, IonText, SelectCustomEvent } from '@ionic/react';
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { auth, db } from '../../services/firebase/firebaseConfig';
 import { doc,setDoc } from 'firebase/firestore';
@@ -9,7 +9,29 @@ import { IonToast } from "@ionic/react";
 const Registrar: React.FC<{ onToggleForm: () => void }> = ({ onToggleForm }) => {
     const [errorMessage, setErrorMessage] = React.useState("");
     const [showToast, setShowToast] = React.useState(false);
+    const [isTouched, setIsTouched] = useState<boolean>(false);
+    const [isValid, setIsValid] = useState<boolean | undefined>();
 
+   const rolSeleccionado = useRef<HTMLIonSelectElement>(null);
+
+  const validateSelect = (event: SelectCustomEvent<{ value: string }>) => {
+    setIsValid(event.detail.value ? true : false);
+  };
+
+  const markTouched = () => {
+    setIsTouched(true);
+  };
+
+  const onIonBlur = () => {
+    markTouched();
+
+    if (rolSeleccionado.current) {
+      validateSelect({
+        detail: { value: rolSeleccionado.current.value },
+      } as SelectCustomEvent<{ value: string }>);
+    }
+  };
+    
     async function registerUser(name:string, email: string, password: string, rol: string) {
        try {
           const infoUsuario = await createUserWithEmailAndPassword(auth, email, password);
@@ -37,20 +59,37 @@ const Registrar: React.FC<{ onToggleForm: () => void }> = ({ onToggleForm }) => 
             setShowToast(true);
           }
     }
+
+
      function sumitHandler(event: React.FormEvent) {
        event.preventDefault();
+       markTouched();
+      
+       
+    if (rolSeleccionado.current) {
+      const rolValue = rolSeleccionado.current.value;
+      validateSelect({ detail: { value: rolValue } } as SelectCustomEvent<{ value: string }>);
+
+      if (!rolValue) {
+        setErrorMessage("Debe seleccionar un tipo de cuenta.");
+        setShowToast(true);
+        return;
+      }
+       
+       
         const form = event.target as HTMLFormElement;
         const name = (form.elements.namedItem('name') as HTMLInputElement).value;
         const email = (form.elements.namedItem('email') as HTMLInputElement).value;
         const password = (form.elements.namedItem('password') as HTMLInputElement).value;
-        const rol = (form.elements.namedItem('rol') as HTMLInputElement).value;
-        console.log(email, password, rol);
-        registerUser(name, email, password, rol).then(() => {
+     
+        console.log(email, password, rolValue);
+        registerUser(name, email, password, rolValue).then(() => {
             console.log("Usuario registrado");
         }).catch((error) => {
             console.error("Error al registrar el usuario:", error);
         });
      }
+    }
 
     return (  <div className="login-access">
       <form  onSubmit={sumitHandler}>
@@ -62,13 +101,13 @@ const Registrar: React.FC<{ onToggleForm: () => void }> = ({ onToggleForm }) => 
     <div  className='input-registrar'>
         <label className='titulos-input'>Nombre de usuario</label>
         <IonItem>
-        <IonInput name="name" required></IonInput>
+        <IonInput className='inputColor' name="name" required></IonInput>
         </IonItem>
     </div>
     <div  className='input-registrar'>
     <label className='titulos-input'>Correo electronico</label>
         <IonItem>
-    <IonInput
+    <IonInput className='inputColor'
       type="email"
       name="email"
       required
@@ -79,7 +118,7 @@ const Registrar: React.FC<{ onToggleForm: () => void }> = ({ onToggleForm }) => 
   <div  className='input-registrar'>
   <label className='titulos-input'>Contraseña</label>
     <IonItem>
-    <IonInput
+    <IonInput className='inputColor'
       type="password"
       name="password"
       required
@@ -89,9 +128,19 @@ const Registrar: React.FC<{ onToggleForm: () => void }> = ({ onToggleForm }) => 
  
   <div  className='input-registrar'>
    <IonItem>
-     <IonSelect aria-label="rol" name='rol' placeholder="Tipo de cuenta" required>
+     <IonSelect  
+      ref={rolSeleccionado} 
+     name='rol'
+      placeholder="Tipo de cuenta"
+     className={`${isValid ? 'ion-valid' : ''} ${isValid === false ? 'ion-invalid' : ''} 
+     ${isTouched ? 'ion-touched' : ''}`}
+     errorText="Seleccion requerida"
+     onIonChange={(event) => validateSelect(event)}
+    onIonBlur={onIonBlur}
+     >    
+      <IonSelectOption value="">-- Selecciona un rol --</IonSelectOption>
           <IonSelectOption value="usuario">Usuario</IonSelectOption>
-          <IonSelectOption value="ejecutiva">Ejecutiva</IonSelectOption>
+          <IonSelectOption value="ejecutivo">Ejecutivo</IonSelectOption>
     </IonSelect>
   </IonItem>     
         </div>
@@ -108,7 +157,7 @@ const Registrar: React.FC<{ onToggleForm: () => void }> = ({ onToggleForm }) => 
           </IonButton>
         </div>
         <div style={{ textAlign: "center", marginTop: "1rem" }}>
-          <IonText color="white">
+          <span style={{color:"white"}}>
             ¿Ya tienes una cuenta?{" "}
             <span
                className="register-link"
@@ -116,7 +165,7 @@ const Registrar: React.FC<{ onToggleForm: () => void }> = ({ onToggleForm }) => 
             >
               Inicia sesión
             </span>
-          </IonText>
+          </span>
         </div>
 
       </form>

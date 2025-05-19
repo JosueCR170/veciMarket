@@ -1,0 +1,31 @@
+
+.tabsMenu{
+    --background: #003EB0 !important;
+}
+
+.iconTabs {
+  color: #ffffff; /* Cambia este valor al color que desees */
+  font-size: 24px; /* opcional: tamaño del icono */
+}
+
+/*.tabsMenu .tab-selected {
+  border-bottom: 2px solid #ffffff;
+}*/
+.tabsMenu .tab-selected::after {
+  content: '';
+  display: block;
+  margin: 0 auto;
+  margin-top: -2px; /* espacio entre el icono y la línea */
+  width: 50%; /* controla el ancho de la línea */
+  height: 2px;
+  background-color: #ffffff;
+  border-radius: 4px; /* opcional: para que tenga bordes redondeados */
+}
+
+/* Puedes ajustar el ícono también si quieres */
+.tabsMenu .tab-selected .iconTabs {
+  color: #ffffff; 
+  filter: drop-shadow(0 0px 10px rgb(205, 205, 205));
+ 
+  transition: filter 0.3s ease;
+}

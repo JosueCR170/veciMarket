@@ -4,6 +4,7 @@ import {
   IonIcon,
   IonLabel,
   IonRouterOutlet,
+  IonSpinner,
   IonTabBar,
   IonTabButton,
   IonTabs,
@@ -17,6 +18,8 @@ import Chat from './pages/Chat';
 import Perfil from './pages/Perfil'
 import {Login} from './pages/Seguro/login'
 import { ButonNavegation } from './components/Tabs/opciones';
+import { useAuth } from './components/context/contextUsuario';
+import ProtectedRoute from './routes/ProtectedRoute'
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
 
@@ -49,34 +52,54 @@ import './theme/variables.css';
 
 setupIonicReact();
 
-const App: React.FC = () => (
-  <IonApp>
-    <IonReactRouter>
-      {/*<IonTabs>
-        <IonRouterOutlet>
-          <Route exact path="/home">
-            <Home />
-          </Route>
-          <Route exact path="/agregar">
-            <Agregar/>
-          </Route>
-          <Route path="/chat">
-            <Chat/>
-          </Route>
+const App: React.FC = () => {
+
+  const {user, rol, loading}= useAuth();
+  console.log(user, rol, loading);
+
+  if(loading){
+    return (
+      <IonApp>
+        <div className="centered-loading" style={{ height: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          <IonSpinner name="crescent" />
+        </div>
+      </IonApp>
+    );
+  }
+  
+  return(
+   <IonApp>
+      <IonReactRouter>
           <Route exact path="/">
-            <Redirect to="/tab1" />
+            <Redirect to={user ? '/home' : '/login'} />
           </Route>
-        </IonRouterOutlet>
-        <ButonNavegation/>
-      </IonTabs>*/}
-      <Route path="/login">
-        <Login/>
+          {user ? (
+        <IonTabs>
+        <IonRouterOutlet>
+          <ProtectedRoute exact path="/home" component={Home}  allowedRoles={['usuario', 'ejecutivo']} isAuthenticated={!!user} userRole={rol ?? undefined} />
+          <ProtectedRoute exact path="/agregar" component={Agregar} allowedRoles={['ejecutivo']} isAuthenticated={!!user} userRole={rol ?? undefined} />
+          <ProtectedRoute exact path="/chat" component={Chat} allowedRoles={['usuario', 'ejecutivo']} isAuthenticated={!!user}  userRole={rol ?? undefined}/>
+          <ProtectedRoute exact path="/perfil" component={Perfil} allowedRoles={['usuario', 'ejecutivo']} isAuthenticated={!!user} userRole={rol ?? undefined}/>
+          </IonRouterOutlet>
+        {user && <ButonNavegation  />}
+        <Route path="*">
+        <Redirect to="/home" />
       </Route>
-      <Route exact path="/">
-            <Redirect to="/login" />
-          </Route>
-    </IonReactRouter>
-  </IonApp>
-);
+         </IonTabs>
+        ):(
+      <>
+      <Route exact path="/login" component={Login} />
+      <Route path="*">
+      <Redirect to="/login" />
+      </Route>
+    </>
+        )
+      }
+        
+       
+      </IonReactRouter>
+    </IonApp>
+  )
+};
 
 export default App;

@@ -1,0 +1,40 @@
+# Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+
+# Capacitor
+android/
+ios/
+plugins/
+build/
+.cordova/
+
+# Build output
+www/
+dist/
+coverage/
+.env
+.env.*
+
+# Editor/OS files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Mac specific
+*.DS_Store
+
+# Windows specific
+*.log
+*.ps1
+
+# ESLint / Prettier cache
+.eslintcache
+.prettiercache
+
+# Firebase Admin SDK private key
+serviceAccountKey.json

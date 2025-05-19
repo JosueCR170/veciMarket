@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { IonInput, IonButton, IonItem, IonLabel, IonText, IonLoading, IonIcon, IonInputPasswordToggle } from "@ionic/react";
 import { personOutline,lockClosedOutline } from 'ionicons/icons';
 import { auth, authReady } from "../../services/firebase/firebaseConfig";
 import { signInWithEmailAndPassword } from "firebase/auth";
+import { useAuth } from "../../components/context/contextUsuario";
 
 const LoginNormal: React.FC<{ onToggleForm: () => void }> = ({ onToggleForm }) => {
     const [email, setEmail] = useState<string>("");
@@ -11,17 +12,26 @@ const LoginNormal: React.FC<{ onToggleForm: () => void }> = ({ onToggleForm }) =
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
     const history = useHistory();
+    const { user } = useAuth();
     
+    /* useEffect(() => {
+    if (!loading && user) {
+      history.replace("/home"); // redirige apenas se autentica
+    }
+  },[user, loading]);*/
+  
     const handleLogin = async (event: React.FormEvent) => {
       event.preventDefault();
         setLoading(true);
         setError(null);
         try {
           await authReady;
-          await signInWithEmailAndPassword(auth, email, password).then(() => {
-            setLoading(false);
+          await signInWithEmailAndPassword(auth, email, password).then(() =>{
             history.replace("/home");
-          });
+          })
+            setLoading(false);
+         
+         
         } catch (error: any) {
           setLoading(false);
           setError(error.message);
@@ -41,11 +51,11 @@ const LoginNormal: React.FC<{ onToggleForm: () => void }> = ({ onToggleForm }) =
             </div>
         <IonItem style={{ '--ion-safe-area-right': '0',}}>
           <IonIcon aria-hidden="true" icon={personOutline} />
-          <IonInput type='email' value={email} onIonChange={(e) => setEmail(e.detail.value!)} required />
+          <IonInput className='inputColor' type='email' value={email} onIonChange={(e) => setEmail(e.detail.value!)} required />
         </IonItem>
         <IonItem style={{ '--ion-safe-area-right': '0',}}>
           <IonIcon aria-hidden="true" icon={lockClosedOutline}/>
-          <IonInput type='password' value={password} onIonChange={(e) => setPassword(e.detail.value!)} required >
+          <IonInput className='inputColor' type='password' value={password} onIonChange={(e) => setPassword(e.detail.value!)} required >
             <IonInputPasswordToggle slot="end"  className="toggle-password-icon"  ></IonInputPasswordToggle>
           </IonInput>
         </IonItem>
@@ -54,7 +64,7 @@ const LoginNormal: React.FC<{ onToggleForm: () => void }> = ({ onToggleForm }) =
             <p>Error in password or email</p>
           </IonText>
         )}
-        <div  className="login-button">
+        <div  className="login-button" >
         <IonButton expand='block' type='submit'   style={{
           '--padding-top': '13px',
           '--padding-bottom': '10px',
@@ -66,7 +76,7 @@ const LoginNormal: React.FC<{ onToggleForm: () => void }> = ({ onToggleForm }) =
         {/*<GoogleSignIn/>*/}
         </div>
         <div style={{ textAlign: "center", marginTop: "1rem"}}>
-          <IonText color="white">
+          <span style={{color: "white"}}>
             ¿No tienes una cuenta?{" "}
             <span
             className="register-link"
@@ -74,7 +84,7 @@ const LoginNormal: React.FC<{ onToggleForm: () => void }> = ({ onToggleForm }) =
             >
               Regístrate aquí
             </span>
-          </IonText>
+          </span>
         </div>
          </form>
      

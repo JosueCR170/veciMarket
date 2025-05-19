@@ -9,14 +9,14 @@ import { getMessaging } from "firebase/messaging";
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-    apiKey: "AIzaSyDxUY0f_uvRPR-6CRg2FHWmCKAZTTVr5mI",
-    authDomain: "vecimarket-19984.firebaseapp.com",
-    projectId: "vecimarket-19984",
-    storageBucket: "vecimarket-19984.firebasestorage.app",
-    messagingSenderId: "867337163000",
-    appId: "1:867337163000:web:6adee3d76af7d30dd12b0d",
-    measurementId: "G-CZQPDWDS75"
-  };
+  apiKey: "AIzaSyBz_Snq78F9pThG7iNZUCfqJGT49f_pkS0",
+  authDomain: "vecimarkert.firebaseapp.com",
+  projectId: "vecimarkert",
+  storageBucket: "vecimarkert.firebasestorage.app",
+  messagingSenderId: "943940426974",
+  appId: "1:943940426974:web:7fc746df6e97d694d0764f",
+  measurementId: "G-M0R47Y59K0"
+};
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
