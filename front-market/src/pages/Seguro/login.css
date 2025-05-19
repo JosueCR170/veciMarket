@@ -188,6 +188,7 @@
     box-shadow: 63px 20px #00256A, 57px -35px #00256A, 119px -1px #00256A, -4px 2px 4px rgb(0 0 0 / 29%), 60px 24px 4px rgb(0 0 0 / 40%);
     animation: flotar 3s ease-in-out infinite;
   }
+ 
   @media (max-width: 600px) {
     .login-button{
        flex-direction: column;   
