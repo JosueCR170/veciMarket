@@ -57,7 +57,7 @@ setupIonicReact();
 const App: React.FC = () => {
 
   const {user, rol, loading}= useAuth();
-  console.log(user, rol, loading);
+
 
   useEffect(() => {
   const configureStatusBar = async () => {
