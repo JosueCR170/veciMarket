@@ -13,7 +13,8 @@ interface Comercios {
 
 const MapaComercios: React.FC = () => {
   const mapRef = useRef<HTMLDivElement | null>(null);
-  let newMap: GoogleMap | null = null;
+  const mapInstance = useRef<GoogleMap | null>(null);
+
   const { location, loading, error, requestPermissions, getCurrentPosition } = useLocationTracker(); // Update every 40 seconds with 5 second countdown
 
   // Arreglo de ejemplo con varias Comercioss (simulando datos de Firebase)
@@ -27,7 +28,7 @@ const MapaComercios: React.FC = () => {
     if (!mapRef.current) return;
 
     try {
-      newMap = await GoogleMap.create({
+      mapInstance.current = await GoogleMap.create({
         id: "Comercioss-map",
         element: mapRef.current,
         apiKey: "AIzaSyBV35eS9s-QUwN0WcZWeK-XIoICekxqXwk",
@@ -41,30 +42,42 @@ const MapaComercios: React.FC = () => {
         },
       });
 
-      // Agregar marcadores para cada Comercios
+      
       for (const Comercios of Comercioss) {
-        await newMap.addMarker({
+        await mapInstance.current.addMarker({
           coordinate: {
             lat: Comercios.latitude,
             lng: Comercios.longitude,
           },
           title: Comercios.name,
+          snippet: "Aquí estás",
         });
       }
-
-      console.log("locaclizacion en el mapa:", location);
       if (location?.coords) {
-        console.log("Ubicación del usuario:", location.coords);
-        await newMap.addMarker({
+        await mapInstance.current.addCircles([{
+          center: {
+            lat: location.coords.latitude,
+            lng: location.coords.longitude,
+          },
+          radius: 1000,
+          strokeColor: '#4285F4',
+          fillColor: 'rgba(66, 133, 244, 0.3)',
+        }]);
+      }
+
+
+      if (location?.coords) {
+        await mapInstance.current.addMarker({
           coordinate: {
             lat: location.coords.latitude,
             lng: location.coords.longitude,
           },
           title: "Tu posición",
+          
         });
 
         // Centrar el mapa en la posición del usuario
-        await newMap.setCamera({
+        await mapInstance.current.setCamera({
           coordinate: {
             lat: location.coords.latitude,
             lng: location.coords.longitude,
@@ -88,6 +101,7 @@ const MapaComercios: React.FC = () => {
   useEffect(() => {
   if (!loading && location?.coords) {
     createMap();
+    console.log("Ubicación actual:", location);
   } else if (error) {
     alert("Error: " + error);
   }

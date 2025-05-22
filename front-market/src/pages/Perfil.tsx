@@ -1,17 +1,16 @@
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
-import ExploreContainer from '../components/ExploreContainer';
+
 import { LogoutButton }  from "../components/tipo de logueo/logOut";
 import './Tab3.css';
 
 const Perfil: React.FC = () => {
   return (
     <IonPage>
-      <IonHeader>
-        <IonToolbar>
-          <IonTitle>Perfil</IonTitle>
-          <div slot="end" style={{marginRight: '10px'}}>
-          <LogoutButton/>
-          </div>
+       <IonHeader>
+        <IonToolbar className="custom-header">
+          <IonTitle className="custom-title">
+            Vec<span style={{ color: "#A8C7FF" }}>i</span>Mark<span style={{ color: "#A8C7FF" }}>e</span>t Lite
+          </IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
@@ -20,7 +19,7 @@ const Perfil: React.FC = () => {
             <IonTitle size="large">Perfil</IonTitle>
           </IonToolbar>
         </IonHeader>
-        <ExploreContainer name="Tab 1 page" />
+   
       </IonContent>
     </IonPage>
   );

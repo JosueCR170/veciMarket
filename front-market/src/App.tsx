@@ -17,7 +17,7 @@ import Agregar from './pages/Agregar';
 import Chat from './pages/Chat';
 import Perfil from './pages/Perfil'
 import {Login} from './pages/Seguro/login'
-import { ButonNavegation } from './components/Tabs/opciones';
+import { ButonNavegation } from './components/elemtos de una pagina/opciones';
 import { useAuth } from './components/context/contextUsuario';
 import ProtectedRoute from './routes/ProtectedRoute';
 import { StatusBar, Style } from '@capacitor/status-bar';
