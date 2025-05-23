@@ -99,7 +99,7 @@ const App: React.FC = () => {
         {rol && <ButonNavegation  />}
         <Route path="*">
         <Redirect to="/home" />
-      </Route>
+        </Route>
          </IonTabs>
         ):(
       <>

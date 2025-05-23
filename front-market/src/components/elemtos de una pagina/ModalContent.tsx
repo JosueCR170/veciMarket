@@ -29,10 +29,30 @@ const ModalContent: React.FC <ModalContentProps> = ({ isOpen, onClose }) =>{
           .duration(300)
           .addAnimation([backdropAnimation, wrapperAnimation]);
       };
+      const leaveAnimation = (baseEl: HTMLElement) => {
+  const root = baseEl.shadowRoot || baseEl;
+
+  const backdropAnimation = createAnimation()
+    .addElement(root.querySelector('ion-backdrop')!)
+    .fromTo('opacity', 'var(--backdrop-opacity)', '0');
+
+  const wrapperAnimation = createAnimation()
+    .addElement(root.querySelector('.modal-wrapper')!)
+    .keyframes([
+      { offset: 0, transform: 'translateX(0)', opacity: '1' },
+      { offset: 1, transform: 'translateX(100%)', opacity: '0' },
+    ]);
+
+  return createAnimation()
+    .addElement(baseEl)
+    .easing('ease-in')
+    .duration(300)
+    .addAnimation([backdropAnimation, wrapperAnimation]);
+};
       
   return (
     <>
-     <IonModal isOpen={isOpen} onDidDismiss={onClose} enterAnimation={enterAnimation} className="custom-font">
+     <IonModal isOpen={isOpen} onDidDismiss={onClose} enterAnimation={enterAnimation} leaveAnimation={leaveAnimation} className="custom-font">
 
        <div>
       <IonToolbar style={{ boxShadow: 'none', '--ion-color-step-100': '#fff', '--padding-start': '16px', '--padding-end': '16px'  }}>
