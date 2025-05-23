@@ -2,9 +2,10 @@ import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { IonInput, IonButton, IonItem, IonLabel, IonText, IonLoading, IonIcon, IonInputPasswordToggle } from "@ionic/react";
 import { personOutline,lockClosedOutline } from 'ionicons/icons';
-import { auth, authReady } from "../../services/firebase/firebaseConfig";
+import { auth, authReady } from "../../services/firebase/config/firebaseConfig";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { useAuth } from "../../components/context/contextUsuario";
+import { useAuth } from "../../context/contextUsuario";
+import HandleGoogleSignIn from "./authenticationGoogle/authenticationGoogle";
 
 const LoginNormal: React.FC<{ onToggleForm: () => void }> = ({ onToggleForm }) => {
     const [email, setEmail] = useState<string>("");
@@ -51,7 +52,7 @@ const LoginNormal: React.FC<{ onToggleForm: () => void }> = ({ onToggleForm }) =
             </div>
         <IonItem style={{ '--ion-safe-area-right': '0',}}>
           <IonIcon aria-hidden="true" icon={personOutline} />
-          <IonInput className='inputColor' type='email'  placeholder="Correo electronico" value={email} onIonChange={(e) => setEmail(e.detail.value!)} required />
+          <IonInput className='inputColor' type='email'  placeholder="Correo electrónico" value={email} onIonChange={(e) => setEmail(e.detail.value!)} required />
         </IonItem>
         <IonItem style={{ '--ion-safe-area-right': '0',}}>
           <IonIcon aria-hidden="true" icon={lockClosedOutline}/>
@@ -64,17 +65,20 @@ const LoginNormal: React.FC<{ onToggleForm: () => void }> = ({ onToggleForm }) =
             <p>Error in password or email</p>
           </IonText>
         )}
-        <div  className="login-button" >
+        <div className="login-button" style={{ display: "flex", flexDirection: "column"}}>
         <IonButton expand='block' type='submit'   style={{
           '--padding-top': '13px',
           '--padding-bottom': '10px',
           '--padding-start': '10px',
           '--padding-end': '10px'
         }} >
-          Inicio de sesion
+          Inicio de sesión
         </IonButton>
+
+        <HandleGoogleSignIn/>
         {/*<GoogleSignIn/>*/}
         </div>
+
         <div style={{ textAlign: "center", marginTop: "1rem"}}>
           <span style={{color: "white"}}>
             ¿No tienes una cuenta?{" "}

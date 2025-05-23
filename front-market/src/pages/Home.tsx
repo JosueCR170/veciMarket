@@ -1,5 +1,5 @@
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
-import Navbar from '../components/elemtos de una pagina/navbar';
+import Navbar from '../components/navbar/navbar';
 
 import MapaComercios from '../components/mapa/mapa';
 import './Home.css';

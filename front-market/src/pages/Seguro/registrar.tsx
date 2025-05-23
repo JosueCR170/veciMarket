@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
 import { IonButton, IonInput, IonItem, IonLabel, IonSelect, IonSelectOption, IonText, SelectCustomEvent } from '@ionic/react';
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
-import { auth, db } from '../../services/firebase/firebaseConfig';
+import { auth, db } from '../../services/firebase/config/firebaseConfig';
 import { doc,setDoc } from 'firebase/firestore';
 import { IonToast } from "@ionic/react"; 
 
@@ -105,7 +105,7 @@ const Registrar: React.FC<{ onToggleForm: () => void }> = ({ onToggleForm }) => 
         </IonItem>
     </div>
     <div  className='input-registrar'>
-    <label className='titulos-input'>Correo electronico</label>
+    <label className='titulos-input'>Correo electrónico</label>
         <IonItem>
     <IonInput className='inputColor'
       type="email"
@@ -153,7 +153,7 @@ const Registrar: React.FC<{ onToggleForm: () => void }> = ({ onToggleForm }) => 
           '--padding-start': '10px',
           '--padding-end': '10px'
           }}>
-            Register
+            Registrarse
           </IonButton>
         </div>
         <div style={{ textAlign: "center", marginTop: "1rem" }}>

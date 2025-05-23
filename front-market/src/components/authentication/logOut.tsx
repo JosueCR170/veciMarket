@@ -2,7 +2,7 @@ import {  IonLabel, IonTabButton, IonIcon, IonButton, } from "@ionic/react";
 import {logOut } from 'ionicons/icons';
 import { useHistory } from "react-router-dom";
 import { FirebaseAuthentication } from "@capacitor-firebase/authentication";
-import { auth } from "../../services/firebase/firebaseConfig";
+import { auth } from "../../services/firebase/config/firebaseConfig";
 import { signOut } from "firebase/auth";
 import { IonAlert } from '@ionic/react';
 import { useState } from "react";

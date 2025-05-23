@@ -1,0 +1,32 @@
+.google-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  background-color: #fff;
+  color: #5f6368;
+  /* font-family: 'Roboto', sans-serif; */
+  font-family: "Zain", sans-serif;
+  font-size: 20px; /* reducido */
+
+  border: 1px solid #dadce0;
+  border-radius: 10px; /* aún redondeado, pero más pequeño */
+  padding: 8px 16px; /* menos espacio interno */
+  cursor: pointer;
+  text-align: center;
+  width: 100%;
+  max-width: 240px; /* reducido desde 300px */
+  max-height: 50px;
+  transition: box-shadow 0.3s ease-in-out, transform 0.1s ease-in-out;
+}
+
+.google-btn:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  transform: scale(1.01);
+}
+
+.google-btn img {
+  width: 18px; /* un poco más pequeño */
+  height: 18px;
+}
