@@ -7,6 +7,7 @@ import { useState } from 'react';
 import ModalContent from '../components/elemtos de una pagina/ModalContent'; // Ajusta la ruta
 import { createAnimation } from '@ionic/react';
 import { LogoutButton }  from "../components/tipo de logueo/logOut";
+import CapturaFotoPage from '../components/camara/fotoUser';
 import './perfil.css';
 
 const Perfil: React.FC = () => {
@@ -21,17 +22,16 @@ const Perfil: React.FC = () => {
           </IonTitle>
           <IonButtons slot="end">
             <IonButton onClick={(e) => {
-                  (e.currentTarget as unknown as HTMLButtonElement).blur(); // Remueve el foco
-                 setShowModal(true);
-               }} 
-            className="custom-button">
+                       (e.currentTarget as unknown as HTMLButtonElement).blur();
+                       setShowModal(true);}} 
+                       className="custom-button">
               <IonIcon icon={menu} style={{ fontSize: '28px' }} />
             </IonButton>
           </IonButtons>
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
-       
+      
       </IonContent> 
       <ModalContent isOpen={showModal} onClose={() => setShowModal(false)} />
     </IonPage>
