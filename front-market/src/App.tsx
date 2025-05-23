@@ -17,9 +17,10 @@ import Agregar from './pages/Agregar';
 import Chat from './pages/Chat';
 import Perfil from './pages/Perfil'
 import {Login} from './pages/Seguro/login'
-import { ButonNavegation } from './components/Tabs/opciones';
+import { ButonNavegation } from './components/elemtos de una pagina/opciones';
 import { useAuth } from './components/context/contextUsuario';
-import ProtectedRoute from './routes/ProtectedRoute'
+import ProtectedRoute from './routes/ProtectedRoute';
+import { StatusBar, Style } from '@capacitor/status-bar';
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
 
@@ -49,18 +50,32 @@ import '@ionic/react/css/palettes/dark.system.css';
 
 /* Theme variables */
 import './theme/variables.css';
+import { useEffect } from 'react';
 
 setupIonicReact();
 
 const App: React.FC = () => {
 
   const {user, rol, loading}= useAuth();
-  console.log(user, rol, loading);
+
+
+  useEffect(() => {
+  const configureStatusBar = async () => {
+    try {
+      await StatusBar.setOverlaysWebView({ overlay: false }); // Evita que la barra se superponga
+     
+    } catch (err) {
+      console.warn('StatusBar plugin no disponible', err);
+    }
+  };
+
+  configureStatusBar();
+}, []);
 
   if(loading){
     return (
       <IonApp>
-        <div className="centered-loading" style={{ height: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+        <div className="centered-loading" style={{ height: '100dvh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
           <IonSpinner name="crescent" />
         </div>
       </IonApp>
@@ -68,7 +83,7 @@ const App: React.FC = () => {
   }
   
   return(
-   <IonApp>
+   <IonApp >
       <IonReactRouter>
           <Route exact path="/">
             <Redirect to={user ? '/home' : '/login'} />
@@ -81,7 +96,7 @@ const App: React.FC = () => {
           <ProtectedRoute exact path="/chat" component={Chat} allowedRoles={['usuario', 'ejecutivo']} isAuthenticated={!!user}  userRole={rol ?? undefined}/>
           <ProtectedRoute exact path="/perfil" component={Perfil} allowedRoles={['usuario', 'ejecutivo']} isAuthenticated={!!user} userRole={rol ?? undefined}/>
           </IonRouterOutlet>
-        {user && <ButonNavegation  />}
+        {rol && <ButonNavegation  />}
         <Route path="*">
         <Redirect to="/home" />
       </Route>

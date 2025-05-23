@@ -130,15 +130,15 @@ const Registrar: React.FC<{ onToggleForm: () => void }> = ({ onToggleForm }) => 
    <IonItem>
      <IonSelect  
       ref={rolSeleccionado} 
+     
      name='rol'
       placeholder="Tipo de cuenta"
-     className={`${isValid ? 'ion-valid' : ''} ${isValid === false ? 'ion-invalid' : ''} 
+     className={`inputColor ${isValid ? 'ion-valid' : ''} ${isValid === false ? 'ion-invalid' : ''} 
      ${isTouched ? 'ion-touched' : ''}`}
      errorText="Seleccion requerida"
      onIonChange={(event) => validateSelect(event)}
     onIonBlur={onIonBlur}
-     >    
-      <IonSelectOption value="">-- Selecciona un rol --</IonSelectOption>
+     > 
           <IonSelectOption value="usuario">Usuario</IonSelectOption>
           <IonSelectOption value="ejecutivo">Ejecutivo</IonSelectOption>
     </IonSelect>
