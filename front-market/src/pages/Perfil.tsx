@@ -4,12 +4,12 @@ import {
 } from '@ionic/react';
 import { menu } from 'ionicons/icons';
 import { useState } from 'react';
-import ModalContent from '../components/elemtos de una pagina/ModalContent'; // Ajusta la ruta
+import ModalContent from '../components/modal/ModalContent'; // Ajusta la ruta
 import { createAnimation } from '@ionic/react';
 import CapturaFotoPage from '../components/camara/fotoUser';
 import './perfil.css';
 import { LogoutButton }  from "../components/authentication/logOut";
-import './Tab3.css';
+// import './Tab3.css';
 
 const Perfil: React.FC = () => {
     const [showModal, setShowModal] = useState(false);

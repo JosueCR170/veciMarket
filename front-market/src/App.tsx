@@ -18,7 +18,7 @@ import Chat from './pages/Chat';
 import Perfil from './pages/Perfil'
 import {Login} from './pages/Seguro/login'
 import { useAuth } from './context/contextUsuario';
-import { ButonNavegation } from './components/elemtos de una pagina/opciones';
+import { ButonNavegation } from './components/tabs/opciones';
 import ProtectedRoute from './routes/ProtectedRoute';
 import { StatusBar, Style } from '@capacitor/status-bar';
 /* Core CSS required for Ionic components to work properly */
