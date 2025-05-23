@@ -1,27 +1,40 @@
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
-import ExploreContainer from '../components/ExploreContainer';
+import {
+  IonButton, IonButtons, IonContent, IonHeader, IonIcon,
+  IonModal, IonPage, IonTitle, IonToolbar
+} from '@ionic/react';
+import { menu } from 'ionicons/icons';
+import { useState } from 'react';
+import ModalContent from '../components/elemtos de una pagina/ModalContent'; // Ajusta la ruta
+import { createAnimation } from '@ionic/react';
+import CapturaFotoPage from '../components/camara/fotoUser';
+import './perfil.css';
 import { LogoutButton }  from "../components/authentication/logOut";
 import './Tab3.css';
 
 const Perfil: React.FC = () => {
-  return (
+    const [showModal, setShowModal] = useState(false);
+
+   return (
     <IonPage>
       <IonHeader>
-        <IonToolbar>
-          <IonTitle>Perfil</IonTitle>
-          <div slot="end" style={{marginRight: '10px'}}>
-          <LogoutButton/>
-          </div>
+        <IonToolbar className="custom-header">
+          <IonTitle className="custom-title">
+            Vec<span style={{ color: "#A8C7FF" }}>i</span>Mark<span style={{ color: "#A8C7FF" }}>e</span>t Lite
+          </IonTitle>
+          <IonButtons slot="end">
+            <IonButton onClick={(e) => {
+                       (e.currentTarget as unknown as HTMLButtonElement).blur();
+                       setShowModal(true);}} 
+                       className="custom-button">
+              <IonIcon icon={menu} style={{ fontSize: '28px' }} />
+            </IonButton>
+          </IonButtons>
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
-        <IonHeader collapse="condense">
-          <IonToolbar>
-            <IonTitle size="large">Perfil</IonTitle>
-          </IonToolbar>
-        </IonHeader>
-        <ExploreContainer name="Tab 1 page" />
-      </IonContent>
+      
+      </IonContent> 
+      <ModalContent isOpen={showModal} onClose={() => setShowModal(false)} />
     </IonPage>
   );
 };

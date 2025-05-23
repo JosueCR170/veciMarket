@@ -15,7 +15,7 @@ export const useLocationTracker = () => {
   });
   const getCurrentPosition = async () => {
     try {
-      console.log('Requesting location...');
+    
       setState(prev => ({ ...prev, loading: true, error: null }));
       
       const position = await Geolocation.getCurrentPosition({
@@ -28,7 +28,7 @@ export const useLocationTracker = () => {
         loading: false,
         location: position
       }));
-      console.log('Location obtained:', position);
+
       return position;
     } catch (error) {
       setState(prev => ({
