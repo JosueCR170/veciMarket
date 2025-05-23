@@ -1,6 +1,6 @@
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
 import ExploreContainer from '../components/ExploreContainer';
-import { LogoutButton }  from "../components/tipo de logueo/logOut";
+import { LogoutButton }  from "../components/authentication/logOut";
 import './Tab3.css';
 
 const Perfil: React.FC = () => {
