@@ -11,12 +11,11 @@
 .add-product-form {
   width: 100%;
   max-width: 400px;
-  /* Adjust as needed */
   margin: 0 auto;
 }
 
 .add-product-input-group {
-  margin-bottom: 15px;
+  margin: 30px 0 30px 0;
 }
 
 .add-product-label {
@@ -30,34 +29,28 @@
 
 .add-product-input {
   width: 100%;
-  padding: 8px;
   font-size: 16px;
-  background-color: #00000084;
-  /* Match your inputColor background */
-  border: none; /* Remove the default border */
-  border-bottom: 3px solid #ffffff; /* Add a white border at the bottom */
-  color: #000000;
-  /* Match your inputColor text color */
+  background-color: #ddd;
+  border-bottom: 3px solid #ffffff; 
+  color: #202020;
+  font-weight: bolder;
   border-radius: 3px;
   box-sizing: border-box;
-  /* Ensure padding doesn't affect width */
   font-family: 'Roboto', sans-serif;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Add a subtle shadow */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  --padding-start: 12px; 
+  --padding-end: 12px;
 }
-
 
 .add-product-select {
   font-size: 16px;
   color: #f7f7f7;
-  /* Match your inputColor text color */
 }
 
 .add-product-image-placeholder {
   width: 100%;
   height: 200px;
-  /* Adjust as needed */
   background-color: #ddd;
-  /* Placeholder background color */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -66,11 +59,13 @@
   border-radius: 10px;
   color: #888;
   font-size: 1.5em;
+  overflow: hidden;
 }
 
 .add-product-image-preview {
-  max-width: 100%;
-  max-height: 100%;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
 
 .add-product-button {
@@ -78,5 +73,5 @@
   font-size: 1.2em;
   color: #003EB0;
   background: white;
-  font-family: 'Paytone One', sans-serif; /* Apply Paytone One font */
+  font-family: 'Paytone One', sans-serif; 
 }
