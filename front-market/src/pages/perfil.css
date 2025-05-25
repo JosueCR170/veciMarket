@@ -2,9 +2,81 @@
 
 .custom-font {
    font-family: "Poppins", sans-serif;
+   color: black;
 } 
 
 ion-label::part(native) {
   margin: 0 !important;
   padding: 0 !important;
+}
+.list-md{
+  padding: 0 !important;
+}
+
+.contenido-Titulo{
+   --ion-font-family: "Poppins", sans-serif;
+  font-size: 12px;
+  font-weight: bold;
+  color: #3a3a3a;
+  --background: #EEEEEE;
+}
+
+.contenido-ItemContenido{
+   --ion-font-family: "Poppins", sans-serif !important;
+  font-size: 14px;
+   --background: #EEEEEE;
+   color: black;
+}
+.bottonLogOut{
+   font-family: "Poppins", sans-serif; 
+  height: 100%;
+  width: 100%;
+   padding:0px;
+    margin: 0 ;
+  --background: rgb(199, 199, 199);
+  --border-radius: 0px;
+  color: rgb(179, 1, 1);
+  font-weight: bold;
+}
+
+.button-inner{
+  justify-content: flex-start;
+}
+
+#background-content{
+  --background: #EEEEEE;
+
+}
+ion-modal ion-content::part(background) {
+  background: #EEEEEE;
+  
+   font-family: "Poppins", sans-serif; 
+}
+
+.captura-foto-container{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 14px ;
+      flex-direction: column;
+}
+
+.iconEditar {
+ position: absolute;
+      bottom: 1px;
+    right: 6px; /* Lo pone hacia afuera a la derecha */
+  height: 40px;
+  width: 40px;
+  background: #868686;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}
+
+@media (max-width: 500px) {
+  .captura-foto-container {
+    flex-direction: column !important;
+  }
 }
