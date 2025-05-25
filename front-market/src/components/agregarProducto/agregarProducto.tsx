@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { IonButton, IonInput, IonLabel, IonToast, IonImg, IonSelect, IonSelectOption } from '@ionic/react';
 import { Camera, CameraResultType } from '@capacitor/camera';
+import { pencilOutline, closeOutline } from 'ionicons/icons';
+import { IonIcon } from '@ionic/react'; // Asegúrate de tener esto también
 import { Filesystem, Directory } from '@capacitor/filesystem';
 import { getStorage, ref, uploadString, getDownloadURL } from 'firebase/storage';
 import { getFirestore, collection, addDoc } from 'firebase/firestore';
@@ -22,7 +24,7 @@ const AgregarProducto: React.FC = () => {
 
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
-        
+
         if (!productName || !description || !price || !category || !image) {
             setErrorMessage('Todos los campos son obligatorios.');
             setShowToast(true);
@@ -80,24 +82,48 @@ const AgregarProducto: React.FC = () => {
                 {/* Image Placeholder */}
                 <div
                     className={`add-product-image-placeholder${isUploading ? ' add-product-image-placeholder--disabled' : ''}`}
-                    onClick={!isUploading ? takePicture : undefined}
+                    onClick={!isUploading && !image ? takePicture : undefined}
                     style={isUploading ? { pointerEvents: 'none', opacity: 0.5 } : {}}
                 >
                     {image ? (
-                        <IonImg src={image} className="add-product-image-preview" />
+                        <div className="add-product-image-wrapper">
+                            <IonImg src={image} className="add-product-image-preview" />
+                            <IonButton
+                                fill="clear"
+                                size="small"
+                                className="icon-button edit-icon"
+                                onClick={() => !isUploading && takePicture()}
+                                disabled={isUploading}
+                            >
+                                <IonIcon icon={pencilOutline} />
+                            </IonButton>
+
+                            <IonButton
+                                fill="clear"
+                                size="small"
+                                className="icon-button delete-icon"
+                                onClick={() => !isUploading && setImage(null)}
+                                disabled={isUploading}
+                            >
+                                <IonIcon icon={closeOutline} />
+                            </IonButton>
+
+                        </div>
                     ) : (
                         <div className="add-product-image-placeholder-text">Toca para agregar imagen</div>
                     )}
+
                 </div>
+
 
                 {/* Product Name Input */}
                 <div className='add-product-input-group'>
                     <IonLabel className='add-product-label'>Nombre del producto</IonLabel>
-                    <IonInput 
+                    <IonInput
                         className='add-product-input'
-                        value={productName} 
-                        onIonChange={e => setProductName(e.detail.value!)} 
-                        required 
+                        value={productName}
+                        onIonChange={e => setProductName(e.detail.value!)}
+                        required
                         disabled={isUploading}
                     />
                 </div>
@@ -105,11 +131,11 @@ const AgregarProducto: React.FC = () => {
                 {/* Description Input */}
                 <div className='add-product-input-group'>
                     <IonLabel className='add-product-label'>Descripción</IonLabel>
-                    <IonInput 
+                    <IonInput
                         className='add-product-input'
-                        value={description} 
-                        onIonChange={e => setDescription(e.detail.value!)} 
-                        required 
+                        value={description}
+                        onIonChange={e => setDescription(e.detail.value!)}
+                        required
                         disabled={isUploading}
                     />
                 </div>
@@ -117,12 +143,12 @@ const AgregarProducto: React.FC = () => {
                 {/* Price Input */}
                 <div className='add-product-input-group'>
                     <IonLabel className='add-product-label'>Precio</IonLabel>
-                    <IonInput 
+                    <IonInput
                         className='add-product-input'
                         type="number"
-                        value={price} 
-                        onIonChange={e => setPrice(e.detail.value!)} 
-                        required 
+                        value={price}
+                        onIonChange={e => setPrice(e.detail.value!)}
+                        required
                         disabled={isUploading}
                     />
                 </div>
