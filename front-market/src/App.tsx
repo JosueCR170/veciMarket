@@ -58,7 +58,7 @@ const App: React.FC = () => {
 
   const {user, rol, loading}= useAuth();
 
-
+  console.log('user', user);
   useEffect(() => {
   const configureStatusBar = async () => {
     try {
