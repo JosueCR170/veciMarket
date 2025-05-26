@@ -29,10 +29,11 @@ const MapaComercios: React.FC = () => {
 
     try {
       mapInstance.current = await GoogleMap.create({
-        id: "Comercioss-map",
+        id: "vendedores-map",
         element: mapRef.current,
         apiKey: "AIzaSyBV35eS9s-QUwN0WcZWeK-XIoICekxqXwk",
         config: {
+          mapId:"ac464f4a57e00c003b1f7259",
           center: {
             lat: 10.61822486603641,
             lng: -85.4529675470169,
