@@ -2,7 +2,11 @@
 
 .custom-font {
    font-family: "Poppins", sans-serif;
-   color: black;
+   --color: black;
+  --height: 100%;
+  --border-radius: 0;
+  align-items: flex-end;
+  justify-content: flex-end;
 } 
 
 ion-label::part(native) {
@@ -27,6 +31,10 @@ ion-label::part(native) {
    --background: #EEEEEE;
    color: black;
 }
+.contenido-ItemContenido:hover{
+  --background: #c4c4c4;
+}
+
 .bottonLogOut{
    font-family: "Poppins", sans-serif; 
   height: 100%;
@@ -53,6 +61,20 @@ ion-modal ion-content::part(background) {
    font-family: "Poppins", sans-serif; 
 }
 
+.tootalModalConfiguracion{
+--background:#eeee;
+color:black;
+ box-shadow: none;
+  --ion-color-step-100: #fff;
+   --padding-start: 16px;
+   --padding-end: 16px
+}
+.tituloModalConfig{
+ font-size: 18px;  
+ text-align: center;
+ font-family: "Poppins", sans-serif;
+}
+
 .captura-foto-container{
   display: flex;
   justify-content: center;
@@ -74,7 +96,12 @@ ion-modal ion-content::part(background) {
   align-items: center;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
 }
-
+.subcontenidoBody{
+  --color: black;
+  --padding-top: 16px;
+ --padding-start: 16px;
+   --padding-end: 16px
+}
 @media (max-width: 500px) {
   .captura-foto-container {
     flex-direction: column !important;
