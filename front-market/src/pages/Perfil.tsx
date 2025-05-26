@@ -5,10 +5,9 @@ import {
 import { menu } from 'ionicons/icons';
 import { useState } from 'react';
 import ModalContent from '../components/modal/ModalContent'; // Ajusta la ruta
-import { createAnimation } from '@ionic/react';
 import CapturaFotoPage from '../components/camara/fotoUser';
 import './perfil.css';
-import { LogoutButton }  from "../components/authentication/logOut";
+
 // import './Tab3.css';
 
 const Perfil: React.FC = () => {
@@ -31,8 +30,8 @@ const Perfil: React.FC = () => {
           </IonButtons>
         </IonToolbar>
       </IonHeader>
-      <IonContent fullscreen>
-      
+      <IonContent fullscreen class="Perfilmodal-content" style={{ '--background': '#eeee' }}>
+        <CapturaFotoPage/>
       </IonContent> 
       <ModalContent isOpen={showModal} onClose={() => setShowModal(false)} />
     </IonPage>

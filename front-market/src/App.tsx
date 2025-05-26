@@ -14,7 +14,7 @@ import { IonReactRouter } from '@ionic/react-router';
 import { ellipse, square, triangle } from 'ionicons/icons';
 import Home from './pages/Home';
 import Agregar from './pages/Agregar';
-import Chat from './pages/Chat';
+import ChatTab from './pages/ChatTab';
 import Perfil from './pages/Perfil'
 import {Login} from './pages/Seguro/login'
 import { useAuth } from './context/contextUsuario';
@@ -58,7 +58,7 @@ const App: React.FC = () => {
 
   const {user, rol, loading}= useAuth();
 
-
+  console.log('user', user);
   useEffect(() => {
   const configureStatusBar = async () => {
     try {
@@ -93,7 +93,7 @@ const App: React.FC = () => {
         <IonRouterOutlet>
           <ProtectedRoute exact path="/home" component={Home}  allowedRoles={['usuario', 'ejecutivo']} isAuthenticated={!!user} userRole={rol ?? undefined} />
           <ProtectedRoute exact path="/agregar" component={Agregar} allowedRoles={['ejecutivo']} isAuthenticated={!!user} userRole={rol ?? undefined} />
-          <ProtectedRoute exact path="/chat" component={Chat} allowedRoles={['usuario', 'ejecutivo']} isAuthenticated={!!user}  userRole={rol ?? undefined}/>
+          <ProtectedRoute exact path="/chat" component={ChatTab} allowedRoles={['usuario', 'ejecutivo']} isAuthenticated={!!user}  userRole={rol ?? undefined}/>
           <ProtectedRoute exact path="/perfil" component={Perfil} allowedRoles={['usuario', 'ejecutivo']} isAuthenticated={!!user} userRole={rol ?? undefined}/>
           </IonRouterOutlet>
         {rol && <ButonNavegation  />}
