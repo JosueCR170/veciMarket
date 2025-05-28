@@ -23,21 +23,18 @@ const LoginNormal: React.FC<{ onToggleForm: () => void }> = ({ onToggleForm }) =
   
     const handleLogin = async (event: React.FormEvent) => {
       event.preventDefault();
-        setLoading(true);
-        setError(null);
-        try {
-          await authReady;
-          await signInWithEmailAndPassword(auth, email, password).then(() =>{
-            history.replace("/home");
-          })
-            setLoading(false);
-         
-         
-        } catch (error: any) {
-          setLoading(false);
-          setError(error.message);
-        }
-    }
+      setLoading(true);
+      setError(null);
+
+       try {
+         await signInWithEmailAndPassword(auth, email, password);
+         setLoading(false);
+         history.replace("/home");
+       } catch (error: any) {
+         setLoading(false);
+         setError(error.message);
+       }
+      };
     if (loading) {
         return <IonLoading isOpen message='Cargando sesión...' />;
       }
@@ -66,14 +63,18 @@ const LoginNormal: React.FC<{ onToggleForm: () => void }> = ({ onToggleForm }) =
           </IonText>
         )}
         <div className="login-button" style={{ display: "flex", flexDirection: "column"}}>
-        <IonButton expand='block' type='submit'   style={{
-          '--padding-top': '13px',
-          '--padding-bottom': '10px',
-          '--padding-start': '10px',
-          '--padding-end': '10px'
-        }} >
-          Inicio de sesión
-        </IonButton>
+       <IonButton
+         expand='block'
+         type='submit'
+         disabled={loading}
+         style={{
+           '--padding-top': '13px',
+           '--padding-bottom': '10px',
+           '--padding-start': '10px',
+           '--padding-end': '10px'
+         }}>
+            {loading ? 'Cargando...' : 'Inicio de sesión'}
+            </IonButton>
 
         <HandleGoogleSignIn/>
         {/*<GoogleSignIn/>*/}
