@@ -3,11 +3,13 @@ import { useState } from 'react';
 import { arrowBackOutline, chevronForwardOutline, shieldHalf, star, trendingUp, lockClosed,bagHandle, eye } from 'ionicons/icons';
 import {LogoutButton }  from "../authentication/logOut";
 import { TipoCuenta } from './submenus de modal/tipoCuenta';
+import { useAuth } from '../../context/contextUsuario';
 interface ModalContentProps {
   isOpen: boolean;
   onClose: () => void;
 }
 const ModalContent: React.FC<ModalContentProps> = ({ isOpen, onClose }) => {
+  const { rol } = useAuth();
   const [submenuActivo, setSubmenuActivo] = useState<string | null>(null);
 
   const abrirSubmenu = (id: string) => {
@@ -103,7 +105,7 @@ const ModalContent: React.FC<ModalContentProps> = ({ isOpen, onClose }) => {
                 <IonItem className="contenido-Titulo" lines="none">
                   <IonLabel>{grupo.titulo}</IonLabel>
                 </IonItem>
-                {grupo.items.map((item, idx) => (
+                {grupo.items.filter(item => !(rol === 'ejecutivo' && item.id === 'cuenta')).map((item, idx) => (
                   <IonItem className="contenido-ItemContenido" lines="none" key={idx} onClick={() => abrirSubmenu(item.id)} >
                     <div style={{ display: 'flex', alignItems: 'center' }}>
                       <IonIcon icon={item.icon} slot="start" style={{ fontSize: '16px', marginRight: '10px' }} />
