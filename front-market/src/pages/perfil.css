@@ -82,6 +82,21 @@ color:black;
   margin-top: 14px ;
       flex-direction: column;
 }
+.foto-container{
+     position: relative;
+          margin-bottom: 1rem;
+          border: 1px dashed var(--ion-color-medium);
+          min-height: 157px;
+          max-height: 157px;
+          width: 160px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          background: white;
+          border-radius: 94px;
+          cursor: pointer;
+          overflow: hidden;
+}
 
 .iconEditar {
  position: absolute;
@@ -95,6 +110,42 @@ color:black;
   justify-content: center;
   align-items: center;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}
+
+.foto-preview{
+   max-height: 300px;
+   max-width: 100%;
+   object-fit: contain;
+}
+.botones-modal{
+    font-family: "Zain", sans-serif;
+    color: #EEEE;
+    font-size: 18px;
+       --border-radius: 10px;
+   --border-color: #00256A;
+   --border-width: 2px;
+   --border-style: solid;
+      font-weight: 800;
+    --background: #004DDA;
+}
+
+.botones-footer-subir{
+   font-family: "Zain", sans-serif;
+   color: rgb(8, 76, 20);
+   font-size: 14px;
+   border-radius: 10px;
+   border: 2px solid rgb(10, 101, 27);
+   font-weight: 800;
+   background: #3fec47;
+}
+.botones-footer-cancelar{
+  font-family: "Zain", sans-serif;
+  color: rgb(146, 146, 146);
+  font-size: 14px;
+  border-radius: 10px;
+  border: 2px solid rgb(146, 146, 146);
+  font-weight: 800;
+  background: #ffffff;
 }
 .subcontenidoBody{
   --color: black;

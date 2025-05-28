@@ -12,6 +12,7 @@ import {
   IonModal,
   IonSpinner,
   IonButtons,
+  IonFooter,
 } from '@ionic/react';
 import {
   pencilSharp,
@@ -131,39 +132,19 @@ const handlePhoto = async (source: CameraSource) => {
   return (
     <div className="captura-foto-container">
       {/* Imagen o Spinner */}
-      <div
-        onClick={() => !loadingFoto && setModalVisible(true)}
-        style={{
-          position: 'relative',
-          marginBottom: '1rem',
-          border: '1px dashed var(--ion-color-medium)',
-          minHeight: '160px',
-          width: '160px',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          background: 'white',
-          borderRadius: '94px',
-          cursor: loadingFoto ? 'default' : 'pointer',
-          overflow: 'hidden',
-        }}
-      >
+      <div className='foto-container'
+        onClick={() => !loadingFoto && setModalVisible(true)}>
         {loadingFoto ? (
           <IonSpinner name="dots" color="primary" />
         ) : photoPreview ? (
-          <IonImg
-            src={photoPreview}
-            style={{ maxHeight: '300px', maxWidth: '100%', objectFit: 'contain' }}
-            onIonError={() => {
-              showAlert('Error de Previsualización', 'No se pudo mostrar la imagen.');
-              setPhotoPreview(null);
-            }}
+          <IonImg src={photoPreview} className='foto-preview'
+            onIonError={() => { showAlert('Error de Previsualización', 'No se pudo mostrar la imagen.'); setPhotoPreview(null);}}
           />
         ) : (
           <IonIcon icon={imageOutline} style={{ fontSize: '64px', color: 'var(--ion-color-medium)' }} />
         )}
       </div>
-
+   
       {/* Card de Usuario */}
       <IonCard style={{ width: '100%', minWidth: '200px', background: 'white', borderRadius: '10px', padding: '10px' }}>
         <IonCardHeader>
@@ -175,24 +156,42 @@ const handlePhoto = async (source: CameraSource) => {
         </IonCardContent>
       </IonCard>
 
-      {/* Botones de acción (solo en preview) */}
       {photoPreview && isPreview && (
-        <IonButtons style={{ marginTop: '1rem', display: 'flex', justifyContent: 'center', gap: '1rem' }}>
-          <IonButton
-            fill="outline"
-            color="medium"
-            onClick={handleCancel}
-            disabled={isUploading}
-          >
-            <IonIcon slot="start" icon={refreshOutline} />
-            Cancelar
-          </IonButton>
-          <IonButton fill="solid" color="success" onClick={handleUpload} disabled={isUploading}>
-            <IonIcon slot="start" icon={cloudUploadOutline} />
-            Subir
-          </IonButton>
-        </IonButtons>
-      )}
+  <IonFooter
+    style={{
+      position: 'fixed',
+      bottom: 0,
+      left: 0,
+      width: '100%',
+      background: 'white',
+      padding: '1rem 0',
+      borderTop: '1px solid var(--ion-color-step-150, #e0e0e0)',
+      zIndex: 1000,
+    }}
+  >
+    <IonButtons
+      style={{ display: 'flex', justifyContent: 'center', gap: '1rem'}}>
+      <IonButton
+       
+        onClick={handleCancel}
+        disabled={isUploading}
+        className='botones-footer-cancelar'
+      >
+        <IonIcon slot="start" icon={refreshOutline} />
+        Cancelar
+      </IonButton>
+      <IonButton
+      
+        onClick={handleUpload}
+        disabled={isUploading}
+        className='botones-footer-subir'
+      >
+        <IonIcon slot="start" icon={cloudUploadOutline} />
+        Subir
+      </IonButton>
+    </IonButtons>
+  </IonFooter>
+)}
 
       {/* Indicador de subida */}
       {isUploading && (
@@ -203,14 +202,14 @@ const handlePhoto = async (source: CameraSource) => {
       )}
 
       {/* Modal para seleccionar origen */}
-      <IonModal isOpen={modalVisible} onDidDismiss={() => setModalVisible(false)} initialBreakpoint={0.25} breakpoints={[0, 0.25, 0.5, 0.75]}
+      <IonModal isOpen={modalVisible} onDidDismiss={() => setModalVisible(false)} initialBreakpoint={0.50} breakpoints={[0, 0.25, 0.5, 0.75]}
       >
         <div style={{ padding: '2rem', textAlign: 'center', background: '#eeee', color: '#000000', height: '-webkit-fill-available'}}>
-          <h2>Seleccionar Imagen</h2>
-          <IonButton expand="block" onClick={() => handlePhoto(CameraSource.Camera)}>
+          <h2 style={{fontFamily: 'Poppi, sans-serif'}}>Seleccionar Imagen</h2>
+          <IonButton className="botones-modal"  style={{fontFamily: 'zain, sans-serif'}} expand="block" onClick={() => handlePhoto(CameraSource.Camera)}>
             Tomar Foto
           </IonButton>
-          <IonButton expand="block" onClick={() => handlePhoto(CameraSource.Photos)} style={{ marginTop: '1rem' }}>
+          <IonButton className="botones-modal" expand="block" onClick={() => handlePhoto(CameraSource.Photos)} style={{ marginTop: '1rem' }}>
             Elegir de Galería
           </IonButton>
         </div>
