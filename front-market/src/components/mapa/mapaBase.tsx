@@ -42,19 +42,9 @@ const MapaComercios: React.FC = () => {
         (async () => {
             if (location?.coords) {
                 const localizacionLocal = await agregarMarcador(mapInstance.current!, location.coords.latitude, location.coords.longitude, "Tu posición");
-                //const circulo = await agregarCirculos(mapInstance.current!, location.coords.latitude, location.coords.longitude, 1000, '#FF000000', '#3300FF00');
                 await moverCamara(mapInstance.current!, location.coords.latitude, location.coords.longitude, 12);
 
-                //circuloActual.current = circulo;
                 marcadorActual.current = localizacionLocal;
-
-
-                //cambiar de marcador dando click, debe activarse cuando acepta cambiar de direccion
-                // await mapInstance.current!.setOnMapClickListener(async ({ latitude, longitude }) => {
-                //     if(mapInstance.current){await mapInstance.current.removeCircles(circuloActual.current!);}
-                //     await agregarMarcadorUnico(latitude, longitude, "Ubicación seleccionada");
-
-                // });
 
             }
         })();
@@ -82,46 +72,10 @@ const MapaComercios: React.FC = () => {
             });
             setMapReady(true);
 
-            // if (location?.coords) {
-            //     const circulo=await agregarCirculos(mapInstance.current, location.coords.latitude, location.coords.longitude,
-            //         1000,
-            //         '#4285F4',
-            //         'rgba(66, 133, 244, 0.3)',
-            //     );
-            //     circuloActual.current = circulo;
-            // }
-
-
-            // if (location?.coords) {
-            //     const localizacionLocal = await agregarMarcador(mapInstance.current, location.coords.latitude, location.coords.longitude, "Tu posición");
-            //     marcadorActual.current = localizacionLocal;
-            //     await moverCamara(mapInstance.current, location.coords.latitude, location.coords.longitude, 12);
-
-            //     //cambiar de marcador dando click, debe activarse cuando acepta cambiar de direccion
-            //     await mapInstance.current.setOnMapClickListener(async ({ latitude, longitude }) => {
-            //         if(mapInstance.current){await mapInstance.current.removeCircles(circuloActual.current);}
-            //         await agregarMarcadorUnico(latitude, longitude, "Ubicación seleccionada");
-
-            //     });
-            // }
-
         } catch (error) {
             alert("Error al inicializar el mapa: " + error);
         }
     }
-
-    // const agregarCirculos = async (map: GoogleMap, lat: number, lng: number, radius: number, strokeColor: string, fillColor: string) => {
-    //     const circulo = await map.addCircles([{
-    //         center: {
-    //             lat,
-    //             lng,
-    //         },
-    //         radius,
-    //         strokeColor,
-    //         fillColor,
-    //     }]);
-    //     return circulo[0]
-    // }
 
     const moverCamara = async (map: GoogleMap, lat: number, lng: number, zoom: number) => {
         await map.setCamera({
@@ -173,27 +127,13 @@ const MapaComercios: React.FC = () => {
     const activarListenerClickMapa = async () => {
         if (!mapInstance.current) return;
         await mapInstance.current.setOnMapClickListener(async ({ latitude, longitude }) => {
-            if (mapInstance.current && circuloActual.current) {
+            if (mapInstance.current) {
                 //await mapInstance.current.removeCircles(circuloActual.current);
+                await agregarMarcadorUnico(latitude, longitude, "Ubicación seleccionada");
                 mapInstance.current.removeAllMapListeners();
             }
-            await agregarMarcadorUnico(latitude, longitude, "Ubicación seleccionada");
         });
     };
-
-
-
-
-
-
-    /*useEffect(() => {
-      const fetchLocation = async () => {
-        await getCurrentPosition(); // Esto se ejecuta una sola vez
-      };
-    
-      fetchLocation();
-    }, []);*/
-
 
     return (
         <div style={{ position: "relative", width: "100%", height: "100%" }}>

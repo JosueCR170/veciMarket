@@ -18,7 +18,6 @@ import AgregarProducto from '../components/agregarProducto/agregarProducto';
 const Agregar: React.FC = () => {
   return (
     <IonPage>
-        <Mapa />
       <Navbar />
       <IonContent fullscreen>
         <IonHeader collapse="condense">
@@ -26,6 +25,7 @@ const Agregar: React.FC = () => {
             <IonTitle size="large">Agregar</IonTitle>
           </IonToolbar>
         </IonHeader>
+        <Mapa />
         <AgregarProducto />
       </IonContent>
     </IonPage>
