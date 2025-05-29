@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { getFirestore, collection, getDocs } from 'firebase/firestore';
 import { app } from '../../services/firebase/config/firebaseConfig';
 import CardProducto from '../cardProducto/cardProducto';
-import { IonGrid, IonRow, IonCol } from '@ionic/react';
+import { IonGrid, IonRow, IonCol, IonContent } from '@ionic/react';
 
 type Producto = {
   id: string;
@@ -40,15 +40,18 @@ const VerProductos: React.FC = () => {
   }, []);
 
   return (
-    <IonGrid>
-      <IonRow>
-        {productos.map(producto => (
-          <IonCol size="4" key={producto.id}>
-            <CardProducto producto={producto} />
-          </IonCol>
-        ))}
-      </IonRow>
-    </IonGrid>
+    <IonContent style={{ '--background': '#EEEEEE' }}>
+      <IonGrid>
+        <IonRow>
+          {productos.map(producto => (
+            <IonCol size="12" sizeMd="6" sizeLg="4" sizeXl="3" key={producto.id}>
+              <CardProducto producto={producto} />
+            </IonCol>
+          ))}
+        </IonRow>
+      </IonGrid>
+    </IonContent>
+
   );
 };
 
