@@ -17,18 +17,21 @@ interface CardProductoProps {
 const CardProducto: React.FC<CardProductoProps> = ({ producto }) => {
   return (
     <IonCard className="product-card">
+      <div className="text-container"> 
       <div className="image-wrapper">
         <IonImg className="imgProducto" src={producto.img} />
       </div>
-      <div className="text-content">
-        <IonCardHeader>
-          <IonText className="product-name">{producto.nombre}</IonText>
-        </IonCardHeader>
-        <IonCardContent>
-          <IonText className="product-info">
-            ${producto.precio} - {producto.categoria}
-          </IonText>
-        </IonCardContent>
+      
+        <div className="text-content">
+          <IonCardHeader>
+            <IonText className="product-name">{producto.nombre}</IonText>
+          </IonCardHeader>
+          <IonCardContent>
+            <IonText className="product-info">
+              ${producto.precio} - {producto.categoria}
+            </IonText>
+          </IonCardContent>
+        </div>
       </div>
     </IonCard>
   );
