@@ -1,6 +1,18 @@
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
+import { useEffect } from 'react';
 import Navbar from '../components/navbar/navbar';
+import MapaComercios from '../components/mapa/mapa';
+import Mapa from '../components/mapa/mapaBase';
 import './Tab2.css';
+
+// useEffect(() => {
+//   // const fetchLocation = async () => {
+//   //   await getCurrentPosition(); // Esto se ejecuta una sola vez
+//   // };
+
+//   // fetchLocation();
+// }, []);
+
 import AgregarProducto from '../components/agregarProducto/agregarProducto';
 
 const Agregar: React.FC = () => {
@@ -13,6 +25,7 @@ const Agregar: React.FC = () => {
             <IonTitle size="large">Agregar</IonTitle>
           </IonToolbar>
         </IonHeader>
+        <Mapa />
         <AgregarProducto />
       </IonContent>
     </IonPage>
