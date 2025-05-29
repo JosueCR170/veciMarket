@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 import { GoogleMap } from "@capacitor/google-maps";
 import { IonLoading, IonSpinner, IonText } from "@ionic/react"; // Importamos los componentes de Ionic
 import "./map.css";
-import { useLocationTracker } from "./useLocationTracker"; // Asegúrate de que la ruta sea correcta
+import { useLocationTracker } from "../../hooks/useLocationTracker"; // Asegúrate de que la ruta sea correcta
  
 interface Comercios {
   id: string;

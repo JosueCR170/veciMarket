@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { GoogleMap } from "@capacitor/google-maps";
 import { IonLoading, IonSpinner, IonText, IonAlert, IonButton } from "@ionic/react"; // Importamos los componentes de Ionic
 import "./map.css";
-import { useLocationTracker } from "./useLocationTracker"; // Asegúrate de que la ruta sea correcta
+import { useLocationTracker } from "../../hooks/useLocationTracker"; // Asegúrate de que la ruta sea correcta
 
 const MapaComercios: React.FC = () => {
     const mapRef = useRef<HTMLDivElement | null>(null);
@@ -14,6 +14,9 @@ const MapaComercios: React.FC = () => {
     const circuloActual = useRef<any>(null);
 
     const [showAlert, setShowAlert] = useState(false);
+
+    const [coordsSeleccionadas, setCoordsSeleccionadas] = useState<{ lat: number; lng: number } | null>(null);
+
 
 
 
@@ -130,6 +133,8 @@ const MapaComercios: React.FC = () => {
             if (mapInstance.current) {
                 //await mapInstance.current.removeCircles(circuloActual.current);
                 await agregarMarcadorUnico(latitude, longitude, "Ubicación seleccionada");
+                setCoordsSeleccionadas({ lat: latitude, lng: longitude });
+                console.log("Coordenadas seleccionadas:", coordsSeleccionadas);
                 mapInstance.current.removeAllMapListeners();
             }
         });

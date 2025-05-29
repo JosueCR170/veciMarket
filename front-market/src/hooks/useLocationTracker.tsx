@@ -13,6 +13,7 @@ export const useLocationTracker = () => {
     loading: true,
     error: null,
   });
+  
   const getCurrentPosition = async () => {
     try {
     
@@ -38,6 +39,7 @@ export const useLocationTracker = () => {
       }));
     }
   };
+
   const requestPermissions = async () => {
     try {
     
