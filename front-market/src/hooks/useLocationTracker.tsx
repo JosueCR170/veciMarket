@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Geolocation, Position } from '@capacitor/geolocation';
 
+
 interface LocationState {
   location: Position | null;
   loading: boolean;
@@ -13,7 +14,7 @@ export const useLocationTracker = () => {
     loading: true,
     error: null,
   });
-  
+
   const getCurrentPosition = async () => {
     try {
     
