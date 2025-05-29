@@ -1,6 +1,6 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { GoogleMap } from "@capacitor/google-maps";
-import { IonLoading, IonSpinner, IonText } from "@ionic/react"; // Importamos los componentes de Ionic
+import { IonContent, IonLoading, IonModal, IonSpinner, IonText } from "@ionic/react"; // Importamos los componentes de Ionic
 import "./map.css";
 import { useLocationTracker } from "../../hooks/useLocationTracker"; // Asegúrate de que la ruta sea correcta
  
@@ -14,7 +14,8 @@ interface Comercios {
 const MapaComercios: React.FC = () => {
   const mapRef = useRef<HTMLDivElement | null>(null);
   const mapInstance = useRef<GoogleMap | null>(null);
-
+  const [modalAbierto, setModalAbierto] = useState(false);
+  const [comercioSeleccionado, setComercioSeleccionado] = useState<Comercios | null>(null);
   const { location, loading, error, requestPermissions, getCurrentPosition } = useLocationTracker(); // Update every 40 seconds with 5 second countdown
 
   // Arreglo de ejemplo con varias Comercioss (simulando datos de Firebase)
@@ -86,10 +87,20 @@ const MapaComercios: React.FC = () => {
           zoom: 12,
         });
       }
-    } catch (error) {
-      alert("Error al inicializar el mapa: " + error);
-    }
-  }
+
+      await mapInstance.current.setOnMarkerClickListener((data) => {
+        const marcadorId = data.markerId;
+        const comercio = Comercioss.find((c) => c.name === data.title);
+
+         if (comercio) {
+           setComercioSeleccionado(comercio);
+           setModalAbierto(true); // Mostrar tu modal
+         }
+           });
+        } catch (error) {
+          alert("Error al inicializar el mapa: " + error);
+        }
+      }
 
   useEffect(() => {
     const initLocation = async () => {
@@ -149,6 +160,19 @@ const MapaComercios: React.FC = () => {
           <IonText style={{ fontSize: "14px", color: "#333" }}>Estamos buscando tu ubicación...</IonText>
         </div>
       )}
+
+     
+        <IonModal isOpen={modalAbierto} trigger="open-modal" initialBreakpoint={0.25}
+          breakpoints={[0, 0.25, 0.55, 1]} onDidDismiss={() => setModalAbierto(false)}
+          style={{'--background': '#fff',  color: '#000'}}>
+          {comercioSeleccionado && (
+            <div style={{ padding: 16 }}>
+              <h2>{comercioSeleccionado.name}</h2>
+              <p>Latitud: {comercioSeleccionado.latitude}</p>
+              <p>Longitud: {comercioSeleccionado.longitude}</p>
+            </div>
+          )}
+      </IonModal>
     </div>
   );
 };
