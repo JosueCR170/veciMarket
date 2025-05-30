@@ -1,4 +1,4 @@
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonCard, IonCardContent, IonText } from '@ionic/react';
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonCard, IonCardContent, IonText, IonSpinner } from '@ionic/react';
 import Navbar from '../components/navbar/navbar';
 import MapaLocal from '../components/mapa/mapaBase';
 import AgregarProducto from '../components/agregarProducto/agregarProducto';
@@ -13,25 +13,24 @@ const Agregar: React.FC = () => {
   return (
     <IonPage>
       <Navbar />
-
-        {/* <MapaLocal /> */}
-<Map />
-
-        {/* {!loading && location ? (
-        <AgregarProducto />
-      ) : (
-        <IonCard color="warning">
-          <IonCardContent>
-            <IonText>
-              ⚠️ Para poder añadir productos, primero debes registrar tu localización.
-            </IonText>
-          </IonCardContent>
-        </IonCard>
-      )} */}
-
-        {/* <MapaComercios /> */}
-        {/* <AgregarProducto /> */}
-        {/* <MapaPruebas /> */}
+ {loading ? (
+          <div style={{ display: 'flex', justifyContent: 'center', marginTop: 30 }}>
+            <IonSpinner name="crescent" />
+          </div>
+        ) : location ? (
+          <AgregarProducto />
+        ) : (
+          <>
+            <Map />
+            <IonCard color="warning" style={{ margin: 16 }}>
+              <IonCardContent>
+                <IonText>
+                  ⚠️ Para poder añadir productos, primero debes registrar tu localización.
+                </IonText>
+              </IonCardContent>
+            </IonCard>
+          </>
+        )}
     </IonPage>
   );
 };
