@@ -1,5 +1,5 @@
 import React from 'react';
-import { IonCard, IonCardHeader, IonCardContent, IonImg, IonText } from '@ionic/react';
+import { IonCard, IonCardHeader, IonCardContent, IonImg, IonText, IonTextarea } from '@ionic/react';
 import './cardProducto.css';
 
 interface Producto {
@@ -17,15 +17,22 @@ interface CardProductoProps {
 const CardProducto: React.FC<CardProductoProps> = ({ producto }) => {
   return (
     <IonCard className="product-card">
-      <IonImg className='imgProducto' src={producto.img} />
-      <IonCardHeader>
-        <IonText className="product-name">{producto.nombre}</IonText>
-      </IonCardHeader>
-      <IonCardContent>
-        <IonText className="product-description">{producto.descripcion}</IonText>
-        <IonText className="product-price">${producto.precio}</IonText>
-        <IonText className="product-category">Category: {producto.categoria}</IonText>
-      </IonCardContent>
+      <div className="text-container"> 
+      <div className="image-wrapper">
+        <IonImg className="imgProducto" src={producto.img} />
+      </div>
+      
+        <div className="text-content">
+          <IonCardHeader>
+            <IonText className="product-name">{producto.nombre}</IonText>
+          </IonCardHeader>
+          <IonCardContent>
+            <IonText className="product-info">
+              ${producto.precio} - {producto.categoria}
+            </IonText>
+          </IonCardContent>
+        </div>
+      </div>
     </IonCard>
   );
 };
