@@ -43,7 +43,8 @@ export const TipoCuenta = ({ onClose }: { onClose: () => void }) => {
       const vendedorData = {
         user_id: user.uid,
         productos: null,
-        localizacion: null
+        localizacion: null,
+        nombre: user.displayName || "Vendedor Anónimo", // Asegúrate de que el nombre esté disponible
       }
 
       await createVendedorProfile(vendedorData)

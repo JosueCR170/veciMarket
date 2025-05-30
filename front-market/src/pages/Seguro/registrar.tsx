@@ -45,7 +45,8 @@ const Registrar: React.FC<{ onToggleForm: () => void }> = ({ onToggleForm }) => 
         const vendedorData = {
           user_id: infoUsuario.user.uid,
           productos: null,
-          localizacion: null
+          localizacion: null,
+          nombre: name || "Vendedor Anónimo",
         }
         await createVendedorProfile(vendedorData);
       };

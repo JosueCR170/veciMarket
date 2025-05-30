@@ -1,25 +1,35 @@
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
-// import { useEffect } from 'react';
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonCard, IonCardContent, IonText } from '@ionic/react';
 import Navbar from '../components/navbar/navbar';
-// import MapaComercios from '../components/mapa/mapa';
 import MapaLocal from '../components/mapa/mapaBase';
-import './Tab2.css';
-
 import AgregarProducto from '../components/agregarProducto/agregarProducto';
+import { useLocationContext } from '../context/contextLocation';
+import './Tab2.css';
+import Map from '../components/mapa/mapaCambiarLocalizacion';
+
 
 const Agregar: React.FC = () => {
+    const { location, loading } = useLocationContext();
+
   return (
     <IonPage>
       <Navbar />
-      {/* <IonContent fullscreen>
-        <IonHeader collapse="condense">
-          <IonToolbar>
-            <IonTitle size="large">Agregar</IonTitle>
-          </IonToolbar>
-        </IonHeader>
+
+        {/* <MapaLocal /> */}
+<Map />
+
+        {/* {!loading && location ? (
+        <AgregarProducto />
+      ) : (
+        <IonCard color="warning">
+          <IonCardContent>
+            <IonText>
+              ⚠️ Para poder añadir productos, primero debes registrar tu localización.
+            </IonText>
+          </IonCardContent>
+        </IonCard>
+      )} */}
+
         {/* <MapaComercios /> */}
-      {/*</IonContent> */}
-        <MapaLocal />
         {/* <AgregarProducto /> */}
         {/* <MapaPruebas /> */}
     </IonPage>
