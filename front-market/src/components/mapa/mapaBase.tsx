@@ -2,6 +2,8 @@ import { useEffect, useRef, useState } from "react";
 import { GoogleMap } from "@capacitor/google-maps";
 import { IonSpinner, IonText, IonAlert, IonButton } from "@ionic/react";
 import "./map.css";
+import { useLocationTracker } from "../../hooks/useLocationTracker";
+
 import { useLocationContext } from "../../context/contextLocation";
 import { updateVendedorLocation } from "../../services/firebase/vendedor";
 import { useAuth } from "../../context/contextUsuario";
@@ -17,7 +19,31 @@ const MapaLocal: React.FC = () => {
     const [showAlert, setShowAlert] = useState(false);
     const [coordsSeleccionadas, setCoordsSeleccionadas] = useState<{ lat: number; lng: number } | null>(null);
 
-    const { location, loading, error } = useLocationContext();
+    const { location, loading, error, refreshLocation } = useLocationContext();
+
+    //const { location, loading, error, requestPermissions, getCurrentPosition } = useLocationTracker();
+
+    useEffect(() => {
+        const init = async () => {
+            await refreshLocation();
+        };
+        init();
+    }, []);
+
+    useEffect(() => {
+    return () => {
+        // Al desmontar el componente o cambiar de usuario, limpiamos el mapa
+        if (mapInstance.current) {
+            mapInstance.current.removeAllMapListeners();
+            mapInstance.current.destroy(); // Destruye el mapa nativo
+            mapInstance.current = null;
+        }
+
+        marcadorActual.current = null;
+        setMapReady(false);
+    };
+}, [user]);
+
 
     useEffect(() => {
         if (!loading && location?.coords) {
@@ -111,7 +137,7 @@ const MapaLocal: React.FC = () => {
 
     const handleGuardarUbicacion = async () => {
         if (!user) return;
-        const localizacionActualizada= await updateVendedorLocation(user.uid, coordsSeleccionadas!);
+        const localizacionActualizada = await updateVendedorLocation(user.uid, coordsSeleccionadas!);
         if (localizacionActualizada.success) {
             alert("Ubicación guardada correctamente.");
         } else {
@@ -150,7 +176,7 @@ const MapaLocal: React.FC = () => {
             </IonButton>
 
             <div
-                id='vendedor-map'
+                id='local-map'
                 ref={mapRef}
                 style={{ width: "100%", height: "100%" }}
             />
@@ -182,10 +208,12 @@ const MapaLocal: React.FC = () => {
                         position: "absolute",
                         top: "16px",
                         right: "16px",
-                        backgroundColor: "rgba(255, 255, 255, 0.9)",
+                        // backgroundColor: "rgba(255, 255, 255, 0.9)",
+                         backgroundColor: "rgb(255, 255, 255)",
                         padding: "10px 16px",
                         borderRadius: "12px",
-                        boxShadow: "0 2px 8px rgba(0, 0, 0, 0.1)",
+                        // boxShadow: "0 2px 8px rgba(0, 0, 0, 0.1)",
+                        boxShadow: "0 2px 8px rgb(0, 0, 0)",
                         display: "flex",
                         alignItems: "center",
                         gap: "8px",

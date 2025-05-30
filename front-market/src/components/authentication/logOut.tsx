@@ -6,15 +6,18 @@ import { auth } from "../../services/firebase/config/firebaseConfig";
 import { signOut } from "firebase/auth";
 import { IonAlert } from '@ionic/react';
 import { useState } from "react";
+import { useLocationContext } from "../../context/contextLocation";
 
 export const LogoutButton = () => {
   const [showAlert, setShowAlert] = useState(false);
   const history = useHistory();
+  const {clearLocation} = useLocationContext();
 
   const handleLogout = async () => {
     try {
       await signOut(auth);
       await FirebaseAuthentication.signOut();
+     clearLocation();
       history.push("/login");
     } catch (error) {
       console.error("Error al cerrar sesión:", error);
@@ -30,7 +33,7 @@ export const LogoutButton = () => {
 
       <IonAlert
         isOpen={showAlert}
-        header="sure you want to log out?"
+        header="¿Deseas cerrar sesión?"
         buttons={[
           {
             text: "Cancelar",

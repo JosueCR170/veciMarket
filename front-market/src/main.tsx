@@ -10,7 +10,7 @@ root.render(
   <React.StrictMode>
     <UserProvider>
       <LocationProvider>
-       <App />
+      <App />
       </LocationProvider>
     </UserProvider>
   </React.StrictMode>

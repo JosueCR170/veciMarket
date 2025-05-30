@@ -57,3 +57,22 @@ interface VendedorModel{
     return { success: false, error };
   }
 };
+
+export const getVendedorLocation = async ( user_id:string) => {
+  try {
+    const vendedorRef = doc(db, 'vendedor', user_id);
+    const vendedorDoc = await getDoc(vendedorRef);
+
+    if (!vendedorDoc.exists()) {
+      throw new Error('El vendedor no existe en Firestore');
+    }
+    
+    return vendedorDoc.data().localizacion
+    //const data = vendedorDoc.data();
+    //return data.localizacion
+
+  } catch (error) {
+    console.error('Error obteniendo localización del vendedor en Firestore:', error);
+    return { success: false, error };
+  }
+};

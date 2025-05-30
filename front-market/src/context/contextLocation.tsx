@@ -12,6 +12,7 @@ interface LocationContextType {
     loading: boolean;
     error: string | null;
     refreshLocation: () => Promise<void>;
+    clearLocation: () => void;
 }
 
 const LocationContext = createContext<LocationContextType | undefined>(undefined);
@@ -23,6 +24,18 @@ export const LocationProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     const [error, setError] = useState<string | null>(null);
 
     const tracker = useLocationTracker();
+
+    useEffect(() => {
+        if (user) {
+            fetchLocation();
+        }
+    }, [user]);
+
+    const clearLocation = () => {
+        setLocation(null);
+        setError(null);
+        setLoading(false);
+    };
 
     const fetchLocation = async () => {
         if (!user) return;
@@ -42,7 +55,7 @@ export const LocationProvider: React.FC<{ children: React.ReactNode }> = ({ chil
                 if (data.localizacion) {
 
                     //setLocation(data.localizacion);
-
+                    await tracker.requestPermissions();
                     const fakePosition: Position = {
                         coords: {
                             latitude: data.localizacion.lat,
@@ -79,13 +92,6 @@ export const LocationProvider: React.FC<{ children: React.ReactNode }> = ({ chil
 
                 }
             } else {
-                // await tracker.requestPermissions();
-                // const pos = await tracker.getCurrentPosition();
-                // if (pos) {
-                //   setLocation(pos);
-                // } else if (tracker.error) {
-                //   throw new Error(tracker.error);
-                // }
                 throw new Error("No hay vendedor guardado en Firestore");
             }
         } catch (err) {
@@ -95,11 +101,7 @@ export const LocationProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         }
     };
 
-    useEffect(() => {
-        if (user) {
-            fetchLocation();
-        }
-    }, [user]);
+
 
     return (
         <LocationContext.Provider
@@ -108,6 +110,7 @@ export const LocationProvider: React.FC<{ children: React.ReactNode }> = ({ chil
                 loading,
                 error,
                 refreshLocation: fetchLocation,
+                clearLocation,
             }}
         >
             {children}

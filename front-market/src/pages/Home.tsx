@@ -15,7 +15,7 @@ const Home: React.FC = () => {
         </IonHeader>
         <ExploreContainer name="Tab 1 page" />*/}
 
-      <MapaComercios />
+      {/* <MapaComercios /> */}
 
     </IonPage>
   );

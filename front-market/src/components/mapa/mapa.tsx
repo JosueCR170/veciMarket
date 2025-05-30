@@ -56,15 +56,15 @@ const MapaComercios: React.FC = () => {
         });
       }
       if (location?.coords) {
-        await mapInstance.current.addCircles([{
-          center: {
-            lat: location.coords.latitude,
-            lng: location.coords.longitude,
-          },
-          radius: 1000,
-          strokeColor: '#4285F4',
-          fillColor: 'rgba(66, 133, 244, 0.3)',
-        }]);
+        // await mapInstance.current.addCircles([{
+        //   center: {
+        //     lat: location.coords.latitude,
+        //     lng: location.coords.longitude,
+        //   },
+        //   radius: 1000,
+        //   strokeColor: '#4285F4',
+        //   fillColor: 'rgba(66, 133, 244, 0.3)',
+        // }]);
       }
 
 
@@ -146,10 +146,12 @@ const MapaComercios: React.FC = () => {
             position: "absolute",
             top: "16px",
             right: "16px",
-            backgroundColor: "rgba(255, 255, 255, 0.9)", // Fondo blanco semi-transparente
+            // backgroundColor: "rgba(255, 255, 255, 0.9)", // Fondo blanco semi-transparente
+              backgroundColor: "rgb(255, 255, 255)", // Fondo blanco semi-transparente
             padding: "10px 16px",
             borderRadius: "12px",
-            boxShadow: "0 2px 8px rgba(0, 0, 0, 0.1)",
+            // boxShadow: "0 2px 8px rgba(0, 0, 0, 0.1)",
+            boxShadow: "0 2px 8px rgb(0, 0, 0)",
             display: "flex",
             alignItems: "center",
             gap: "8px",
