@@ -206,6 +206,7 @@ const MapaComercios: React.FC = () => {
         {comercioSeleccionado && (
           <div style={{ padding: 16 }}>
             <h2>{comercioSeleccionado.nombre}</h2>
+             <p>Direccion: {comercioSeleccionado.nombreLugar}</p>
             <p>Latitud: {comercioSeleccionado.localizacion.lat}</p>
             <p>Longitud: {comercioSeleccionado.localizacion.lng}</p>
           </div>

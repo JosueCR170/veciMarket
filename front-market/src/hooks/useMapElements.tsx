@@ -9,11 +9,11 @@ type Coordenadas = { lat: number; lng: number };
 
 export const UseMapElements = (
   location: Position | null,
-
   refreshLocation: () => Promise<void>,
   mapInstanceId = "local-map",
   mostrarVendedores: boolean = false
 ) => {
+
   const mapRef = useRef<HTMLDivElement | null>(null);
   const mapInstance = useRef<GoogleMap | null>(null);
   const marcadorActual = useRef<any>(null);
@@ -25,6 +25,8 @@ export const UseMapElements = (
 
   const [locales, setLocales] = useState<any[]>([]);
   const [comercioSeleccionado, setComercioSeleccionado] = useState<any | null>(null);
+  const [nombreLugar, setNombreLugar] = useState<string | null>(null);
+
 
   const { user } = useAuth();
   const tracker = useLocationTracker();
@@ -39,6 +41,10 @@ export const UseMapElements = (
 
     if (lat == null || lng == null) return;
     setCoordsSeleccionadas({ lat, lng });
+
+    const nombre = await obtenerNombreLugar(lat, lng);
+    setNombreLugar(nombre);
+
 
     //if (!mapRef.current || !location) return;
 
@@ -129,6 +135,12 @@ export const UseMapElements = (
     await mapInstance.current.setOnMapClickListener(async ({ latitude, longitude }) => {
       await agregarMarcadorUnico(latitude, longitude, "Ubicación seleccionada");
       setCoordsSeleccionadas({ lat: latitude, lng: longitude });
+
+      const nombre = await obtenerNombreLugar(latitude, longitude);
+      setNombreLugar(nombre);
+
+
+
       mapInstance.current?.removeAllMapListeners();
     });
   };
@@ -137,7 +149,7 @@ export const UseMapElements = (
     if (!mapInstance.current) return false;
 
     try {
-      await mapInstance.current.setOnMarkerClickListener((data) => {
+      await mapInstance.current.setOnMarkerClickListener(async (data) => {
         const { title, snippet } = data;
 
         // Ignorar el marcador del usuario
@@ -147,7 +159,14 @@ export const UseMapElements = (
         const comercio = locales.find((c) => c.nombre === data.title);
 
         if (comercio) {
-          setComercioSeleccionado(comercio);
+
+          const nombreLugar = await obtenerNombreLugar(comercio.localizacion.lat, comercio.localizacion.lng);
+          const comercioData = {
+            ...comercio,
+            nombreLugar: nombreLugar || "Ubicación desconocida"
+          };
+          
+          setComercioSeleccionado(comercioData);
           // setModalAbierto(true); // Puedes habilitar esto si necesitas mostrar algo
           return true;
         }
@@ -180,6 +199,28 @@ export const UseMapElements = (
     marcadorActual.current = null;
     setMapReady(false);
   };
+
+  const obtenerNombreLugar = async (lat: number, lng: number) => {
+    try {
+      const response = await fetch(
+        `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`
+      );
+      const data = await response.json();
+      return data.display_name || null;
+    } catch (error) {
+      console.error("Error al obtener el nombre del lugar:", error);
+      return null;
+    }
+  };
+
+  const moverCamara = async ( lat: number, lng: number, zoom: number) => {
+        await mapInstance.current!.setCamera({
+            coordinate: { lat, lng },
+            zoom,
+        });
+    };
+
+
 
   useEffect(() => {
 
@@ -221,10 +262,12 @@ export const UseMapElements = (
     coordsSeleccionadas,
     mapReady,
     comercioSeleccionado,
+    nombreLugar,
     activarSeleccionUbicacion,
     guardarUbicacion,
     agregarMarcadoresDeVendedores,
     destroyMap,
-    seleccionarMarcadorVendedor
+    seleccionarMarcadorVendedor,
+    moverCamara,
   };
 };

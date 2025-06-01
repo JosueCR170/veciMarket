@@ -22,13 +22,6 @@ const Agregar: React.FC = () => {
         ) : (
           <>
             <Map />
-            <IonCard color="warning" style={{ margin: 16 }}>
-              <IonCardContent>
-                <IonText>
-                  ⚠️ Para poder añadir productos, primero debes registrar tu localización.
-                </IonText>
-              </IonCardContent>
-            </IonCard>
           </>
         )}
     </IonPage>
