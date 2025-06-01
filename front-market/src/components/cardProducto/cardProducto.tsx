@@ -1,8 +1,10 @@
 import React from 'react';
-import { IonCard, IonCardHeader, IonCardContent, IonImg, IonText, IonTextarea } from '@ionic/react';
+import { IonCard, IonCardHeader, IonCardContent, IonImg, IonText } from '@ionic/react';
 import './cardProducto.css';
 
+// Define la interfaz Producto aquí
 interface Producto {
+  id: string;
   img: string;
   nombre: string;
   descripcion: string;
@@ -12,16 +14,16 @@ interface Producto {
 
 interface CardProductoProps {
   producto: Producto;
+  onClick: (producto: Producto) => void;
 }
 
-const CardProducto: React.FC<CardProductoProps> = ({ producto }) => {
+const CardProducto: React.FC<CardProductoProps> = ({ producto, onClick }) => {
   return (
-    <IonCard className="product-card">
-      <div className="text-container"> 
-      <div className="image-wrapper">
-        <IonImg className="imgProducto" src={producto.img} />
-      </div>
-      
+    <IonCard className="product-card" onClick={() => onClick(producto)}>
+      <div className="text-container">
+        <div className="image-wrapper">
+          <IonImg className="imgProducto" src={producto.img} />
+        </div>
         <div className="text-content">
           <IonCardHeader>
             <IonText className="product-name">{producto.nombre}</IonText>
