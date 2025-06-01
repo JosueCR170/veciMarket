@@ -1,7 +1,7 @@
-import { IonButton, IonAlert, IonSpinner, IonText } from "@ionic/react";
+import { IonButton, IonAlert, IonSpinner, IonText, IonModal } from "@ionic/react";
 import { useLocationContext } from "../../context/contextLocation";
 import { UseMapElements } from "../../hooks/useMapElements";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const Map: React.FC = () => {
   const { location, loading, error, refreshLocation } = useLocationContext();
@@ -11,9 +11,27 @@ const Map: React.FC = () => {
     guardarUbicacion,
     coordsSeleccionadas,
     mapReady,
+    comercioSeleccionado,
+    seleccionarMarcadorVendedor
   } = UseMapElements(location, refreshLocation);
 
   const [showAlert, setShowAlert] = useState(false);
+
+  const [modalAbierto, setModalAbierto] = useState(false);
+
+  useEffect(() => {
+    if (comercioSeleccionado) {
+      console.log("Comercio seleccionado:", comercioSeleccionado);
+      setModalAbierto(true);
+    }
+  }, [comercioSeleccionado]);
+
+  useEffect(() => {
+    if (mapReady) {
+      seleccionarMarcadorVendedor(); // activa el listener
+    }
+  }, [mapReady]);
+
 
   return (
     <div style={{ width: "100%", height: "100%", position: "relative" }}>
@@ -55,6 +73,19 @@ const Map: React.FC = () => {
           <IonText>Estamos buscando tu ubicación...</IonText>
         </div>
       )}
+
+
+      <IonModal isOpen={modalAbierto} trigger="open-modal" initialBreakpoint={0.25}
+        breakpoints={[0, 0.25, 0.55, 1]} onDidDismiss={() => setModalAbierto(false)}
+        style={{ '--background': '#fff', color: '#000' }}>
+        {comercioSeleccionado && (
+          <div style={{ padding: 16 }}>
+            <h2>{comercioSeleccionado.nombre}</h2>
+            <p>Latitud: {comercioSeleccionado.localizacion.lat}</p>
+            <p>Longitud: {comercioSeleccionado.localizacion.lng}</p>
+          </div>
+        )}
+      </IonModal>
     </div>
   );
 };

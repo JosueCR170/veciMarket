@@ -10,7 +10,9 @@ type Coordenadas = { lat: number; lng: number };
 export const UseMapElements = (
   location: Position | null,
 
-  refreshLocation: () => Promise<void>
+  refreshLocation: () => Promise<void>,
+  mapInstanceId = "local-map",
+  mostrarVendedores: boolean = false
 ) => {
   const mapRef = useRef<HTMLDivElement | null>(null);
   const mapInstance = useRef<GoogleMap | null>(null);
@@ -21,25 +23,28 @@ export const UseMapElements = (
   const [mapReady, setMapReady] = useState(false);
   const [coordsSeleccionadas, setCoordsSeleccionadas] = useState<Coordenadas | null>(null);
 
+  const [locales, setLocales] = useState<any[]>([]);
+  const [comercioSeleccionado, setComercioSeleccionado] = useState<any | null>(null);
+
   const { user } = useAuth();
   const tracker = useLocationTracker();
 
 
 
   const createMap = async () => {
-     if (!mapRef.current) return;
+    if (!mapRef.current) return;
 
-  const lat = location?.coords.latitude ?? coordsLocal?.lat;
-  const lng = location?.coords.longitude ?? coordsLocal?.lng;
+    const lat = location?.coords.latitude ?? coordsLocal?.lat;
+    const lng = location?.coords.longitude ?? coordsLocal?.lng;
 
-  if (lat == null || lng == null) return;
-  setCoordsSeleccionadas({ lat, lng });
+    if (lat == null || lng == null) return;
+    setCoordsSeleccionadas({ lat, lng });
 
     //if (!mapRef.current || !location) return;
 
     try {
       mapInstance.current = await GoogleMap.create({
-        id: "local-map",
+        id: mapInstanceId,
         element: mapRef.current!,
         apiKey: "AIzaSyBV35eS9s-QUwN0WcZWeK-XIoICekxqXwk",
         config: {
@@ -59,10 +64,10 @@ export const UseMapElements = (
           lng: lng,
         },
         title: "Tu posición",
+        snippet: "Esta es tu ubicación actual",
       });
 
-      const { success, vendedores } = await getVendedoresWithLocation();
-      console.log("Vendedores:", vendedores);
+      if (mostrarVendedores) { await agregarMarcadoresDeVendedores() }
 
 
       setMapReady(true);
@@ -82,6 +87,8 @@ export const UseMapElements = (
       marcadorActual.current = await mapInstance.current.addMarker({
         coordinate: { lat, lng },
         title: titulo,
+        snippet: "Esta es tu ubicación actual",
+
       });
 
     } catch (error) {
@@ -95,6 +102,7 @@ export const UseMapElements = (
       const { success, vendedores } = await getVendedoresWithLocation();
 
       if (!success || !vendedores) return;
+      setLocales(vendedores);
 
       for (const vendedor of vendedores) {
         if (vendedor.localizacion?.lat && vendedor.localizacion?.lng) {
@@ -104,6 +112,7 @@ export const UseMapElements = (
               lng: vendedor.localizacion.lng,
             },
             title: vendedor.nombre || "Vendedor",
+            snippet: "Comercio",
           });
         }
       }
@@ -123,6 +132,33 @@ export const UseMapElements = (
       mapInstance.current?.removeAllMapListeners();
     });
   };
+
+  const seleccionarMarcadorVendedor = async () => {
+    if (!mapInstance.current) return false;
+
+    try {
+      await mapInstance.current.setOnMarkerClickListener((data) => {
+        const { title, snippet } = data;
+
+        // Ignorar el marcador del usuario
+        if (title === "Tu posición" || snippet === "Esta es tu ubicación actual") {
+          return;
+        }
+        const comercio = locales.find((c) => c.nombre === data.title);
+
+        if (comercio) {
+          setComercioSeleccionado(comercio);
+          // setModalAbierto(true); // Puedes habilitar esto si necesitas mostrar algo
+          return true;
+        }
+
+        return false; // Si no encontró el comercio
+      });
+    } catch (error) {
+      alert("Error al seleccionar el marcador: " + error);
+    }
+  };
+
 
   const guardarUbicacion = async () => {
     if (!user || !coordsSeleccionadas) return;
@@ -162,13 +198,10 @@ export const UseMapElements = (
             lng: pos.coords.longitude,
           }
           setCoordsLocal(coords);
-          // await updateVendedorLocation(user.uid, coords);
-          // await refreshLocation();
 
         } else if (tracker.error) {
           throw new Error(tracker.error);
         }
-        //refreshLocation();
       }
     };
 
@@ -178,17 +211,20 @@ export const UseMapElements = (
   }, [location]);
 
   useEffect(() => {
-  if (coordsLocal) {
-    createMap();
-  }
-}, [coordsLocal]);
+    if (coordsLocal) {
+      createMap();
+    }
+  }, [coordsLocal]);
 
   return {
     mapRef,
-    activarSeleccionUbicacion,
-    guardarUbicacion,
     coordsSeleccionadas,
     mapReady,
+    comercioSeleccionado,
+    activarSeleccionUbicacion,
+    guardarUbicacion,
     agregarMarcadoresDeVendedores,
+    destroyMap,
+    seleccionarMarcadorVendedor
   };
 };
