@@ -1,0 +1,65 @@
+ion-modal {
+  --width: 100%;
+  --max-width: 600px; 
+  --height: 100%; 
+  
+}
+
+.modal-sidebar {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 500px;
+  height: 90%;
+  border-radius: 0;
+  box-shadow: -2px 0px 5px rgba(0, 0, 0, 0.2);
+  align-self: flex-end;
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: auto;
+  --background: none;
+}
+
+.modal-product-content {
+  width: 100%;
+  height: 100%;
+}
+
+.product-details-content {
+  background: #f8f8f8;
+  color: #000000;
+}
+
+.product-details {
+  display: flex;
+}
+
+p {
+  display: flex;
+  padding: 0px 0px 0px 10px;
+}
+
+.modal-back-arrow {
+  font-size: 24px;
+  cursor: pointer;
+  padding: 10px;
+}
+
+
+
+@media (max-width: 576px) {
+  .modal-sidebar {
+    width: 100%;
+  }
+
+  .modal-product-content {
+    padding: 5px;
+  }
+}
+
+@media (min-width: 577px) and (max-width: 768px) {
+  .modal-sidebar {
+    width: 70%;
+  }
+}
