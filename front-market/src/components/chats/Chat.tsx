@@ -1,12 +1,15 @@
 import React, { useState, useEffect, useRef, use } from 'react';
-import { IonList, IonItem, IonTextarea, IonIcon, IonButton } from '@ionic/react';
+import { IonList, IonItem, IonTextarea, IonIcon } from '@ionic/react';
 import { send } from 'ionicons/icons';
 import { useAuth } from '../../context/contextUsuario';
 import { db } from '../../services/firebase/config/firebaseConfig';
-import { collection, query, orderBy, onSnapshot, Timestamp, doc, addDoc, updateDoc, serverTimestamp, writeBatch } from 'firebase/firestore';
+import { collection, query, orderBy, onSnapshot, Timestamp, doc, getDoc, serverTimestamp, writeBatch } from 'firebase/firestore';
 import { ChatPreview } from './chatPreviewInterface';
 
 const Chat: React.FC<ChatPreview> = (chatPreview) => {
+
+    const API_BASE = 'http://10.0.2.2:3000';
+
     const [inputValue, setInputValue] = useState('');
     const [messages, setMessages] = useState<any[]>([]);
 
@@ -40,6 +43,7 @@ const Chat: React.FC<ChatPreview> = (chatPreview) => {
     }
 
     async function sendMessage(chatId: string, userId: string, text: string) {
+
         const batch = writeBatch(db);
 
         const messagesRef = collection(db, 'chats', chatId, 'messages');
@@ -50,6 +54,7 @@ const Chat: React.FC<ChatPreview> = (chatPreview) => {
             from: userId,
             text,
             timestamp: serverTimestamp(),
+            read: false
         });
 
         // Referencia al doc principal
@@ -63,6 +68,37 @@ const Chat: React.FC<ChatPreview> = (chatPreview) => {
 
         // Ejecuta el batch
         await batch.commit();
+
+        const otherUserId = chatPreview.participants.find(id => id !== user?.uid);
+        if (!otherUserId) return;
+
+        const sessionDocRef = doc(db, "userSessions", otherUserId!);
+        const sessionSnap = await getDoc(sessionDocRef);
+        const existingDeviceToken = sessionSnap.exists() ? sessionSnap.data().deviceToken : null;
+
+        if (existingDeviceToken) {
+            try {
+                const payload = {
+                    token: existingDeviceToken,
+                    title: `Nuevo mensaje de ${user?.email}`,
+                    body: text,
+                    data: { chatId, senderId: user?.uid},
+                    
+                };
+
+                const res = await fetch(`${API_BASE}/api/send-notification`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const resData = await res.json();
+                console.log(JSON.stringify(resData, null, 1));
+            } catch (err: any) {
+                console.error('Error al enviar la notificación: ' + err.message);
+            }
+            console.log("Enviando notificación push al usuario:", otherUserId);
+        }
     }
 
     async function handleSendClick() {
