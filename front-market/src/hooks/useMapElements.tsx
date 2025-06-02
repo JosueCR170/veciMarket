@@ -23,9 +23,9 @@ export const UseMapElements = (
   const [mapReady, setMapReady] = useState(false);
   const [coordsSeleccionadas, setCoordsSeleccionadas] = useState<Coordenadas | null>(null);
 
-  const [locales, setLocales] = useState<any[]>([]);
+  const [vendedores, setVendedores] = useState<any[]>([]);
   const [comercioSeleccionado, setComercioSeleccionado] = useState<any | null>(null);
-  const [nombreLugar, setNombreLugar] = useState<string | null>(null);
+  const [direccionLugar, setDireccionLugar] = useState<string | null>(null);
 
 
   const { user } = useAuth();
@@ -42,8 +42,8 @@ export const UseMapElements = (
     if (lat == null || lng == null) return;
     setCoordsSeleccionadas({ lat, lng });
 
-    const nombre = await obtenerNombreLugar(lat, lng);
-    setNombreLugar(nombre);
+    const dir = await obtenerDireccionByCoords(lat, lng);
+    setDireccionLugar(dir);
 
 
     //if (!mapRef.current || !location) return;
@@ -108,7 +108,7 @@ export const UseMapElements = (
       const { success, vendedores } = await getVendedoresWithLocation();
 
       if (!success || !vendedores) return;
-      setLocales(vendedores);
+      setVendedores(vendedores);
 
       for (const vendedor of vendedores) {
         if (vendedor.localizacion?.lat && vendedor.localizacion?.lng) {
@@ -136,8 +136,8 @@ export const UseMapElements = (
       await agregarMarcadorUnico(latitude, longitude, "Ubicación seleccionada");
       setCoordsSeleccionadas({ lat: latitude, lng: longitude });
 
-      const nombre = await obtenerNombreLugar(latitude, longitude);
-      setNombreLugar(nombre);
+      const direction = await obtenerDireccionByCoords(latitude, longitude);
+      setDireccionLugar(direction);
 
 
 
@@ -156,15 +156,16 @@ export const UseMapElements = (
         if (title === "Tu posición" || snippet === "Esta es tu ubicación actual") {
           return;
         }
-        const comercio = locales.find((c) => c.nombre === data.title);
+        const comercio = vendedores.find((c) => c.nombre === data.title);
 
         if (comercio) {
 
-          const nombreLugar = await obtenerNombreLugar(comercio.localizacion.lat, comercio.localizacion.lng);
+          const direccion = await obtenerDireccionByCoords(comercio.localizacion.lat, comercio.localizacion.lng);
           const comercioData = {
             ...comercio,
-            nombreLugar: nombreLugar || "Ubicación desconocida"
+            direccion: direccion || "Ubicación desconocida"
           };
+          console.log("Comercio seleccionado:", comercioData);
           
           setComercioSeleccionado(comercioData);
           // setModalAbierto(true); // Puedes habilitar esto si necesitas mostrar algo
@@ -182,7 +183,14 @@ export const UseMapElements = (
   const guardarUbicacion = async () => {
     if (!user || !coordsSeleccionadas) return;
 
-    const res = await updateVendedorLocation(user.uid, coordsSeleccionadas);
+    const direccion = await obtenerDireccionByCoords(coordsSeleccionadas.lat, coordsSeleccionadas.lng);
+    const coords = {
+      lat: coordsSeleccionadas.lat,
+      lng: coordsSeleccionadas.lng,
+      direccion: direccion || "Ubicación desconocida",
+    };
+
+    const res = await updateVendedorLocation(user.uid, coords);
     if (res.success) {
       console.log("Ubicación guardada:", coordsSeleccionadas);
       alert("Ubicación guardada correctamente.");
@@ -200,7 +208,7 @@ export const UseMapElements = (
     setMapReady(false);
   };
 
-  const obtenerNombreLugar = async (lat: number, lng: number) => {
+  const obtenerDireccionByCoords = async (lat: number, lng: number) => {
     try {
       const response = await fetch(
         `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`
@@ -262,7 +270,7 @@ export const UseMapElements = (
     coordsSeleccionadas,
     mapReady,
     comercioSeleccionado,
-    nombreLugar,
+    direccionLugar,
     activarSeleccionUbicacion,
     guardarUbicacion,
     agregarMarcadoresDeVendedores,

@@ -8,22 +8,28 @@ import Map from '../components/mapa/mapaCambiarLocalizacion';
 
 
 const Agregar: React.FC = () => {
-    const { location, loading } = useLocationContext();
+  const { location, loading } = useLocationContext();
 
-  return (
+  // return (
+  //   <IonPage>
+  //     <Navbar />
+  //     {loading ? (
+  //       <div style={{ display: 'flex', justifyContent: 'center', marginTop: 30 }}>
+  //         <IonSpinner name="crescent" />
+  //       </div>
+  //     ) : location ? (
+  //       <AgregarProducto />
+  //     ) : (
+  //       <>
+  //         <Map />
+  //       </>
+  //     )}
+  //   </IonPage>
+  // );
+   return (
     <IonPage>
       <Navbar />
- {loading ? (
-          <div style={{ display: 'flex', justifyContent: 'center', marginTop: 30 }}>
-            <IonSpinner name="crescent" />
-          </div>
-        ) : location ? (
-          <AgregarProducto />
-        ) : (
-          <>
-            <Map />
-          </>
-        )}
+      {location ? <AgregarProducto /> : <Map />}
     </IonPage>
   );
 };

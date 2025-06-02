@@ -44,7 +44,6 @@ const Registrar: React.FC<{ onToggleForm: () => void }> = ({ onToggleForm }) => 
       if (rol === "ejecutivo") {
         const vendedorData = {
           user_id: infoUsuario.user.uid,
-          productos: null,
           localizacion: null,
           nombre: name || "Vendedor Anónimo",
         }
