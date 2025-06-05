@@ -40,7 +40,7 @@ const ProductoModal: React.FC<ProductoModalProps> = ({ isOpen, producto, onClose
   return (
     <IonModal isOpen={isOpen} onDidDismiss={onClose} className="modal-sidebar">
       <IonHeader>
-        <IonToolbar>
+        <IonToolbar style={{ '--background': '#f8f8f8', color: '#000' }}>
           <IonIcon
             slot="start"
             icon={arrowBackOutline}
@@ -51,35 +51,31 @@ const ProductoModal: React.FC<ProductoModalProps> = ({ isOpen, producto, onClose
         </IonToolbar>
       </IonHeader>
       <IonContent className="modal-product-content">
-        <IonCard>
+        <IonCard className="modal-product-card">
           <IonImg src={producto.img} alt={producto.nombre} />
           <IonCardContent className="product-details-content">
-            <IonCardHeader>
-              <IonCardTitle>{producto.nombre}</IonCardTitle>
-              <IonCardSubtitle>
-                <IonText color="medium">
-                  {producto.categoria} - ${producto.precio}
-                </IonText>
-              </IonCardSubtitle>
-            </IonCardHeader>
-
-            <div className="product-details">
-              <p><strong>Descripción:</strong></p>
-              <p>{producto.descripcion}</p>
-
-              {producto.vendedor && (
+            <IonCardTitle style={{ color: '#000' }}>{producto.nombre}</IonCardTitle>
+            <IonText>
+              <p><strong>Precio: </strong></p> <p> ${producto.precio}</p>
+            </IonText>
+            <IonText>
+              <p><strong>Categoría: </strong> </p> <p> {producto.categoria}</p>
+            </IonText>
+            <IonText>
+              <p><strong>Descripción: </strong> </p> <p> {producto.descripcion}</p>
+            </IonText>
+              <IonText>
                 <p>
-                  <IonIcon icon={personCircleOutline} /> <strong>Vendedor:</strong> {producto.vendedor}
+                  <IonIcon icon={personCircleOutline} /> <strong>Vendedor:</strong> </p> <p> {producto.vendedor}
                 </p>
-              )}
-              {producto.contacto && (
+              </IonText>
+              <IonText>
                 <p>
-                  <IonIcon icon={callOutline} /> <strong>Contacto:</strong> {producto.contacto}
+                  <IonIcon icon={callOutline} /> <strong>Contacto:</strong> </p> <p> {producto.contacto}
                 </p>
-              )}
-            </div>
-            
+              </IonText>
           </IonCardContent>
+
         </IonCard>
       </IonContent>
     </IonModal>
