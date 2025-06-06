@@ -1,7 +1,7 @@
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
 import Navbar from '../components/navbar/navbar';
 
-import MapaComercios from '../components/mapa/mapa';
+import MapaComercios from '../components/mapa/mapaVerComercios';
 import './Home.css';
 
 const Home: React.FC = () => {
@@ -14,6 +14,7 @@ const Home: React.FC = () => {
           </IonToolbar>
         </IonHeader>
         <ExploreContainer name="Tab 1 page" />*/}
+
       <MapaComercios />
 
     </IonPage>
