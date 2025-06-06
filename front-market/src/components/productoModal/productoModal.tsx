@@ -34,7 +34,7 @@ interface ProductoModalProps {
 }
 
 const ProductoModal: React.FC<ProductoModalProps> = ({ isOpen, producto, onClose }) => {
-  console.log('ProductoModal renderizado', { isOpen, producto });
+  // console.log('ProductoModal renderizado', { isOpen, producto });
   if (!producto) return null;
 
   return (

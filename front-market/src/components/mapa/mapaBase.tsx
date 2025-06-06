@@ -5,7 +5,7 @@ import "./map.css";
 import { useLocationTracker } from "../../hooks/useLocationTracker";
 
 import { useLocationContext } from "../../context/contextLocation";
-import { updateVendedorLocation } from "../../services/firebase/vendedor";
+import { updateVendedorLocation } from "../../services/firebase/vendedorService";
 import { useAuth } from "../../context/contextUsuario";
 
 const MapaLocal: React.FC = () => {

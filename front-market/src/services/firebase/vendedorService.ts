@@ -19,14 +19,12 @@ type Coordenadas = {
 
 interface VendedorModel {
   user_id: string;
-  //productos: string[] | null;
   localizacion: Coordenadas | null;
   nombre: string;
 }
 
 export const createVendedorProfile = async ({
   user_id,
-  //productos,
   localizacion,
   nombre,
 }: VendedorModel) => {

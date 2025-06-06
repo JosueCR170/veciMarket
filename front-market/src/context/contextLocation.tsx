@@ -5,7 +5,7 @@ import { db } from "../services/firebase/config/firebaseConfig";
 import { useAuth } from "./contextUsuario";
 import { useLocationTracker } from "../hooks/useLocationTracker"; // tu hook personalizado
 import { Position } from "@capacitor/geolocation";
-import { updateVendedorLocation } from "../services/firebase/vendedor";
+import { updateVendedorLocation } from "../services/firebase/vendedorService";
 
 interface LocationContextType {
     location: Position | null;

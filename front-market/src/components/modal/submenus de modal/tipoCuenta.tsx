@@ -16,7 +16,7 @@ import { useAuth } from "../../../context/contextUsuario";
 import { auth, db } from "../../../services/firebase/config/firebaseConfig";
 import { doc, updateDoc } from "firebase/firestore";
 import { useState } from "react";
-import { createVendedorProfile } from "../../../services/firebase/vendedor";
+import { createVendedorProfile } from "../../../services/firebase/vendedorService";
 
 export const TipoCuenta = ({ onClose }: { onClose: () => void }) => {
   const { rol, user } = useAuth(); // asegúrate de que user contenga el uid

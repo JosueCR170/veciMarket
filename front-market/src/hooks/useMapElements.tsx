@@ -1,7 +1,7 @@
 import { useRef, useEffect, useState } from "react";
 import { GoogleMap } from "@capacitor/google-maps";
 import { useAuth } from "../context/contextUsuario";
-import { updateVendedorLocation, getVendedoresWithLocation } from "../services/firebase/vendedor";
+import { updateVendedorLocation, getVendedoresWithLocation } from "../services/firebase/vendedorService";
 import { useLocationTracker } from "./useLocationTracker";
 import type { Position } from "@capacitor/geolocation";
 

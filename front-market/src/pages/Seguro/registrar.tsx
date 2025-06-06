@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
 import { IonButton, IonInput, IonItem, IonLabel, IonSelect, IonSelectOption, IonText, SelectCustomEvent } from '@ionic/react';
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
-import { createVendedorProfile } from '../../services/firebase/vendedor';
+import { createVendedorProfile } from '../../services/firebase/vendedorService';
 import { auth, db } from '../../services/firebase/config/firebaseConfig';
 import { doc, setDoc } from 'firebase/firestore';
 import { IonToast } from "@ionic/react";

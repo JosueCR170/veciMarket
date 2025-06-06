@@ -75,11 +75,9 @@ const MapaComercios: React.FC = () => {
             <div>
               <h2>{comercioSeleccionado.nombre}</h2>
               <p>Direccion: {comercioSeleccionado.direccion}</p>
-              <p>Latitud: {comercioSeleccionado.localizacion.lat}</p>
-              <p>Longitud: {comercioSeleccionado.localizacion.lng}</p>
             </div>
 
-            <VerProductos />
+            <VerProductos idVendedor={comercioSeleccionado.id}/>
           </div>
 
         )}
