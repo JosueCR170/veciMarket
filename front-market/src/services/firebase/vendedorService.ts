@@ -78,24 +78,24 @@ export const updateVendedorLocation = async (
   }
 };
 
-export const getVendedor = async (user_id: string) => {
-  try {
-    const vendedorRef = doc(db, "vendedor", user_id);
-    const vendedorDoc = await getDoc(vendedorRef);
+// export const getVendedor = async (user_id: string) => {
+//   try {
+//     const vendedorRef = doc(db, "vendedor", user_id);
+//     const vendedorDoc = await getDoc(vendedorRef);
 
-    if (!vendedorDoc.exists()) {
-      throw new Error("El vendedor no existe en Firestore");
-    }
+//     if (!vendedorDoc.exists()) {
+//       throw new Error("El vendedor no existe en Firestore");
+//     }
 
-    return vendedorDoc.data();
-  } catch (error) {
-    console.error(
-      "Error obteniendo localización del vendedor en Firestore:",
-      error
-    );
-    return { success: false, error };
-  }
-};
+//     return vendedorDoc.data();
+//   } catch (error) {
+//     console.error(
+//       "Error obteniendo localización del vendedor en Firestore:",
+//       error
+//     );
+//     return { success: false, error };
+//   }
+// };
 
 export const getVendedoresWithLocation = async () => {
   try {
