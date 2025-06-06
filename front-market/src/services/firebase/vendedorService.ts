@@ -90,7 +90,7 @@ export const getVendedor = async (user_id: string) => {
     return vendedorDoc.data();
   } catch (error) {
     console.error(
-      "Error obteniendo localización del vendedor en Firestore:",
+      "Error obteniendo el vendedor en Firestore:",
       error
     );
     return { success: false, error };
