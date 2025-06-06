@@ -2,7 +2,7 @@ ion-modal {
   --width: 100%;
   --max-width: 600px; 
   --height: 100%; 
-  
+
 }
 
 .modal-sidebar {
@@ -10,7 +10,7 @@ ion-modal {
   flex-direction: column;
   width: 100%;
   max-width: 500px;
-  height: 90%;
+  height: 100%;
   border-radius: 0;
   box-shadow: -2px 0px 5px rgba(0, 0, 0, 0.2);
   align-self: flex-end;
@@ -18,36 +18,49 @@ ion-modal {
   top: 0;
   right: 0;
   left: auto;
-  --background: none;
+
+}
+
+.modal-product-card {
+  width: 100%;
+  height: 100%;
+  margin: 0; 
+  border: none; 
+  box-shadow: none; 
+  background-color: #e4e4e4;
 }
 
 .modal-product-content {
+  color: #000000;
   width: 100%;
   height: 100%;
 }
 
 .product-details-content {
-  background: #f8f8f8;
+  background: #e4e4e4;
+  padding: 20px;
+}
+
+ion-text {
+  font-size: 1rem;
+  display: flex;
   color: #000000;
 }
 
-.product-details {
-  display: flex;
-}
-
 p {
-  display: flex;
-  padding: 0px 0px 0px 10px;
+  font-size: 1rem;
+  padding: 10px 0px 0px 10px;
 }
 
 .modal-back-arrow {
   font-size: 24px;
   cursor: pointer;
-  padding: 10px;
+  padding: 0px 0px 0px 10px;
 }
 
 
 
+/* Media Queries for Responsiveness */
 @media (max-width: 576px) {
   .modal-sidebar {
     width: 100%;
@@ -61,5 +74,11 @@ p {
 @media (min-width: 577px) and (max-width: 768px) {
   .modal-sidebar {
     width: 70%;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 992px) {
+  .modal-sidebar {
+    width: 60%;
   }
 }

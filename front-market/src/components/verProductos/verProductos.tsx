@@ -112,7 +112,8 @@ const VerProductos: React.FC<{ idVendedor: string }> = ({ idVendedor }) => {
       <IonGrid>
         <IonRow>
           {productosFiltrados.map(producto => (
-            <IonCol size="12" sizeMd="6" sizeLg="4" sizeXl="3" key={producto.id}>
+            <IonCol size="6" key={producto.id}>
+
               <CardProducto producto={producto} onClick={handleProductoClick} />
             </IonCol>
           ))}
