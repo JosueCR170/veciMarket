@@ -4,10 +4,17 @@ import { Camera, CameraResultType } from '@capacitor/camera';
 import { pencilOutline, closeOutline } from 'ionicons/icons';
 import { IonIcon } from '@ionic/react'; // Asegúrate de tener esto también
 import { Filesystem, Directory } from '@capacitor/filesystem';
-import { getStorage, ref, uploadString, getDownloadURL } from 'firebase/storage';
-import { getFirestore, collection, addDoc } from 'firebase/firestore';
-import { app } from '../../services/firebase/config/firebaseConfig'; // Import Firebase app
+
+import { useAuth } from '../../context/contextUsuario';
+
+import { uploadProductImage, saveProductData } from '../../services/firebase/productService';
+
+// import { getStorage, ref, uploadString, getDownloadURL } from 'firebase/storage';
+// import { getFirestore, collection, addDoc } from 'firebase/firestore';
+// import { app } from '../../services/firebase/config/firebaseConfig'; // Import Firebase app
+
 import './agregarProducto.css';
+import { auth } from '../../services/firebase/config/firebaseConfig';
 
 const AgregarProducto: React.FC = () => {
     const [productName, setProductName] = useState('');
@@ -19,8 +26,18 @@ const AgregarProducto: React.FC = () => {
     const [showToast, setShowToast] = useState(false);
     const [isUploading, setIsUploading] = useState(false);
 
-    const storage = getStorage(app); // Get Firebase Storage instance
-    const firestore = getFirestore(app); // Get Firestore instance
+    const {user}= useAuth();
+
+    // const storage = getStorage(app); // Get Firebase Storage instance
+    // const firestore = getFirestore(app); // Get Firestore instance
+
+    const categories = [
+        { value: 'electrónica', label: 'Electrónica' },
+        { value: 'ropa', label: 'Ropa' },
+        { value: 'hogar', label: 'Hogar' },
+        { value: 'alimentos', label: 'Alimentos' },
+        { value: 'otro', label: 'Otro' }
+    ];
 
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
@@ -33,19 +50,34 @@ const AgregarProducto: React.FC = () => {
 
         setIsUploading(true);
         try {
+            if(!user || !user.uid) {
+                setErrorMessage(`Error al agregar producto: Usuario no autenticado.`);
+                return
+            }
+
             // Upload image to Firebase Storage
-            const storageRef = ref(storage, `productos/${new Date().getTime()}-${productName}.jpeg`);
-            const uploadTask = await uploadString(storageRef, image, 'data_url');
-            const downloadURL = await getDownloadURL(storageRef);
+            const imageUrl = await uploadProductImage(productName, image);
+
+            // const storageRef = ref(storage, `productos/${new Date().getTime()}-${productName}.jpeg`);
+            // const uploadTask = await uploadString(storageRef, image, 'data_url');
+            // const downloadURL = await getDownloadURL(storageRef);
 
             // Save product details to Firestore
-            await addDoc(collection(firestore, 'productos'), {
+            await saveProductData({
                 nombre: productName,
                 descripcion: description,
                 precio: price,
                 categoria: category,
-                img: downloadURL,
+                img: imageUrl,
+                idVendedor: user?.uid
             });
+            // await addDoc(collection(firestore, 'productos'), {
+            //     nombre: productName,
+            //     descripcion: description,
+            //     precio: price,
+            //     categoria: category,
+            //     img: downloadURL,
+            // });
 
             // Reset form fields
             setProductName('');
@@ -163,11 +195,11 @@ const AgregarProducto: React.FC = () => {
                         interface="popover"
                         disabled={isUploading}
                     >
-                        <IonSelectOption value="electronics">Electrónica</IonSelectOption>
-                        <IonSelectOption value="clothing">Ropa</IonSelectOption>
-                        <IonSelectOption value="home">Hogar</IonSelectOption>
-                        <IonSelectOption value="food">Alimentos</IonSelectOption>
-                        <IonSelectOption value="other">Otro</IonSelectOption>
+                        {categories.map(cat => (
+                            <IonSelectOption key={cat.value} value={cat.value}>
+                                {cat.label}
+                            </IonSelectOption>
+                        ))}
                     </IonSelect>
                 </div>
 

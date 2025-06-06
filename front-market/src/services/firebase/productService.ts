@@ -1,49 +1,24 @@
-// import { collection, doc, writeBatch } from "firebase/firestore";
-// import { ref, uploadString, getDownloadURL } from "firebase/storage";
-// import { firestore, storage } from "./firebase"; // tu archivo de configuración
-// import { getAuth } from "firebase/auth";
+// src/services/firebaseProductService.ts
+import { ref, uploadString, getDownloadURL } from 'firebase/storage';
+import { addDoc, collection } from 'firebase/firestore';
+import { storage, db, auth } from './config/firebaseConfig';
 
-// const agregarProductoConImagenYActualizarVendedor = async ({ productName, description, price, category, image }) => {
-//   const auth = getAuth();
-//   const user = auth.currentUser;
 
-//   if (!user) {
-//     throw new Error("Usuario no autenticado");
-//   }
+export const uploadProductImage = async (productName: string, imageDataUrl: string): Promise<string> => {
+  const timestamp = new Date().getTime();
+  const storageRef = ref(storage, `productos/${timestamp}-${productName}.jpeg`);
+  await uploadString(storageRef, imageDataUrl, 'data_url');
+  return await getDownloadURL(storageRef);
+};
 
-//   try {
-//     const uid = user.uid;
+export const saveProductData = async (product: {
 
-//     // 1. Subir imagen a Firebase Storage
-//     const imageRef = ref(storage, `productos/${Date.now()}-${productName}.jpeg`);
-//     await uploadString(imageRef, image, 'data_url');
-//     const downloadURL = await getDownloadURL(imageRef);
-
-//     // 2. Preparar referencias a Firestore
-//     const productosRef = collection(firestore, 'productos');
-//     const nuevoProductoRef = doc(productosRef); // genera un nuevo ID
-
-//     const productoData = {
-//       nombre: productName,
-//       descripcion: description,
-//       precio: price,
-//       categoria: category,
-//       img: downloadURL,
-//       creadoEn: new Date(),
-//       vendedorId: uid,
-//     };
-
-//     // Subcolección del vendedor
-//     const vendedorProductoRef = doc(firestore, `vendedores/${uid}/productos/${nuevoProductoRef.id}`);
-
-//     // 3. Crear y ejecutar batch
-//     const batch = writeBatch(firestore);
-//     batch.set(nuevoProductoRef, productoData);
-//     batch.set(vendedorProductoRef, productoData);
-
-//     await batch.commit();
-//     console.log("Producto agregado y registrado en la cuenta del vendedor");
-//   } catch (error) {
-//     console.error("Error al agregar producto con imagen:", error);
-//   }
-// };
+  nombre: string;
+  descripcion: string;
+  precio: string;
+  categoria: string;
+  img: string;
+  idVendedor:string;
+}): Promise<void> => {
+  await addDoc(collection(db, 'productos'), product);
+};

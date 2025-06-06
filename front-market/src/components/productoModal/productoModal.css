@@ -60,6 +60,7 @@ p {
 
 
 
+/* Media Queries for Responsiveness */
 @media (max-width: 576px) {
   .modal-sidebar {
     width: 100%;
@@ -73,5 +74,11 @@ p {
 @media (min-width: 577px) and (max-width: 768px) {
   .modal-sidebar {
     width: 70%;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 992px) {
+  .modal-sidebar {
+    width: 60%;
   }
 }

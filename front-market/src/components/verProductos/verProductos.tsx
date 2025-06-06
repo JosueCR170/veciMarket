@@ -57,7 +57,7 @@ const VerProductos: React.FC = () => {
       <IonGrid>
         <IonRow>
           {productos.map(producto => (
-            <IonCol size="12" sizeMd="6" sizeLg="4" sizeXl="3" key={producto.id}>
+            <IonCol size="6"  key={producto.id}>
               {/* Pasamos el ID como key */}
               <CardProducto producto={producto} onClick={handleProductoClick} />
             </IonCol>
