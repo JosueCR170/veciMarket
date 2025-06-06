@@ -14,18 +14,19 @@ import {
 type Coordenadas = {
   lat: number;
   lng: number;
+  direccion?: string;
 };
 
 interface VendedorModel {
   user_id: string;
-  productos: string[] | null;
+  //productos: string[] | null;
   localizacion: Coordenadas | null;
   nombre: string;
 }
 
 export const createVendedorProfile = async ({
   user_id,
-  productos,
+  //productos,
   localizacion,
   nombre,
 }: VendedorModel) => {
@@ -36,7 +37,7 @@ export const createVendedorProfile = async ({
     // Solo crear si no existe
     if (!vendedorDoc.exists()) {
       await setDoc(vendedorRef, {
-        productos,
+        //productos,
         localizacion,
         nombre,
       });
@@ -89,8 +90,6 @@ export const getVendedorLocation = async (user_id: string) => {
     }
 
     return vendedorDoc.data().localizacion;
-    //const data = vendedorDoc.data();
-    //return data.localizacion
   } catch (error) {
     console.error(
       "Error obteniendo localización del vendedor en Firestore:",

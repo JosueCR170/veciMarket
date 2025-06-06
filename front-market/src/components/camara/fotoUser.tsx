@@ -79,6 +79,11 @@ const CapturaFotoPage: React.FC = () => {
     fetchFotoPerfil();
   }, [user?.uid, showAlert]);
 
+  useEffect(() => {
+  console.log('Usuario actual:', user);
+}, [user]);
+
+
 
 const handlePhoto = async (source: CameraSource) => {
     try {
@@ -146,6 +151,7 @@ const handlePhoto = async (source: CameraSource) => {
       </div>
    
       {/* Card de Usuario */}
+      {user && (
       <IonCard style={{ width: '100%', minWidth: '200px', background: 'white', borderRadius: '10px', padding: '10px' }}>
         <IonCardHeader>
           <IonCardTitle>{user?.displayName}</IonCardTitle>
@@ -155,6 +161,7 @@ const handlePhoto = async (source: CameraSource) => {
           <p>{rol}</p>
         </IonCardContent>
       </IonCard>
+      )}
 
       {photoPreview && isPreview && (
   <IonFooter
