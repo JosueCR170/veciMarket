@@ -50,30 +50,3 @@ export const getProductosByVendedorId = async (idVendedor: string) => {
     return { success: false, error };
   }
 }
-
-
-export const filterProductsByCategories = async (categorias: string[], idVendedor: string) => {
-  try {
-    const productosRef = collection(db, 'productos');
-    const q = query(productosRef, where('categoria', "in", categorias), where('idVendedor', '==', idVendedor));
-    const querySnapshot = await getDocs(q);
-    console.log('querySnapshot:', querySnapshot);
-    const productos = querySnapshot.docs.map((doc) => {
-      const data = doc.data();
-      return {
-         id: doc.id,
-          img: data.img || '',
-          nombre: data.nombre || '',
-          descripcion: data.descripcion || '',
-          precio: data.precio || 0,
-          categoria: data.categoria || '',
-          ...data,
-      };
-    });
-
-    return { success: true, productos: productos };
-  } catch (error) {
-    console.error('Error al obtener productos por vendedor:', error);
-    return { success: false, error };
-  }
-}

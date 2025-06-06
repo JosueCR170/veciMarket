@@ -78,7 +78,7 @@ export const updateVendedorLocation = async (
   }
 };
 
-export const getVendedorLocation = async (user_id: string) => {
+export const getVendedor = async (user_id: string) => {
   try {
     const vendedorRef = doc(db, "vendedor", user_id);
     const vendedorDoc = await getDoc(vendedorRef);
@@ -87,7 +87,7 @@ export const getVendedorLocation = async (user_id: string) => {
       throw new Error("El vendedor no existe en Firestore");
     }
 
-    return vendedorDoc.data().localizacion;
+    return vendedorDoc.data();
   } catch (error) {
     console.error(
       "Error obteniendo localización del vendedor en Firestore:",

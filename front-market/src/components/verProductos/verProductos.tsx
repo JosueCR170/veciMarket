@@ -4,7 +4,7 @@ import { app } from '../../services/firebase/config/firebaseConfig';
 import CardProducto from '../cardProducto/cardProducto';
 import ProductoModal from '../productoModal/productoModal';
 import { IonGrid, IonRow, IonCol, IonContent, IonItem, IonSelect, IonSelectOption, IonSearchbar } from '@ionic/react';
-import { filterProductsByCategories, getProductosByVendedorId } from '../../services/firebase/productService';
+import { getProductosByVendedorId } from '../../services/firebase/productService';
 
 // Define la interfaz Producto aquí
 interface Producto {
