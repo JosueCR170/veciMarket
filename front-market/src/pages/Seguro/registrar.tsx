@@ -5,10 +5,8 @@ import { createVendedorProfile } from '../../services/firebase/vendedorService';
 import { auth, db } from '../../services/firebase/config/firebaseConfig';
 import { doc, setDoc } from 'firebase/firestore';
 import { IonToast } from "@ionic/react";
-<<<<<<< HEAD
 import { getDeviceToken } from '../../services/firebase/tokenUtils';
-=======
->>>>>>> 4e7db1bfc0db358f8d2b2a0067bf8f490dbaabb4
+
 
 
 const Registrar: React.FC<{ onToggleForm: () => void }> = ({ onToggleForm }) => {
