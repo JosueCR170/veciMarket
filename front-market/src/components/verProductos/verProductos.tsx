@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, ReactNode } from 'react';
 import { getFirestore, collection, getDocs } from 'firebase/firestore';
 import { app } from '../../services/firebase/config/firebaseConfig';
 import CardProducto from '../cardProducto/cardProducto';
@@ -8,15 +8,14 @@ import { getProductosByVendedorId } from '../../services/firebase/productService
 
 // Define la interfaz Producto aquí
 interface Producto {
+  contacto: ReactNode;
   id: string;
   img: string;
   nombre: string;
   descripcion: string;
   precio: number;
   categoria: string;
-  idVendedor?: string;
-  vendedor?: string;
-  contacto?: string;
+  idVendedor?: string; // Store the vendedor's ID
 }
 
 const VerProductos: React.FC<{ idVendedor: string }> = ({ idVendedor }) => {
@@ -42,12 +41,16 @@ const VerProductos: React.FC<{ idVendedor: string }> = ({ idVendedor }) => {
       const { success, productos } = await getProductosByVendedorId(idVendedor);
       console.log('Productos obtenidos:', productos);
       if (!success || !productos) return;
-      setProductos(productos);
-      setProductosFiltrados(productos);
+      const productosConContacto = productos.map((producto: any) => ({
+        ...producto,
+        contacto: producto.contacto ?? null,
+      }));
+      setProductos(productosConContacto);
+      setProductosFiltrados(productosConContacto);
     };
 
     fetchProductos();
-  }, []);
+  }, [idVendedor]);
 
   useEffect(() => {
     aplicarFiltros();

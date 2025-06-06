@@ -12,19 +12,22 @@ import {
   IonCardTitle,
   IonCardSubtitle,
   IonIcon,
+  IonButton,
 } from '@ionic/react';
-import { callOutline, personCircleOutline, arrowBackOutline } from 'ionicons/icons';
+import { callOutline, personCircleOutline, arrowBackOutline, locationOutline } from 'ionicons/icons';
 import './productoModal.css';
+import { getUser } from '../../services/firebase/userService';
+import { ReactNode, useEffect, useState } from 'react';
 
 interface Producto {
+  contacto: ReactNode;
   id: string;
   img: string;
   nombre: string;
   descripcion: string;
   precio: number;
   categoria: string;
-  vendedor?: string;
-  contacto?: string;
+  idVendedor?: string; 
 }
 
 interface ProductoModalProps {
@@ -34,7 +37,21 @@ interface ProductoModalProps {
 }
 
 const ProductoModal: React.FC<ProductoModalProps> = ({ isOpen, producto, onClose }) => {
-  // console.log('ProductoModal renderizado', { isOpen, producto });
+  const [vendedorCorreo, setVendedorCorreo] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchVendedorInfo = async () => {
+      if (producto?.idVendedor) {
+        const userData = await getUser(producto.idVendedor);
+        if (userData && userData.correo) {
+          setVendedorCorreo(userData.correo);
+        }
+      }
+    };
+
+    fetchVendedorInfo();
+  }, [producto]);
+
   if (!producto) return null;
 
   return (
@@ -56,30 +73,27 @@ const ProductoModal: React.FC<ProductoModalProps> = ({ isOpen, producto, onClose
           <IonCardContent className="product-details-content">
             <IonCardTitle style={{ color: '#000' }}>{producto.nombre}</IonCardTitle>
             <IonText>
-              <p><strong>Precio: </strong></p> <p> ${producto.precio}</p>
+              <strong>Precio: </strong> ₡{producto.precio}
             </IonText>
             <IonText>
-              <p><strong>Categoría: </strong> </p> <p> {producto.categoria}</p>
+              <strong>Categoría: </strong> {producto.categoria}
             </IonText>
             <IonText>
-              <p><strong>Descripción: </strong> </p> <p> {producto.descripcion}</p>
+              <strong>Descripción: </strong> {producto.descripcion}
             </IonText>
+            {vendedorCorreo && (
               <IonText>
-                <p>
-                  <IonIcon icon={personCircleOutline} /> <strong>Vendedor:</strong> </p> <p> {producto.vendedor}
-                </p>
+                <IonIcon icon={callOutline} /> <strong>Contacto:</strong> {vendedorCorreo}
               </IonText>
-              <IonText>
-                <p>
-                  <IonIcon icon={callOutline} /> <strong>Contacto:</strong> </p> <p> {producto.contacto}
-                </p>
-              </IonText>
+            )}
+            <IonButton>
+              <IonIcon icon={personCircleOutline} />
+              <strong>Vendedor</strong>
+            </IonButton>
           </IonCardContent>
-
         </IonCard>
       </IonContent>
     </IonModal>
-
   );
 };
 

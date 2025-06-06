@@ -42,6 +42,7 @@ ion-modal {
 }
 
 ion-text {
+  margin: 10px;
   font-size: 1rem;
   display: flex;
   color: #000000;
