@@ -4,6 +4,7 @@ import { useAuth } from "../context/contextUsuario";
 import { updateVendedorLocation, getVendedoresWithLocation } from "../services/firebase/vendedorService";
 import { useLocationTracker } from "./useLocationTracker";
 import type { Position } from "@capacitor/geolocation";
+import { useIonViewDidLeave, useIonViewWillEnter } from "@ionic/react";
 
 type Coordenadas = { lat: number; lng: number };
 
@@ -237,24 +238,24 @@ export const UseMapElements = (
 
 
 
-  useEffect(() => {
-  const handleLocation = async () => {
-    if (!location) {
-      if (!user) return;
-      await tracker.requestPermissions();
-      const pos = await tracker.getCurrentPosition();
-      if (pos) {
-        setCoordsLocal({ lat: pos.coords.latitude, lng: pos.coords.longitude });
-      } else if (tracker.error) {
-        throw new Error(tracker.error);
-      }
-    } else {
-      await createMap();
-    }
-  };
-  handleLocation();
-  return destroyMap;
-}, [location]);
+//   useEffect(() => {
+//   const handleLocation = async () => {
+//     if (!location) {
+//       if (!user) return;
+//       await tracker.requestPermissions();
+//       const pos = await tracker.getCurrentPosition();
+//       if (pos) {
+//         setCoordsLocal({ lat: pos.coords.latitude, lng: pos.coords.longitude });
+//       } else if (tracker.error) {
+//         throw new Error(tracker.error);
+//       }
+//     } else {
+//       await createMap();
+//     }
+//   };
+//   handleLocation();
+//   return destroyMap;
+// }, [location]);
 
 
   useEffect(() => {
@@ -262,6 +263,29 @@ export const UseMapElements = (
       createMap();
     }
   }, [coordsLocal]);
+
+
+  
+  useIonViewDidLeave(() => {
+  destroyMap(); // 🔥 limpia el mapa cuando la vista deja de mostrarse
+});
+
+useIonViewWillEnter(() => {
+  destroyMap(); // Limpia si quedaba algo
+  if (location) {
+    createMap();
+  } else {
+    // Obtener nueva ubicación si no hay una previa
+    (async () => {
+      if (!user) return;
+      await tracker.requestPermissions();
+      const pos = await tracker.getCurrentPosition();
+      if (pos) {
+        setCoordsLocal({ lat: pos.coords.latitude, lng: pos.coords.longitude });
+      }
+    })();
+  }
+});
 
   return {
     mapRef,
