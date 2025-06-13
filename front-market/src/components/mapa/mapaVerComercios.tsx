@@ -38,6 +38,8 @@ const MapaComercios: React.FC = () => {
 // [loading, mapReady, location]
 );
 
+
+
   return (
     <div style={{ position: "relative", width: "100%", height: "100%" }}>
 

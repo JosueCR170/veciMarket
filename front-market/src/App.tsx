@@ -96,7 +96,7 @@ const App: React.FC = () => {
           <ProtectedRoute exact path="/agregar" component={Agregar} allowedRoles={['ejecutivo']} isAuthenticated={!!user} userRole={rol ?? undefined} />
           <ProtectedRoute exact path="/chat" component={ChatTab} allowedRoles={['usuario', 'ejecutivo']} isAuthenticated={!!user}  userRole={rol ?? undefined}/>
           <ProtectedRoute exact path="/perfil" component={Perfil} allowedRoles={['usuario', 'ejecutivo']} isAuthenticated={!!user} userRole={rol ?? undefined}/>
-          <ProtectedRoute exact path="/productos" component={Productos} allowedRoles={['usuario', 'ejecutivo']} isAuthenticated={!!user} userRole={rol ?? undefined}/>
+          {/* <ProtectedRoute exact path="/productos" component={Productos} allowedRoles={['usuario', 'ejecutivo']} isAuthenticated={!!user} userRole={rol ?? undefined}/> */}
           </IonRouterOutlet>
         {rol && <ButonNavegation  />}
         <Route path="*">
