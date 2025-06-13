@@ -15,6 +15,7 @@ export const UseMapElements = (
 ) => {
 
   const mapRef = useRef<HTMLDivElement | null>(null);
+  const mapaYaCreado = useRef(false);
   const mapInstance = useRef<GoogleMap | null>(null);
   const marcadorActual = useRef<any>(null);
 
@@ -34,7 +35,8 @@ export const UseMapElements = (
 
 
   const createMap = async () => {
-    if (!mapRef.current) return;
+    if (mapaYaCreado.current || !mapRef.current) return;
+    mapaYaCreado.current = true;
 
     const lat = location?.coords.latitude ?? coordsLocal?.lat;
     const lng = location?.coords.longitude ?? coordsLocal?.lng;
@@ -59,7 +61,7 @@ export const UseMapElements = (
             lat: lat,
             lng: lng,
           },
-          zoom: 12,
+          zoom: 19,
           disableDefaultUI: true,
         },
       });
@@ -206,7 +208,12 @@ export const UseMapElements = (
     mapInstance.current = null;
     marcadorActual.current = null;
     setMapReady(false);
+    mapaYaCreado.current = false;
   };
+
+  
+
+  
 
   const obtenerDireccionByCoords = async (lat: number, lng: number) => {
     try {
@@ -231,33 +238,24 @@ export const UseMapElements = (
 
 
   useEffect(() => {
-
-    const handleLocation = async () => {
-      if (location) {
-        createMap();
-
-      } else {
-        if (!user) return;
-
-        await tracker.requestPermissions();
-        const pos = await tracker.getCurrentPosition();
-        if (pos) {
-          const coords = {
-            lat: pos.coords.latitude,
-            lng: pos.coords.longitude,
-          }
-          setCoordsLocal(coords);
-
-        } else if (tracker.error) {
-          throw new Error(tracker.error);
-        }
+  const handleLocation = async () => {
+    if (!location) {
+      if (!user) return;
+      await tracker.requestPermissions();
+      const pos = await tracker.getCurrentPosition();
+      if (pos) {
+        setCoordsLocal({ lat: pos.coords.latitude, lng: pos.coords.longitude });
+      } else if (tracker.error) {
+        throw new Error(tracker.error);
       }
-    };
+    } else {
+      await createMap();
+    }
+  };
+  handleLocation();
+  return destroyMap;
+}, [location]);
 
-    handleLocation();
-
-    return destroyMap;
-  }, [location]);
 
   useEffect(() => {
     if (coordsLocal) {

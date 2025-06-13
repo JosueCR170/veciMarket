@@ -14,6 +14,7 @@ const MapaComercios: React.FC = () => {
     mapReady,
     comercioSeleccionado,
     seleccionarMarcadorVendedor,
+    moverCamara,
 
   } = UseMapElements(location, refreshLocation, "verVendedores-map", true);
 
@@ -26,11 +27,16 @@ const MapaComercios: React.FC = () => {
     }
   }, [comercioSeleccionado]);
 
+
   useEffect(() => {
-    if (mapReady) {
-      seleccionarMarcadorVendedor(); // activa el listener
-    }
-  }, [mapReady]);
+    
+  if ( mapReady) {
+    console.log("entra a seleccionador de marcador");
+    seleccionarMarcadorVendedor();
+  }
+}, [mapReady]
+// [loading, mapReady, location]
+);
 
   return (
     <div style={{ position: "relative", width: "100%", height: "100%" }}>

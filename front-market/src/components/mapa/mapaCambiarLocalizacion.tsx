@@ -36,7 +36,7 @@ const Map: React.FC = () => {
   }, [mapReady]);
 
   const handleMoverCamara = async () => {
-     await moverCamara( coordsSeleccionadas?.lat!, coordsSeleccionadas?.lng!, 14);
+     await moverCamara( coordsSeleccionadas?.lat!, coordsSeleccionadas?.lng!, 19);
   }
 
   return (
