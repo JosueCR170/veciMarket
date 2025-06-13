@@ -27,7 +27,7 @@ interface Producto {
   descripcion: string;
   precio: number;
   categoria: string;
-  idVendedor?: string; 
+  idVendedor?: string;
 }
 
 interface ProductoModalProps {
@@ -72,19 +72,11 @@ const ProductoModal: React.FC<ProductoModalProps> = ({ isOpen, producto, onClose
           <IonImg src={producto.img} alt={producto.nombre} />
           <IonCardContent className="product-details-content">
             <IonCardTitle style={{ color: '#000' }}>{producto.nombre}</IonCardTitle>
-            <IonText>
-              <strong>Precio: </strong> ₡{producto.precio}
-            </IonText>
-            <IonText>
-              <strong>Categoría: </strong> {producto.categoria}
-            </IonText>
-            <IonText>
-              <strong>Descripción: </strong> {producto.descripcion}
-            </IonText>
+            <IonText className="textInfo"><strong>Precio: </strong>₡{producto.precio}</IonText>
+            <IonText className="textInfo"> <strong>Categoría: </strong> {producto.categoria} </IonText>
+            <IonText className="textInfo"> <strong>Descripción: </strong> {producto.descripcion} </IonText>
             {vendedorCorreo && (
-              <IonText>
-                <IonIcon icon={callOutline} /> <strong>Contacto:</strong> {vendedorCorreo}
-              </IonText>
+              <IonText className="textInfo"> <IonIcon icon={callOutline} /> <strong>Contacto:</strong> {vendedorCorreo} </IonText>
             )}
 
             <IonButton>

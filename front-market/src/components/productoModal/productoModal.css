@@ -1,3 +1,8 @@
+ion-modal::part(backdrop) {
+  background-color: rgba(0, 0, 0, 0.6); /* Adjust the alpha value for the desired blur intensity */
+  backdrop-filter: blur(5px); /* Adjust the blur radius as needed */
+}
+
 ion-modal {
   --width: 100%;
   --max-width: 600px; 
@@ -18,7 +23,6 @@ ion-modal {
   top: 0;
   right: 0;
   left: auto;
-
 }
 
 .modal-product-card {
@@ -37,20 +41,15 @@ ion-modal {
 }
 
 .product-details-content {
-  background: #e4e4e4;
   padding: 20px;
 }
 
-ion-text {
-  margin: 10px;
+.textInfo {
+  margin: 20px;
   font-size: 1rem;
   display: flex;
   color: #000000;
-}
-
-p {
-  font-size: 1rem;
-  padding: 10px 0px 0px 10px;
+  gap: 10px;
 }
 
 .modal-back-arrow {
@@ -59,7 +58,9 @@ p {
   padding: 0px 0px 0px 10px;
 }
 
-
+.modal-back-arrow:hover {
+  color: #868686; /* Change to your desired hover color */
+}
 
 /* Media Queries for Responsiveness */
 @media (max-width: 576px) {
