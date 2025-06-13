@@ -86,10 +86,12 @@ const ProductoModal: React.FC<ProductoModalProps> = ({ isOpen, producto, onClose
                 <IonIcon icon={callOutline} /> <strong>Contacto:</strong> {vendedorCorreo}
               </IonText>
             )}
+
             <IonButton>
               <IonIcon icon={personCircleOutline} />
               <strong>Vendedor</strong>
             </IonButton>
+            
           </IonCardContent>
         </IonCard>
       </IonContent>
