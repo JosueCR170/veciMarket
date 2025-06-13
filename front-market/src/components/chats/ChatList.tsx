@@ -5,7 +5,6 @@ import { useAuth } from '../../context/contextUsuario';
 import { db } from '../../services/firebase/config/firebaseConfig';
 import { collection, query, where, orderBy, onSnapshot, QueryDocumentSnapshot, DocumentData } from 'firebase/firestore';
 import { ChatPreview } from './chatPreviewInterface';
-import NotificationService from '../../services/notification';
 
 const ChatList: React.FC = () => {
 
