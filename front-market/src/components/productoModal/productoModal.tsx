@@ -20,7 +20,7 @@ import { getUser } from '../../services/firebase/userService';
 import { ReactNode, useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
 import { useAuth } from '../../context/contextUsuario';
-import { collection, query, where, doc, getDocs, getDoc, serverTimestamp, writeBatch } from 'firebase/firestore';
+import { collection, query, where, doc, getDocs, getDoc, serverTimestamp, writeBatch, arrayUnion } from 'firebase/firestore';
 import { db } from '../../services/firebase/config/firebaseConfig';
 
 interface Producto {
@@ -65,7 +65,7 @@ const ProductoModal: React.FC<ProductoModalProps> = ({ isOpen, producto, onClose
   const contactSeller = async () => {
 
     let chatId = "";
-    
+
     const chatQuery = query(
       collection(db, 'chats'),
       where('participants', 'array-contains', user?.uid)
@@ -86,19 +86,30 @@ const ProductoModal: React.FC<ProductoModalProps> = ({ isOpen, producto, onClose
 
     const message = "¡Saludos! Tengo interés en el producto: " + producto?.nombre + "-" + producto?.id;
 
-    if (!existingChat) {
-      const chatDocRef = collection(db, 'chats');
-      const newChatDoc = doc(chatDocRef);
+    console.log("Existing chat", existingChat)
 
-      batch.set(newChatDoc, {
+    let chatDocRef;
+
+    if (!existingChat) {
+      // Crear nuevo chat
+      chatDocRef = doc(collection(db, 'chats')); // genera nuevo ID
+      batch.set(chatDocRef, {
         lastMessage: message,
         lastTimestamp: serverTimestamp(),
         participants: [producto?.idVendedor, user?.uid]
       });
-      chatId = newChatDoc.id;
     } else {
-      chatId = existingChat.id
+      // Actualizar chat existente
+      chatDocRef = doc(db, 'chats', existingChat.id);
+      batch.update(chatDocRef, {
+        lastMessage: message,
+        lastTimestamp: serverTimestamp(),
+        // Usar arrayUnion para evitar duplicados por seguridad
+        participants: arrayUnion(producto?.idVendedor, user?.uid)
+      });
     }
+
+    chatId = chatDocRef.id;
 
     const messagesRef = collection(db, 'chats', chatId, 'messages');
     const newMessageRef = doc(messagesRef); // genera un id automáticamente
@@ -174,7 +185,7 @@ const ProductoModal: React.FC<ProductoModalProps> = ({ isOpen, producto, onClose
               <IonIcon icon={personCircleOutline} />
               <strong>Vendedor</strong>
             </IonButton>
-            
+
           </IonCardContent>
         </IonCard>
       </IonContent>
