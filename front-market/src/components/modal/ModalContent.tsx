@@ -1,9 +1,10 @@
 import { createAnimation, IonContent, IonHeader, IonIcon, IonItem, IonItemDivider, IonItemGroup, IonLabel, IonList, IonModal, IonTitle, IonToolbar } from '@ionic/react';
-import { useState } from 'react';
-import { arrowBackOutline, chevronForwardOutline, shieldHalf, star, trendingUp, lockClosed,bagHandle, eye } from 'ionicons/icons';
-import {LogoutButton }  from "../authentication/logOut";
+import { useState, useEffect } from 'react';
+import { arrowBackOutline, chevronForwardOutline, shieldHalf, star, trendingUp, lockClosed, bagHandle, eye } from 'ionicons/icons';
+import { LogoutButton } from "../authentication/logOut";
 import { TipoCuenta } from './submenus de modal/tipoCuenta';
 import { useAuth } from '../../context/contextUsuario';
+import { SubmodalHeader } from './submenus de modal/submodalHeader';
 interface ModalContentProps {
   isOpen: boolean;
   onClose: () => void;
@@ -82,18 +83,18 @@ const ModalContent: React.FC<ModalContentProps> = ({ isOpen, onClose }) => {
 
   return (
     <>
-      <IonModal 
-      isOpen={isOpen}
-       onDidDismiss={onClose}
-       enterAnimation={enterAnimation} 
-       leaveAnimation={leaveAnimation}
+      <IonModal
+        isOpen={isOpen}
+        onDidDismiss={onClose}
+        enterAnimation={enterAnimation}
+        leaveAnimation={leaveAnimation}
         backdropDismiss={true}
         className="custom-font">
         <div>
           <IonToolbar className='tootalModalConfiguracion' >
-            <IonTitle className='tituloModalConfig'  >Configuracion</IonTitle>
-            <span slot="start" onClick={onClose} style={{ cursor: 'pointer'}}>
-              <IonIcon icon={arrowBackOutline} style={{fontSize: '24px', stroke: '#0003c9'}}/>
+            <IonTitle className='tituloModalConfig'>Configuración</IonTitle>
+            <span slot="start" onClick={onClose} style={{ cursor: 'pointer' }}>
+              <IonIcon icon={arrowBackOutline} style={{ fontSize: '24px', stroke: '#0003c9' }} />
             </span>
           </IonToolbar>
           <div style={{ height: '1px', backgroundColor: '#ccc', width: '100%' }}></div>
@@ -106,12 +107,16 @@ const ModalContent: React.FC<ModalContentProps> = ({ isOpen, onClose }) => {
                   <IonLabel>{grupo.titulo}</IonLabel>
                 </IonItem>
                 {grupo.items.filter(item => !(rol === 'ejecutivo' && item.id === 'cuenta')).map((item, idx) => (
+
                   <IonItem className="contenido-ItemContenido" lines="none" key={idx} onClick={() => abrirSubmenu(item.id)} >
                     <div style={{ display: 'flex', alignItems: 'center' }}>
                       <IonIcon icon={item.icon} slot="start" style={{ fontSize: '16px', marginRight: '10px' }} />
                       <IonLabel>{item.label}</IonLabel>
                     </div>
                     <IonIcon style={{ color: 'black' }} icon={chevronForwardOutline} slot="end" />
+
+                    {/* <SubmodalHeader titulo={item.id} onClose={cerrarSubmenu} /> */}
+
                   </IonItem>
                 ))}
                 <div style={{ height: '3px', backgroundColor: '#7c7c7c', width: '100%' }} />
@@ -119,7 +124,7 @@ const ModalContent: React.FC<ModalContentProps> = ({ isOpen, onClose }) => {
             ))}
             <IonItemGroup>
               <IonItem className='contenido-Titulo' lines="none">
-                <IonLabel>Inicio de sesion</IonLabel>
+                <IonLabel>Inicio de sesión</IonLabel>
               </IonItem>
               <IonItem
                 lines="none"
@@ -134,18 +139,24 @@ const ModalContent: React.FC<ModalContentProps> = ({ isOpen, onClose }) => {
                 <LogoutButton />
               </IonItem>
             </IonItemGroup>
-          </IonList> 
+          </IonList>
         </IonContent>
         <IonModal
-        isOpen={!!submenuActivo}
-        onDidDismiss={cerrarSubmenu}
-         enterAnimation={enterAnimation} 
-       leaveAnimation={leaveAnimation}
-        className="custom-font"
-        backdropDismiss={false}
-      >
-        {submenuActivo === "cuenta" && <TipoCuenta onClose={cerrarSubmenu} />}
-      </IonModal>
+          isOpen={!!submenuActivo}
+          onDidDismiss={cerrarSubmenu}
+          enterAnimation={enterAnimation}
+          leaveAnimation={leaveAnimation}
+          className="custom-font"
+          backdropDismiss={false}
+        >
+          {submenuActivo === "cuenta" && <TipoCuenta onClose={cerrarSubmenu} />}
+
+           {submenuActivo === "favoritos" && <SubmodalHeader titulo='Productos Favoritos' onClose={cerrarSubmenu} />}
+           {submenuActivo === "actividad" && <SubmodalHeader titulo='Tu actividad' onClose={cerrarSubmenu} />}
+           {submenuActivo === "privacidad" && <SubmodalHeader titulo='Privacidad de contenido' onClose={cerrarSubmenu} />}
+           {submenuActivo === "vendidos" && <SubmodalHeader titulo='Tus productos vendidos' onClose={cerrarSubmenu} />}
+           {submenuActivo === "mas-visto" && <SubmodalHeader titulo='Contenido más visto' onClose={cerrarSubmenu} />}
+        </IonModal>
       </IonModal>
     </>
   );

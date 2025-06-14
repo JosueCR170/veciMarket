@@ -17,6 +17,7 @@ import { auth, db } from "../../../services/firebase/config/firebaseConfig";
 import { doc, updateDoc } from "firebase/firestore";
 import { useState } from "react";
 import { createVendedorProfile } from "../../../services/firebase/vendedorService";
+import { SubmodalHeader } from "./submodalHeader";
 
 export const TipoCuenta = ({ onClose }: { onClose: () => void }) => {
   const { rol, user } = useAuth(); // asegúrate de que user contenga el uid
@@ -57,15 +58,8 @@ export const TipoCuenta = ({ onClose }: { onClose: () => void }) => {
 
   return (
     <>
-      <div>
-        <IonToolbar className="tootalModalConfiguracion">
-          <IonTitle className="tituloModalConfig">Tipo de cuenta</IonTitle>
-          <span slot="start" onClick={onClose} style={{ cursor: "pointer" }}>
-            <IonIcon icon={arrowBackOutline} style={{ fontSize: "24px", stroke: "#0003c9" }} />
-          </span>
-        </IonToolbar>
-        <div style={{ height: "1px", backgroundColor: "#ccc", width: "100%" }}></div>
-      </div>
+
+      <SubmodalHeader titulo="Tipo de Cuenta" onClose={onClose}/>
 
       <IonContent class="subcontenidoBody" style={{ padding: "16px" }}>
         <p>

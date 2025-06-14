@@ -28,7 +28,7 @@ export const LogoutButton = () => {
     <>
       <IonButton className="bottonLogOut"   onClick={() => setShowAlert(true)}>
         <IonIcon icon={logOut}  slot="end" />
-        <IonLabel >Cerrar sesion</IonLabel>
+        <IonLabel >Cerrar Sesión</IonLabel>
       </IonButton>
 
       <IonAlert
