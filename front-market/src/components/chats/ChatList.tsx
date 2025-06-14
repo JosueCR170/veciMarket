@@ -3,13 +3,13 @@ import ChatLabel from './ChatLabel';
 import { useEffect, useState } from 'react';
 import { useAuth } from '../../context/contextUsuario';
 import { db } from '../../services/firebase/config/firebaseConfig';
-import { collection, query, where, orderBy, onSnapshot, QueryDocumentSnapshot, DocumentData, and } from 'firebase/firestore';
+import { collection, query, where, orderBy, onSnapshot, QueryDocumentSnapshot, DocumentData } from 'firebase/firestore';
 import { ChatPreview } from './chatPreviewInterface';
 
 const ChatList: React.FC = () => {
 
-    const [previewChats, setPreviewChats] = useState<ChatPreview[]>([]);
     const { user } = useAuth();
+    const [previewChats, setPreviewChats] = useState<ChatPreview[]>([]);
 
     useEffect(() => {
         if (!user) return;

@@ -16,7 +16,7 @@ import Home from './pages/Home';
 import Agregar from './pages/Agregar';
 import ChatTab from './pages/ChatTab';
 import Perfil from './pages/Perfil'
-import {Login} from './pages/Seguro/login'
+import { Login } from './pages/Seguro/login'
 import { useAuth } from './context/contextUsuario';
 import { ButonNavegation } from './components/tabs/opciones';
 import ProtectedRoute from './routes/ProtectedRoute';
@@ -57,23 +57,24 @@ setupIonicReact();
 
 const App: React.FC = () => {
 
-  const {user, rol, loading}= useAuth();
+  const { user, rol, loading } = useAuth();
 
   console.log('user', user);
   useEffect(() => {
-  const configureStatusBar = async () => {
-    try {
-      await StatusBar.setOverlaysWebView({ overlay: false }); // Evita que la barra se superponga
-     
-    } catch (err) {
-      console.warn('StatusBar plugin no disponible', err);
-    }
-  };
+    const configureStatusBar = async () => {
+      try {
+        await StatusBar.setOverlaysWebView({ overlay: false }); // Evita que la barra se superponga
 
-  configureStatusBar();
-}, []);
+      } catch (err) {
+        console.warn('StatusBar plugin no disponible', err);
+      }
+    };
 
-  if(loading){
+    configureStatusBar();
+  }, []);
+
+
+  if (loading) {
     return (
       <IonApp>
         <div className="centered-loading" style={{ height: '100dvh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
@@ -82,36 +83,36 @@ const App: React.FC = () => {
       </IonApp>
     );
   }
-  
-  return(
-   <IonApp >
+
+  return (
+    <IonApp >
       <IonReactRouter>
-          <Route exact path="/">
-            <Redirect to={ user ? '/home' : '/login'} />
-          </Route>
-          {user ? (
-        <IonTabs>
-        <IonRouterOutlet>
-          <ProtectedRoute exact path="/home" component={Home}  allowedRoles={['usuario', 'ejecutivo']} isAuthenticated={!!user} userRole={rol ?? undefined} />
-          <ProtectedRoute exact path="/agregar" component={Agregar} allowedRoles={['ejecutivo']} isAuthenticated={!!user} userRole={rol ?? undefined} />
-          <ProtectedRoute exact path="/chat" component={ChatTab} allowedRoles={['usuario', 'ejecutivo']} isAuthenticated={!!user}  userRole={rol ?? undefined}/>
-          <ProtectedRoute exact path="/perfil" component={Perfil} allowedRoles={['usuario', 'ejecutivo']} isAuthenticated={!!user} userRole={rol ?? undefined}/>
-          {/* <ProtectedRoute exact path="/productos" component={Productos} allowedRoles={['usuario', 'ejecutivo']} isAuthenticated={!!user} userRole={rol ?? undefined}/> */}
-          </IonRouterOutlet>
-        {rol && <ButonNavegation  />}
-        <Route path="*">
-        <Redirect to="/home" />
+        <Route exact path="/">
+          <Redirect to={user ? '/home' : '/login'} />
         </Route>
-         </IonTabs>
-        ):(
-      <>
-      <Route exact path="/login" component={Login} />
-      <Route path="*">
-      <Redirect to="/login" />
-      </Route>
-    </>
+        {user ? (
+          <IonTabs>
+            <IonRouterOutlet>
+              <ProtectedRoute exact path="/home" component={Home} allowedRoles={['usuario', 'ejecutivo']} isAuthenticated={!!user} userRole={rol ?? undefined} />
+              <ProtectedRoute exact path="/agregar" component={Agregar} allowedRoles={['ejecutivo']} isAuthenticated={!!user} userRole={rol ?? undefined} />
+              <ProtectedRoute exact path="/chat" component={ChatTab} allowedRoles={['usuario', 'ejecutivo']} isAuthenticated={!!user} userRole={rol ?? undefined} />
+              <ProtectedRoute exact path="/perfil" component={Perfil} allowedRoles={['usuario', 'ejecutivo']} isAuthenticated={!!user} userRole={rol ?? undefined} />
+              <ProtectedRoute exact path="/productos" component={Productos} allowedRoles={['usuario', 'ejecutivo']} isAuthenticated={!!user} userRole={rol ?? undefined} />
+            </IonRouterOutlet>
+            {rol && <ButonNavegation />}
+            <Route path="*">
+              <Redirect to="/home" />
+            </Route>
+          </IonTabs>
+        ) : (
+          <>
+            <Route exact path="/login" component={Login} />
+            <Route path="*">
+              <Redirect to="/login" />
+            </Route>
+          </>
         )
-      }       
+        }
       </IonReactRouter>
     </IonApp>
   )
