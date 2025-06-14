@@ -8,11 +8,12 @@ import { Position } from "@capacitor/geolocation";
 import { updateVendedorLocation } from "../services/firebase/vendedorService";
 
 interface LocationContextType {
-    location: Position | null;
-    loading: boolean;
-    error: string | null;
-    refreshLocation: () => Promise<void>;
-    clearLocation: () => void;
+    location: Position | null
+    loading: boolean
+    error: string | null
+    setLoading: (loading: boolean) => void;
+    refreshLocation: () => Promise<void>
+    clearLocation: () => void
 }
 
 const LocationContext = createContext<LocationContextType | undefined>(undefined);
@@ -109,6 +110,7 @@ export const LocationProvider: React.FC<{ children: React.ReactNode }> = ({ chil
             value={{
                 location,
                 loading,
+                setLoading,
                 error,
                 refreshLocation: fetchLocation,
                 clearLocation,
