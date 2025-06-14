@@ -16,6 +16,7 @@ import { useAuth } from "../../../context/contextUsuario";
 import { auth, db } from "../../../services/firebase/config/firebaseConfig";
 import { doc, updateDoc } from "firebase/firestore";
 import { useState } from "react";
+import { createVendedorProfile } from "../../../services/firebase/vendedorService";
 
 export const TipoCuenta = ({ onClose }: { onClose: () => void }) => {
   const { rol, user } = useAuth(); // asegúrate de que user contenga el uid
@@ -38,6 +39,14 @@ export const TipoCuenta = ({ onClose }: { onClose: () => void }) => {
       }
       const userRef = doc(db, "userRol", user.uid);
       await updateDoc(userRef, { rol: "ejecutivo" });
+
+      const vendedorData = {
+        user_id: user.uid,
+        localizacion: null,
+        nombre: user.displayName || "Vendedor Anónimo", // Asegúrate de que el nombre esté disponible
+      }
+
+      await createVendedorProfile(vendedorData)
 
       // Opción: localStorage.setItem("rol", "ejecutivo");
       window.location.reload(); // Recargar la app

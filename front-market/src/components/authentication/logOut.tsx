@@ -1,20 +1,33 @@
-import {  IonLabel, IonTabButton, IonIcon, IonButton, } from "@ionic/react";
-import {logOut } from 'ionicons/icons';
+import { IonLabel, IonIcon, IonButton, } from "@ionic/react";
+import { logOut } from 'ionicons/icons';
 import { useHistory } from "react-router-dom";
 import { FirebaseAuthentication } from "@capacitor-firebase/authentication";
-import { auth } from "../../services/firebase/config/firebaseConfig";
+import { auth, db } from "../../services/firebase/config/firebaseConfig";
 import { signOut } from "firebase/auth";
 import { IonAlert } from '@ionic/react';
 import { useState } from "react";
+import { deleteDoc, doc } from "firebase/firestore";
+import { useLocationContext } from "../../context/contextLocation";
 
 export const LogoutButton = () => {
   const [showAlert, setShowAlert] = useState(false);
   const history = useHistory();
+  const {clearLocation} = useLocationContext();
 
   const handleLogout = async () => {
     try {
+      const user = auth.currentUser;
+      if (user) {
+        // 🔴 Elimina sesión en Firestore
+        await deleteDoc(doc(db, "userSessions", user.uid));
+      }
+
+      // 🔴 Logout de Firebase + Capacitor
       await signOut(auth);
       await FirebaseAuthentication.signOut();
+
+     clearLocation();
+
       history.push("/login");
     } catch (error) {
       console.error("Error al cerrar sesión:", error);
@@ -23,14 +36,14 @@ export const LogoutButton = () => {
 
   return (
     <>
-      <IonButton className="bottonLogOut"   onClick={() => setShowAlert(true)}>
-        <IonIcon icon={logOut}  slot="end" />
+      <IonButton className="bottonLogOut" onClick={() => setShowAlert(true)}>
+        <IonIcon icon={logOut} slot="end" />
         <IonLabel >Cerrar sesion</IonLabel>
       </IonButton>
 
       <IonAlert
         isOpen={showAlert}
-        header="sure you want to log out?"
+        header="¿Deseas cerrar sesión?"
         buttons={[
           {
             text: "Cancelar",
