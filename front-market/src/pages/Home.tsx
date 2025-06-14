@@ -8,12 +8,6 @@ const Home: React.FC = () => {
   return (
     <IonPage >
       <Navbar/>
-        {/*<IonHeader collapse="condense">
-          <IonToolbar>
-            <IonTitle size="large">Home</IonTitle>
-          </IonToolbar>
-        </IonHeader>
-        <ExploreContainer name="Tab 1 page" />*/}
 
       <MapaComercios />
 

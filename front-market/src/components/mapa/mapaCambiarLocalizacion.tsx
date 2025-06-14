@@ -22,16 +22,16 @@ const Map: React.FC = () => {
   const [showWarning, setShowWarning] = useState(true);
   const [modalAbierto, setModalAbierto] = useState(false);
 
+  // const [cargador, setCargador]= useState(true);
+
   // useEffect(() => {
-  //   if (comercioSeleccionado) {
-  //     console.log("Comercio seleccionado:", comercioSeleccionado);
-  //     setModalAbierto(true);
-  //   }
-  // }, [comercioSeleccionado]);
+  //   setCargador(true)
+  // }, []);
 
   useEffect(() => {
     if (mapReady) {
       seleccionarMarcadorVendedor(); // activa el listener
+      // setCargador(false)
     }
   }, [mapReady]);
 
@@ -39,72 +39,71 @@ const Map: React.FC = () => {
      await moverCamara( coordsSeleccionadas?.lat!, coordsSeleccionadas?.lng!, 19);
   }
 
-  return (
-    <div className="map-container">
-      <div className="top-buttons">
-        
-        <IonButton fill="outline" className="btn-icono" shape="round" onClick={handleMoverCamara}>
-           <IonIcon slot="icon-only" ios={locate} md={locate}></IonIcon>
-        </IonButton>
-
-        <IonButton onClick={() => setShowAlert(true)} className="btn-cambiar" size="small">
-          Cambiar ubicación
-        </IonButton>
-
-        <IonButton onClick={guardarUbicacion} disabled={!coordsSeleccionadas} className="btn-guardar" size="small">
-          Guardar
-        </IonButton>
-      </div>
-
-      {!location?.coords && showWarning && (
-        <div className="alert-warning">
-          <div className="alert-content">
-            <span className="alert-icon">⚠️</span>
-            Para poder añadir productos, primero debes registrar tu localización.
-          </div>
-          <button onClick={() => setShowWarning(false)} className="alert-close" aria-label="Cerrar advertencia">
-            ✖
-          </button>
+ return (
+  <div className="map-container">
+    {loading ? (
+       <div
+          style={{
+            position: "absolute",
+            top: "16px",
+            right: "16px",
+            backgroundColor: "rgb(255, 255, 255)",
+            padding: "10px 16px",
+            borderRadius: "12px",
+            boxShadow: "0 2px 8px rgb(0, 0, 0)",
+            display: "flex",
+            alignItems: "center",
+            gap: "8px",
+            zIndex: 1000,
+          }}
+        >
+          <IonSpinner name='crescent' color='primary' style={{ width: "20px", height: "20px" }} />
+          <IonText style={{ fontSize: "14px", color: "#333" }}>Estamos buscando tu ubicación...</IonText>
         </div>
-      )}
+    ) : (
+      <>
+        <div className="top-buttons">
+          <IonButton fill="outline" className="btn-icono" shape="round" onClick={handleMoverCamara}>
+            <IonIcon slot="icon-only" ios={locate} md={locate}></IonIcon>
+          </IonButton>
 
-      <div ref={mapRef} id="local-map" className="map" />
+          <IonButton onClick={() => setShowAlert(true)} className="btn-cambiar" size="small">
+            Cambiar ubicación
+          </IonButton>
 
-      <IonAlert
-        isOpen={showAlert}
-        onDidDismiss={() => setShowAlert(false)}
-        header="¿Cambiar localización manualmente?"
-        buttons={[
-          { text: "No", role: "cancel" },
-          { text: "Sí", handler: activarSeleccionUbicacion },
-        ]}
-      />
-
-      {loading && !location?.coords && (
-        <div className="loading-box">
-          <IonSpinner name="crescent" color="primary" />
-          <IonText>Estamos buscando tu ubicación...</IonText>
+          <IonButton onClick={guardarUbicacion} disabled={!coordsSeleccionadas} className="btn-guardar" size="small">
+            Guardar
+          </IonButton>
         </div>
-      )}
 
-      {/* <IonModal
-        isOpen={modalAbierto}
-        trigger="open-modal"
-        initialBreakpoint={0.25}
-        breakpoints={[0, 0.25, 0.55, 1]}
-        onDidDismiss={() => setModalAbierto(false)}
-        className="modal-comercio"
-      >
-        {comercioSeleccionado && (
-          <div className="modal-content">
-            <h2>{comercioSeleccionado.nombre}</h2>
-            <p>Latitud: {comercioSeleccionado.localizacion.lat}</p>
-            <p>Longitud: {comercioSeleccionado.localizacion.lng}</p>
+        {!location?.coords && showWarning && (
+          <div className="alert-warning">
+            <div className="alert-content">
+              <span className="alert-icon">⚠️</span>
+              Para poder añadir productos, primero debes registrar tu localización.
+            </div>
+            <button onClick={() => setShowWarning(false)} className="alert-close" aria-label="Cerrar advertencia">
+              ✖
+            </button>
           </div>
         )}
-      </IonModal> */}
-    </div>
-  );
+      </>
+    )}
+
+    <div ref={mapRef} id="local-map" className="map" />
+
+    <IonAlert
+      isOpen={showAlert}
+      onDidDismiss={() => setShowAlert(false)}
+      header="¿Cambiar localización manualmente?"
+      buttons={[
+        { text: "No", role: "cancel" },
+        { text: "Sí", handler: activarSeleccionUbicacion },
+      ]}
+    />
+  </div>
+);
+
 };
 
 export default Map;

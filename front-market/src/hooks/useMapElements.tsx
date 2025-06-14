@@ -5,6 +5,7 @@ import { updateVendedorLocation, getVendedoresWithLocation } from "../services/f
 import { useLocationTracker } from "./useLocationTracker";
 import type { Position } from "@capacitor/geolocation";
 import { useIonViewDidLeave, useIonViewWillEnter } from "@ionic/react";
+import { useLocationContext } from "../context/contextLocation";
 
 type Coordenadas = { lat: number; lng: number };
 
@@ -31,6 +32,7 @@ export const UseMapElements = (
 
 
   const { user } = useAuth();
+  const { setLoading } = useLocationContext()
   const tracker = useLocationTracker();
 
 
@@ -47,9 +49,6 @@ export const UseMapElements = (
 
     const dir = await obtenerDireccionByCoords(lat, lng);
     setDireccionLugar(dir);
-
-
-    //if (!mapRef.current || !location) return;
 
     try {
       mapInstance.current = await GoogleMap.create({
@@ -114,7 +113,11 @@ export const UseMapElements = (
       setVendedores(vendedores);
 
       for (const vendedor of vendedores) {
+        const esMiComercio = vendedor.id === user?.uid;
+
         if (vendedor.localizacion?.lat && vendedor.localizacion?.lng) {
+          if (esMiComercio) continue;
+
           await mapInstance.current.addMarker({
             coordinate: {
               lat: vendedor.localizacion.lat,
@@ -123,6 +126,7 @@ export const UseMapElements = (
             title: vendedor.nombre || "Vendedor",
             snippet: "Comercio",
           });
+
         }
       }
 
@@ -156,11 +160,17 @@ export const UseMapElements = (
         const { title, snippet } = data;
 
         // Ignorar el marcador del usuario
-        if (title === "Tu posición" || snippet === "Esta es tu ubicación actual") {
-          return;
-        }
-        const comercio = vendedores.find((c) => c.nombre === data.title);
+        // if (title === "Tu posición" || snippet === "Esta es tu ubicación actual") {
+        //   return;
+        // }
 
+        // const comercio = vendedores.find((c) => c.nombre === data.title);
+        const comercio = vendedores.find((c) =>
+          Math.abs(c.localizacion.lat - data.latitude) < 0.0001 &&
+          Math.abs(c.localizacion.lng - data.longitude) < 0.0001
+        );
+
+        console.log("comercio", comercio)
         if (comercio) {
 
           const direccion = await obtenerDireccionByCoords(comercio.localizacion.lat, comercio.localizacion.lng);
@@ -169,13 +179,12 @@ export const UseMapElements = (
             direccion: direccion || "Ubicación desconocida"
           };
           console.log("Comercio seleccionado:", comercioData);
-          
+
           setComercioSeleccionado(comercioData);
-          // setModalAbierto(true); // Puedes habilitar esto si necesitas mostrar algo
           return true;
         }
 
-        return false; // Si no encontró el comercio
+        return false;
       });
     } catch (error) {
       alert("Error al seleccionar el marcador: " + error);
@@ -212,10 +221,6 @@ export const UseMapElements = (
     mapaYaCreado.current = false;
   };
 
-  
-
-  
-
   const obtenerDireccionByCoords = async (lat: number, lng: number) => {
     try {
       const response = await fetch(
@@ -229,34 +234,12 @@ export const UseMapElements = (
     }
   };
 
-  const moverCamara = async ( lat: number, lng: number, zoom: number) => {
-        await mapInstance.current!.setCamera({
-            coordinate: { lat, lng },
-            zoom,
-        });
-    };
-
-
-
-//   useEffect(() => {
-//   const handleLocation = async () => {
-//     if (!location) {
-//       if (!user) return;
-//       await tracker.requestPermissions();
-//       const pos = await tracker.getCurrentPosition();
-//       if (pos) {
-//         setCoordsLocal({ lat: pos.coords.latitude, lng: pos.coords.longitude });
-//       } else if (tracker.error) {
-//         throw new Error(tracker.error);
-//       }
-//     } else {
-//       await createMap();
-//     }
-//   };
-//   handleLocation();
-//   return destroyMap;
-// }, [location]);
-
+  const moverCamara = async (lat: number, lng: number, zoom: number) => {
+    await mapInstance.current!.setCamera({
+      coordinate: { lat, lng },
+      zoom,
+    });
+  };
 
   useEffect(() => {
     if (coordsLocal) {
@@ -265,27 +248,28 @@ export const UseMapElements = (
   }, [coordsLocal]);
 
 
-  
-  useIonViewDidLeave(() => {
-  destroyMap(); // 🔥 limpia el mapa cuando la vista deja de mostrarse
-});
 
-useIonViewWillEnter(() => {
-  destroyMap(); // Limpia si quedaba algo
-  if (location) {
-    createMap();
-  } else {
-    // Obtener nueva ubicación si no hay una previa
-    (async () => {
-      if (!user) return;
-      await tracker.requestPermissions();
-      const pos = await tracker.getCurrentPosition();
-      if (pos) {
-        setCoordsLocal({ lat: pos.coords.latitude, lng: pos.coords.longitude });
-      }
-    })();
-  }
-});
+  useIonViewDidLeave(() => {
+    destroyMap();
+  });
+
+  useIonViewWillEnter(() => {
+    destroyMap();
+    if (location) {
+      createMap();
+    } else {
+      (async () => {
+        if (!user) return;
+        setLoading(true);
+        await tracker.requestPermissions();
+        const pos = await tracker.getCurrentPosition();
+        if (pos) {
+          setCoordsLocal({ lat: pos.coords.latitude, lng: pos.coords.longitude });
+        }
+        setLoading(false);
+      })();
+    }
+  });
 
   return {
     mapRef,
