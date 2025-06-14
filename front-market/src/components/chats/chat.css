@@ -16,6 +16,10 @@
     max-width: 500px;
 }
 
+.msg-new {
+    background-color: #17c70067;
+}
+
 .msg-preview-content {
     padding: 3px 0px 3px 0px;
 }

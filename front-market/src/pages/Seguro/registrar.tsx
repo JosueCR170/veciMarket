@@ -5,6 +5,8 @@ import { createVendedorProfile } from '../../services/firebase/vendedorService';
 import { auth, db } from '../../services/firebase/config/firebaseConfig';
 import { doc, setDoc } from 'firebase/firestore';
 import { IonToast } from "@ionic/react";
+import { getDeviceToken } from '../../services/firebase/tokenUtils';
+
 
 
 const Registrar: React.FC<{ onToggleForm: () => void }> = ({ onToggleForm }) => {
@@ -41,6 +43,12 @@ const Registrar: React.FC<{ onToggleForm: () => void }> = ({ onToggleForm }) => 
       await setDoc(docuRef, { name: name, correo: email, rol: rol });
       console.log("data");
 
+
+      const deviceToken = await getDeviceToken();
+      if (deviceToken) {
+        const sessionDocRef = doc(db, "userSessions", infoUsuario.user.uid);
+        await setDoc(sessionDocRef, { deviceToken: deviceToken, updateAt: new Date() });
+      }
       if (rol === "ejecutivo") {
         const vendedorData = {
           user_id: infoUsuario.user.uid,
@@ -49,7 +57,6 @@ const Registrar: React.FC<{ onToggleForm: () => void }> = ({ onToggleForm }) => 
         }
         await createVendedorProfile(vendedorData);
       };
-
 
     } catch (error: any) {
       let mensaje = "Ocurrió un error al registrar el usuario.";

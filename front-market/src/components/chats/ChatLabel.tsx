@@ -1,25 +1,87 @@
 import React, { useEffect, useState } from 'react';
-import { IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, IonCardContent, IonIcon, IonModal, IonButton, IonHeader, IonToolbar, IonTitle } from '@ionic/react';
+import { IonCard, IonCardContent, IonIcon, IonModal, IonButton, IonHeader, IonToolbar, IonTitle } from '@ionic/react';
 import { personAddSharp, arrowBack } from 'ionicons/icons';
 import { ChatPreview } from './chatPreviewInterface';
 import { useAuth } from '../../context/contextUsuario';
 import { db } from '../../services/firebase/config/firebaseConfig';
-import { getDoc, doc, onSnapshot } from 'firebase/firestore';
+import { getDoc, doc, onSnapshot, collection, query, where, getDocs, updateDoc } from 'firebase/firestore';
 import Chat from './Chat';
 import "./chat.css"
-
 interface user {
     correo: string,
     name: string,
     rol: string
 }
 
-const ChatLabel: React.FC<ChatPreview> = (chatPreview) => {
+const ChatLabel: React.FC<ChatPreview> = ({ ...chatPreview }) => {
     const [open, setOpen] = useState(false);
     const [chat, setChat] = useState(chatPreview);
     const [otherUser, setOtherUser] = useState<user | null>(null);
+    const [otherUserId, setOtherUserId] = useState<string>("");
+    const [hasUnread, setHasUnread] = useState(false);
 
     const { user } = useAuth();
+
+    useEffect(() => {
+        getOtherUser();
+    }, []);
+
+    useEffect(() => {
+        const chatRef = doc(db, 'chats', chat.id);
+        const messagesRef = collection(chatRef, 'messages');
+
+        const unsubscribeChat = onSnapshot(chatRef, (docSnap) => {
+            if (docSnap.exists()) {
+                const updatedChat = docSnap.data() as ChatPreview;
+                setChat({
+                    ...updatedChat,
+                    id: docSnap.id,
+                });
+            }
+        });
+
+        const q = query(
+            messagesRef,
+            where('read', '==', false),
+            where('from', '==', otherUserId)
+        );
+
+        const unsubscribeMessages = onSnapshot(q, (querySnapshot) => {
+            const unreadMessages = querySnapshot.docs.map(doc => doc.data());
+            if (unreadMessages.length > 0) {
+                setHasUnread(true);
+            }
+        });
+
+        return () => {
+            unsubscribeChat();
+            unsubscribeMessages();
+        };
+    }, [chat.id, otherUser]);
+
+    async function getOtherUser() {
+        let otherUserId = "";
+        if (chat.participants[0] == user?.uid) {
+            otherUserId = chat.participants[1];
+        } else {
+            otherUserId = chat.participants[0];
+        }
+        setOtherUserId(otherUserId);
+
+        const otherUserRef = doc(db, 'userRol', otherUserId);
+
+        try {
+            const docSnap = await getDoc(otherUserRef);
+            if (docSnap.exists()) {
+                const otherUserData = docSnap.data() as user;
+                setOtherUser(otherUserData);
+            } else {
+                console.log("El documento del otro usuario no existe");
+            }
+        } catch (error) {
+            console.error("Error al obtener datos del otro usuario:", error);
+        }
+    }
 
     const fechaFormateada = chat.lastTimestamp?.toDate().toLocaleString('es-ES', {
         hour: '2-digit',
@@ -30,53 +92,38 @@ const ChatLabel: React.FC<ChatPreview> = (chatPreview) => {
         year: 'numeric'
     });
 
-    async function getOtherUser() {
-        let otherUserId = "";
-        if (chat.participants[0] == user?.uid) {
-            otherUserId = chat.participants[1];
-        } else {
-            otherUserId = chat.participants[0];
-        }
-
-        const otherUserRef = doc(db, 'userRol', otherUserId);
-
+    const makeRead = async () => {
         try {
-            const docSnap = await getDoc(otherUserRef);
-            if (docSnap.exists()) {
-                const otherUserData = docSnap.data() as user;
-                console.log("Datos del otro usuario:", otherUserData);
-                setOtherUser(otherUserData);
+            const messagesRef = collection(db, 'chats', chatPreview.id, 'messages');
+            const q = query(messagesRef, where('read', '==', false), where('from', '==', otherUserId));
+            const querySnapshot = await getDocs(q);
 
-            } else {
-                console.log("El documento del otro usuario no existe");
-            }
+            const updatePromises = querySnapshot.docs.map((messageDoc) => {
+                const messageRef = doc(db, 'chats', chatPreview.id, 'messages', messageDoc.id);
+                return updateDoc(messageRef, { read: true });
+            });
+
+            await Promise.all(updatePromises);
+            setHasUnread(false);
+            console.log('Mensajes marcados como leídos');
         } catch (error) {
-            console.error("Error al obtener datos del otro usuario:", error);
+            console.error('Error al marcar mensajes como leídos:', error);
         }
     }
 
-    useEffect(() => {
-        getOtherUser();
-    }, []);
+    const openChat = () => {
+        setOpen(true);
+        makeRead();
+    }
 
-    useEffect(() => {
-        const chatRef = doc(db, 'chats', chat.id);
-        const unsubscribe = onSnapshot(chatRef, (docSnap) => {
-            if (docSnap.exists()) {
-                const updatedChat = docSnap.data() as ChatPreview;
-                setChat({
-                    ...updatedChat,
-                    id: docSnap.id,
-                });
-            }
-        });
-
-        return () => unsubscribe();
-    }, [chat.id]);
+    const closeChat = () => {
+        setOpen(false);
+        makeRead();
+    }
 
     return (
         <>
-            <IonCard className='msg-preview-card' button={true} onClick={() => setOpen(true)}>
+            <IonCard className={`msg-preview-card${hasUnread ? ' msg-new' : ''}`} button={true} onClick={() => openChat()}>
                 <IonCardContent className='msg-preview-content'>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
                         <IonIcon icon={personAddSharp} className='msg-preview-icon' />
@@ -93,10 +140,10 @@ const ChatLabel: React.FC<ChatPreview> = (chatPreview) => {
                 </IonCardContent>
             </IonCard>
 
-            <IonModal isOpen={open} onDidDismiss={() => setOpen(false)}>
+            <IonModal isOpen={open} onDidDismiss={() => closeChat()} className="chat-modal">
                 <IonHeader>
                     <IonToolbar className="custom-header ">
-                        <IonButton onClick={() => setOpen(false)} slot="start" fill="clear">
+                        <IonButton onClick={() => closeChat()} slot="start" fill="clear">
                             <IonIcon icon={arrowBack} className='chat-back-icon'></IonIcon>
                         </IonButton>
                         <IonTitle className="custom-title chat-title">

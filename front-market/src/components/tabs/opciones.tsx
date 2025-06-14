@@ -1,5 +1,5 @@
 import { IonLabel, IonTabBar, IonTabButton, IonTabs, IonIcon, } from "@ionic/react";
-import { personCircle, chatbox, storefront, addCircle } from 'ionicons/icons';
+import { personCircle, chatbox, storefront, addCircle, mapOutline } from 'ionicons/icons';
 import "./opciones.css"
 import { useAuth } from "../../context/contextUsuario";
 
@@ -28,9 +28,11 @@ export const ButonNavegation = () => {
         <IonIcon className="iconTabs" aria-hidden="true" icon={personCircle} />
       </IonTabButton>
 
+
       {/* <IonTabButton tab="productos" href="/productos">
         <IonIcon className="iconTabs" aria-hidden="true" icon={personCircle} />
       </IonTabButton> */}
+
 
     </IonTabBar>
   );

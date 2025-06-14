@@ -1,8 +1,11 @@
 import { createAnimation, IonContent, IonHeader, IonIcon, IonItem, IonItemDivider, IonItemGroup, IonLabel, IonList, IonModal, IonTitle, IonToolbar } from '@ionic/react';
+
 import { useState, useEffect } from 'react';
+
 import { arrowBackOutline, chevronForwardOutline, shieldHalf, star, trendingUp, lockClosed, bagHandle, eye } from 'ionicons/icons';
 import { LogoutButton } from "../authentication/logOut";
 import { TipoCuenta } from './submenus de modal/tipoCuenta';
+import { ModelGeneral } from './submenus de modal/modelGeneral';
 import { useAuth } from '../../context/contextUsuario';
 import { SubmodalHeader } from './submenus de modal/submodalHeader';
 interface ModalContentProps {
@@ -93,6 +96,7 @@ const ModalContent: React.FC<ModalContentProps> = ({ isOpen, onClose }) => {
         <div>
           <IonToolbar className='tootalModalConfiguracion' >
             <IonTitle className='tituloModalConfig'>Configuración</IonTitle>
+
             <span slot="start" onClick={onClose} style={{ cursor: 'pointer' }}>
               <IonIcon icon={arrowBackOutline} style={{ fontSize: '24px', stroke: '#0003c9' }} />
             </span>
@@ -156,6 +160,7 @@ const ModalContent: React.FC<ModalContentProps> = ({ isOpen, onClose }) => {
            {submenuActivo === "privacidad" && <SubmodalHeader titulo='Privacidad de contenido' onClose={cerrarSubmenu} />}
            {submenuActivo === "vendidos" && <SubmodalHeader titulo='Tus productos vendidos' onClose={cerrarSubmenu} />}
            {submenuActivo === "mas-visto" && <SubmodalHeader titulo='Contenido más visto' onClose={cerrarSubmenu} />}
+
         </IonModal>
       </IonModal>
     </>

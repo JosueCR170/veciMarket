@@ -4,11 +4,11 @@ const config: CapacitorConfig = {
   appId: 'com.una.vecimarkey',
   appName: 'veciMarket',
   webDir: 'dist',
- bundledWebRuntime: false,
+  bundledWebRuntime: false,
   server: {
-    cleartext: true, 
-    androidScheme: 'http', 
-    
+    cleartext: true,
+    androidScheme: 'http',
+
   },
   plugins: {
     Camera: {
@@ -24,8 +24,8 @@ const config: CapacitorConfig = {
       presentationOptions: ["badge", "sound", "alert"]
     },
     GoogleMaps: {
-        apiKey: "AIzaSyBV35eS9s-QUwN0WcZWeK-XIoICekxqXwk",
-      },
+      apiKey: "AIzaSyBV35eS9s-QUwN0WcZWeK-XIoICekxqXwk",
+    },
   }
 };
 
