@@ -3,16 +3,15 @@ import { IonList, IonItem, IonTextarea, IonIcon } from '@ionic/react';
 import { send } from 'ionicons/icons';
 import { useAuth } from '../../context/contextUsuario';
 import { db } from '../../services/firebase/config/firebaseConfig';
-import { collection, query, orderBy, onSnapshot, Timestamp, doc, getDoc, serverTimestamp, writeBatch } from 'firebase/firestore';
+import { collection, query, orderBy, onSnapshot} from 'firebase/firestore';
 import { ChatPreview } from './chatPreviewInterface';
-import { getDatabase, ref, onDisconnect, set, get } from 'firebase/database';
+import { getDatabase, ref, onDisconnect, set} from 'firebase/database';
 import { getApp } from 'firebase/app';
+import { convertDate ,saveMessage, detectPresence, sendPushNotification } from '../../services/firebase/chatService';
 
 const realtimeDb = getDatabase(getApp());
 
 const Chat: React.FC<ChatPreview> = (chatPreview) => {
-
-    const API_BASE = 'http://10.0.2.2:3000';
 
     const [inputValue, setInputValue] = useState('');
     const [messages, setMessages] = useState<any[]>([]);
@@ -84,98 +83,6 @@ const Chat: React.FC<ChatPreview> = (chatPreview) => {
         });
     }
 
-    // --- 1. Guardar el mensaje y actualizar el chat ---
-    async function saveMessage(chatId: string, userId: string, text: string) {
-        console.log("[saveMessage] Iniciando batch...");
-        const batch = writeBatch(db);
-
-        const messagesRef = collection(db, 'chats', chatId, 'messages');
-        const newMessageRef = doc(messagesRef);
-
-        batch.set(newMessageRef, {
-            from: userId,
-            text,
-            timestamp: serverTimestamp(),
-            read: false,
-        });
-
-        const chatDocRef = doc(db, 'chats', chatId);
-        batch.update(chatDocRef, {
-            lastMessage: text,
-            lastTimestamp: serverTimestamp(),
-        });
-
-        await batch.commit();
-        console.log("[saveMessage] Batch commit ejecutado correctamente.");
-    }
-
-    // --- 2. Verificar si el otro usuario está conectado y en el chat ---
-    async function detectPresence(chatId: string, otherUserId: string): Promise<boolean> {
-        console.log(`[detectPresence] Verificando presencia de usuario ${otherUserId} en chat ${chatId}`);
-        const realtimeDb = getDatabase(getApp());
-        const presenceRef = ref(realtimeDb, `/userPresence/${otherUserId}`);
-        const snapshot = await get(presenceRef);
-
-        if (!snapshot.exists()) {
-            console.log("[detectPresence] No hay snapshot, se enviará push.");
-            return true;
-        }
-
-        const data = snapshot.val();
-        console.log("[detectPresence] Estado actual:", data);
-
-        const isOnline = data?.state === 'online';
-        const isInChat = data?.currentChatId === chatId;
-
-        const result = !(isOnline && isInChat);
-        console.log(`[detectPresence] isOnline: ${isOnline}, isInChat: ${isInChat}, enviar push: ${result}`);
-
-        return result;
-    }
-
-
-    // --- 3. Enviar la notificación push ---
-    async function sendPushNotification(otherUserId: string, chatId: string, text: string, senderEmail: string, senderId: string) {
-        console.log(`[sendPushNotification] Enviando notificación a ${otherUserId}`);
-        const sessionDocRef = doc(db, "userSessions", otherUserId);
-        const sessionSnap = await getDoc(sessionDocRef);
-
-        if (!sessionSnap.exists()) {
-            console.warn("[sendPushNotification] No existe el documento de sesión.");
-            return;
-        }
-
-        const existingDeviceToken = sessionSnap.data().deviceToken;
-        console.log("[sendPushNotification] Token encontrado:", existingDeviceToken);
-
-        if (!existingDeviceToken) {
-            console.warn("[sendPushNotification] No hay token registrado.");
-            return;
-        }
-
-        const payload = {
-            token: existingDeviceToken,
-            title: `Nuevo mensaje de ${senderEmail}`,
-            body: text,
-            data: { chatId, senderId },
-        };
-
-        console.log("[sendPushNotification] Payload:", payload);
-
-        try {
-            const res = await fetch(`${API_BASE}/api/send-notification`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload),
-            });
-
-            const resData = await res.json();
-            console.log("[sendPushNotification] Respuesta del servidor:", resData);
-        } catch (err: any) {
-            console.error('[sendPushNotification] Error al enviar la notificación:', err.message);
-        }
-    }
-
     async function sendMessage(chatId: string, userId: string, text: string) {
         await saveMessage(chatId, userId, text);
 
@@ -188,13 +95,7 @@ const Chat: React.FC<ChatPreview> = (chatPreview) => {
             return;
         }
 
-        await sendPushNotification(
-            otherUserId,
-            chatId,
-            text,
-            user?.email || "Usuario",
-            userId
-        );
+        await sendPushNotification(otherUserId, chatId, text, user?.email || "Usuario", userId);
     }
 
 
@@ -207,17 +108,6 @@ const Chat: React.FC<ChatPreview> = (chatPreview) => {
         } catch (error) {
             console.error("Error al enviar mensaje:", error);
         }
-    }
-
-    function convertDate(timestamp: Timestamp) {
-        return timestamp?.toDate().toLocaleString('es-ES', {
-            hour: '2-digit',
-            minute: '2-digit',
-            hour12: false,
-            day: '2-digit',
-            month: '2-digit',
-            year: 'numeric'
-        });
     }
 
     return (

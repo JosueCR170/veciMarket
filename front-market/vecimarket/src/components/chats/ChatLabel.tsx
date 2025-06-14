@@ -4,9 +4,11 @@ import { personAddSharp, arrowBack } from 'ionicons/icons';
 import { ChatPreview } from './chatPreviewInterface';
 import { useAuth } from '../../context/contextUsuario';
 import { db } from '../../services/firebase/config/firebaseConfig';
-import { getDoc, doc, onSnapshot, collection, query, where, getDocs, updateDoc } from 'firebase/firestore';
+import { getDoc, doc, onSnapshot, collection, query, where } from 'firebase/firestore';
+import { convertDate, makeRead } from '../../services/firebase/chatService';
 import Chat from './Chat';
 import "./chat.css"
+
 interface user {
     correo: string,
     name: string,
@@ -83,42 +85,16 @@ const ChatLabel: React.FC<ChatPreview> = ({ ...chatPreview }) => {
         }
     }
 
-    const fechaFormateada = chat.lastTimestamp?.toDate().toLocaleString('es-ES', {
-        hour: '2-digit',
-        minute: '2-digit',
-        hour12: false,
-        day: '2-digit',
-        month: '2-digit',
-        year: 'numeric'
-    });
-
-    const makeRead = async () => {
-        try {
-            const messagesRef = collection(db, 'chats', chatPreview.id, 'messages');
-            const q = query(messagesRef, where('read', '==', false), where('from', '==', otherUserId));
-            const querySnapshot = await getDocs(q);
-
-            const updatePromises = querySnapshot.docs.map((messageDoc) => {
-                const messageRef = doc(db, 'chats', chatPreview.id, 'messages', messageDoc.id);
-                return updateDoc(messageRef, { read: true });
-            });
-
-            await Promise.all(updatePromises);
-            setHasUnread(false);
-            console.log('Mensajes marcados como leídos');
-        } catch (error) {
-            console.error('Error al marcar mensajes como leídos:', error);
-        }
-    }
-
     const openChat = () => {
         setOpen(true);
-        makeRead();
+        setHasUnread(false);
+        makeRead(chatPreview, otherUserId);
     }
 
     const closeChat = () => {
         setOpen(false);
-        makeRead();
+        setHasUnread(false);
+        makeRead(chatPreview, otherUserId);
     }
 
     return (
@@ -130,7 +106,7 @@ const ChatLabel: React.FC<ChatPreview> = ({ ...chatPreview }) => {
                         <div className='msg-preview-detail'>
                             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                                 <label className='msg-preview-title'>{otherUser?.name || 'Cargando...'}</label>
-                                <label className='msg-preview-date'>{fechaFormateada}</label>
+                                <label className='msg-preview-date'>{convertDate(chat.lastTimestamp)}</label>
                             </div>
                             <div style={{ marginTop: '8px' }}>
                                 <label className='msg-preview-text'>{chat.lastMessage}</label>
