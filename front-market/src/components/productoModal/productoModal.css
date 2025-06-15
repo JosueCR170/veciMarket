@@ -1,6 +1,6 @@
 ion-modal::part(backdrop) {
-  background-color: rgba(0, 0, 0, 0.6); /* Adjust the alpha value for the desired blur intensity */
-  backdrop-filter: blur(5px); /* Adjust the blur radius as needed */
+  background-color: rgba(0, 0, 0, 0.6); 
+  backdrop-filter: blur(5px);
 }
 
 ion-modal {
@@ -59,10 +59,10 @@ ion-modal {
 }
 
 .modal-back-arrow:hover {
-  color: #868686; /* Change to your desired hover color */
+  color: #868686; 
 }
 
-/* Media Queries for Responsiveness */
+
 @media (max-width: 576px) {
   .modal-sidebar {
     width: 100%;

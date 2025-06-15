@@ -38,17 +38,15 @@ const LoginNormal: React.FC<{ onToggleForm: () => void }> = ({ onToggleForm }) =
       const existingDeviceToken = sessionSnap.exists() ? sessionSnap.data().deviceToken : null;
 
       if (!existingDeviceToken || existingDeviceToken === currentDeviceToken) {
-        // ✅ No hay sesión activa o es el mismo dispositivo
         await savePushToken(currentDeviceToken, uid);
         history.replace("/home");
       } else {
-        // ❌ Otro dispositivo tiene la sesión activa
         await signOut(auth);
         setError("Ya tienes una sesión activa en otro dispositivo. Cierra sesión allí para poder ingresar.");
         history.push("/login");
       }
     } catch (error: any) {
-      await signOut(auth); // prevenir sesión parcial
+      await signOut(auth);
       setError(error.message || "Error al iniciar sesión.");
     } finally {
       setLoading(false);
@@ -97,7 +95,7 @@ const LoginNormal: React.FC<{ onToggleForm: () => void }> = ({ onToggleForm }) =
         </IonButton>
 
         <HandleGoogleSignIn />
-        {/*<GoogleSignIn/>*/}
+
       </div>
 
       <div style={{ textAlign: "center", marginTop: "1rem" }}>

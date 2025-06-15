@@ -1,10 +1,6 @@
 import { useState } from 'react';
 import { Geolocation, Position } from '@capacitor/geolocation';
 
-// import { getVendedorLocation } from '../services/firebase/vendedor';
-// import { useAuth } from '../context/contextUsuario';
-
-
 interface LocationState {
   location: Position | null;
   loading: boolean;
@@ -17,8 +13,6 @@ export const useLocationTracker = () => {
     loading: true,
     error: null,
   });
-
-  // const { user } = useAuth();
 
   const getCurrentPosition = async () => {
     try {

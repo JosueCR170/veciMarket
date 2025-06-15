@@ -3,7 +3,6 @@ import "./login.css"
 import { useState } from "react";
 import LoginNormal from "../../components/authentication/loginNormal";
 import Registrar from "./registrar";
-import { StatusBar, Style } from '@capacitor/status-bar';
 export const Login = () => {
   const [showRegister, setShowRegister] = useState(false);
   const toggleForm = () => {

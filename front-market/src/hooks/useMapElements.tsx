@@ -157,14 +157,7 @@ export const UseMapElements = (
 
     try {
       await mapInstance.current.setOnMarkerClickListener(async (data) => {
-        const { title, snippet } = data;
 
-        // Ignorar el marcador del usuario
-        // if (title === "Tu posición" || snippet === "Esta es tu ubicación actual") {
-        //   return;
-        // }
-
-        // const comercio = vendedores.find((c) => c.nombre === data.title);
         const comercio = vendedores.find((c) =>
           Math.abs(c.localizacion.lat - data.latitude) < 0.0001 &&
           Math.abs(c.localizacion.lng - data.longitude) < 0.0001

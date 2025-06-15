@@ -9,10 +9,6 @@ import { useAuth } from '../../context/contextUsuario';
 
 import { uploadProductImage, saveProductData } from '../../services/firebase/productService';
 
-// import { getStorage, ref, uploadString, getDownloadURL } from 'firebase/storage';
-// import { getFirestore, collection, addDoc } from 'firebase/firestore';
-// import { app } from '../../services/firebase/config/firebaseConfig'; // Import Firebase app
-
 import './agregarProducto.css';
 import { auth } from '../../services/firebase/config/firebaseConfig';
 
@@ -27,9 +23,6 @@ const AgregarProducto: React.FC = () => {
     const [isUploading, setIsUploading] = useState(false);
 
     const {user}= useAuth();
-
-    // const storage = getStorage(app); // Get Firebase Storage instance
-    // const firestore = getFirestore(app); // Get Firestore instance
 
     const categories = [
         { value: 'electrónica', label: 'Electrónica' },
@@ -55,14 +48,8 @@ const AgregarProducto: React.FC = () => {
                 return
             }
 
-            // Upload image to Firebase Storage
             const imageUrl = await uploadProductImage(productName, image);
 
-            // const storageRef = ref(storage, `productos/${new Date().getTime()}-${productName}.jpeg`);
-            // const uploadTask = await uploadString(storageRef, image, 'data_url');
-            // const downloadURL = await getDownloadURL(storageRef);
-
-            // Save product details to Firestore
             await saveProductData({
                 nombre: productName,
                 descripcion: description,
@@ -71,15 +58,7 @@ const AgregarProducto: React.FC = () => {
                 img: imageUrl,
                 idVendedor: user?.uid
             });
-            // await addDoc(collection(firestore, 'productos'), {
-            //     nombre: productName,
-            //     descripcion: description,
-            //     precio: price,
-            //     categoria: category,
-            //     img: downloadURL,
-            // });
 
-            // Reset form fields
             setProductName('');
             setDescription('');
             setPrice('');
@@ -111,7 +90,6 @@ const AgregarProducto: React.FC = () => {
     return (
         <div className="add-product-container">
             <form className="add-product-form" onSubmit={handleSubmit}>
-                {/* Image Placeholder */}
                 <div
                     className={`add-product-image-placeholder${isUploading ? ' add-product-image-placeholder--disabled' : ''}`}
                     onClick={!isUploading && !image ? takePicture : undefined}
@@ -147,8 +125,6 @@ const AgregarProducto: React.FC = () => {
 
                 </div>
 
-
-                {/* Product Name Input */}
                 <div className='add-product-input-group'>
                     <IonLabel className='add-product-label'>Nombre del producto</IonLabel>
                     <IonInput
@@ -160,7 +136,6 @@ const AgregarProducto: React.FC = () => {
                     />
                 </div>
 
-                {/* Description Input */}
                 <div className='add-product-input-group'>
                     <IonLabel className='add-product-label'>Descripción</IonLabel>
                     <IonInput
@@ -172,7 +147,6 @@ const AgregarProducto: React.FC = () => {
                     />
                 </div>
 
-                {/* Price Input */}
                 <div className='add-product-input-group'>
                     <IonLabel className='add-product-label'>Precio</IonLabel>
                     <IonInput
@@ -185,7 +159,6 @@ const AgregarProducto: React.FC = () => {
                     />
                 </div>
 
-                {/* Category Select */}
                 <div className='add-product-input-group'>
                     <IonLabel className='add-product-label'>Categoría</IonLabel>
                     <IonSelect
@@ -203,7 +176,6 @@ const AgregarProducto: React.FC = () => {
                     </IonSelect>
                 </div>
 
-                {/* Publish Button */}
                 <IonButton className="add-product-button" expand='full' type='submit' disabled={isUploading}>
                     {isUploading ? 'Agregando...' : 'Publicar'}
                 </IonButton>

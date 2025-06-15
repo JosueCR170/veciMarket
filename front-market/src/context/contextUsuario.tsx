@@ -24,7 +24,7 @@ async function getRol(uid: string): Promise<string | null> {
       return data.rol || null;
     } else {
       console.warn("No se encontró el documento del usuario");
-      //return null;
+
       return "usuario";
     }
   } catch (error) {
@@ -60,13 +60,11 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
         const remoteDeviceToken = snap.exists() ? snap.data().deviceToken : null;
 
         if (remoteDeviceToken === null || remoteDeviceToken === currentDeviceToken) {
-          // ✅ No hay sesión activa, guardar el token
           console.log("No hay sesión activa o el token es igual, sesión válida");
           setUser(user);
           const userRol = await getRol(uid);
           setRol(userRol);
         } else {
-          // ❌ Sesión inválida
           await signOut(auth);
           setUser(null);
           setRol(null);

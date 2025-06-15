@@ -29,10 +29,6 @@ export const ButonNavegation = () => {
       </IonTabButton>
 
 
-      {/* <IonTabButton tab="productos" href="/productos">
-        <IonIcon className="iconTabs" aria-hidden="true" icon={personCircle} />
-      </IonTabButton> */}
-
 
     </IonTabBar>
   );

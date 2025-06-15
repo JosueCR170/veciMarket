@@ -1,15 +1,13 @@
-import { useEffect, useRef, useState } from "react";
-import { GoogleMap } from "@capacitor/google-maps";
-import { IonContent, IonLoading, IonModal, IonSpinner, IonText, IonButton,IonIcon } from "@ionic/react"; // Importamos los componentes de Ionic
+import { useEffect, useState } from "react";
+import { IonModal, IonSpinner, IonText, IonButton,IonIcon } from "@ionic/react";
 import "./map.css";
-import { useLocationTracker } from "../../hooks/useLocationTracker"; // Asegúrate de que la ruta sea correcta
 import { useLocationContext } from "../../context/contextLocation";
 import { UseMapElements } from "../../hooks/useMapElements";
 import VerProductos from "../verProductos/verProductos"
 import { locate } from "ionicons/icons";
 
 const MapaComercios: React.FC = () => {
-  const { location, loading, error, refreshLocation } = useLocationContext();
+  const { location, loading, refreshLocation } = useLocationContext();
   const {
     mapRef,
     mapReady,
@@ -37,7 +35,6 @@ const MapaComercios: React.FC = () => {
     seleccionarMarcadorVendedor();
   }
 }, [mapReady]
-// [loading, mapReady, location]
 );
 
  const handleMoverCamara = async () => {
@@ -48,7 +45,6 @@ const MapaComercios: React.FC = () => {
 
   return (
   <div style={{ position: "relative", width: "100%", height: "100%" }}>
-    {/* Mapa siempre visible */}
     <div
       id='Comercios-map'
       ref={mapRef}
@@ -58,7 +54,6 @@ const MapaComercios: React.FC = () => {
       }}
     />
 
-    {/* Mostrar solo el loading al inicio */}
     {loading || !coordsSeleccionadas?.lat ? (
       <div
         style={{
@@ -83,7 +78,6 @@ const MapaComercios: React.FC = () => {
       </div>
     ) : (
       <>
-        {/* ✅ Solo mostrar si ya se cargó la ubicación */}
         <div className="top-buttons">
           <IonButton fill="outline" className="btn-icono" shape="round" onClick={handleMoverCamara}>
             <IonIcon slot="icon-only" ios={locate} md={locate}></IonIcon>

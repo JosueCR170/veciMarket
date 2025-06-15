@@ -18,11 +18,10 @@ export const LogoutButton = () => {
     try {
       const user = auth.currentUser;
       if (user) {
-        // 🔴 Elimina sesión en Firestore
+
         await deleteDoc(doc(db, "userSessions", user.uid));
       }
 
-      // 🔴 Logout de Firebase + Capacitor
       await signOut(auth);
       await FirebaseAuthentication.signOut();
 

@@ -11,7 +11,6 @@ const Map: React.FC = () => {
     mapRef,
     coordsSeleccionadas,
     mapReady,
-    //comercioSeleccionado,
     activarSeleccionUbicacion,
     guardarUbicacion,
     seleccionarMarcadorVendedor,
@@ -22,16 +21,9 @@ const Map: React.FC = () => {
   const [showWarning, setShowWarning] = useState(true);
   const [modalAbierto, setModalAbierto] = useState(false);
 
-  // const [cargador, setCargador]= useState(true);
-
-  // useEffect(() => {
-  //   setCargador(true)
-  // }, []);
-
   useEffect(() => {
     if (mapReady) {
-      seleccionarMarcadorVendedor(); // activa el listener
-      // setCargador(false)
+      seleccionarMarcadorVendedor();
     }
   }, [mapReady]);
 

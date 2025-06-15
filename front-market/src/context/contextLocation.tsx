@@ -1,11 +1,9 @@
-// context/LocationContext.tsx
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../services/firebase/config/firebaseConfig";
 import { useAuth } from "./contextUsuario";
-import { useLocationTracker } from "../hooks/useLocationTracker"; // tu hook personalizado
+import { useLocationTracker } from "../hooks/useLocationTracker"; 
 import { Position } from "@capacitor/geolocation";
-import { updateVendedorLocation } from "../services/firebase/vendedorService";
 
 interface LocationContextType {
     location: Position | null
@@ -52,10 +50,8 @@ export const LocationProvider: React.FC<{ children: React.ReactNode }> = ({ chil
 
                 const data = vendedorSnap.data();
                 console.log("Datos del vendedor:", data);
-                // Verifica si hay una localización guardada en Firestore
                 if (data.localizacion !=null) {
 
-                    //setLocation(data.localizacion);
                     await tracker.requestPermissions();
                     const fakePosition: Position = {
                         coords: {
@@ -77,20 +73,6 @@ export const LocationProvider: React.FC<{ children: React.ReactNode }> = ({ chil
 
                 } else {
                     setLocation(null);
-                    //   throw new Error("No hay localización guardada en Firestore");
-                    // await tracker.requestPermissions();
-                    // const pos = await tracker.getCurrentPosition();
-                    // if (pos) {
-                    //     setLocation(pos);
-                    //     console.log("Pos:", pos);
-                    //     const coords = {
-                    //         lat: pos.coords.latitude,
-                    //         lng: pos.coords.longitude,
-                    //     }
-                    //     await updateVendedorLocation(user.uid, coords);
-                    // } else if (tracker.error) {
-                    //     throw new Error(tracker.error);
-                    // }
 
                 }
             } else {
