@@ -5,8 +5,10 @@ import { UseMapElements } from "../../hooks/useMapElements";
 import { useState, useEffect } from "react";
 import './mapaCambiarLocalizacion.css'
 
+
+
 const Map: React.FC = () => {
-  const { location, loading, error, refreshLocation } = useLocationContext();
+  const { location, loading, refreshLocation } = useLocationContext();
   const {
     mapRef,
     coordsSeleccionadas,
@@ -19,7 +21,6 @@ const Map: React.FC = () => {
 
   const [showAlert, setShowAlert] = useState(false);
   const [showWarning, setShowWarning] = useState(true);
-  const [modalAbierto, setModalAbierto] = useState(false);
 
   useEffect(() => {
     if (mapReady) {

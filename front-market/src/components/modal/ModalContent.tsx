@@ -1,12 +1,14 @@
 import { createAnimation, IonContent, IonHeader, IonIcon, IonItem, IonItemDivider, IonItemGroup, IonLabel, IonList, IonModal, IonTitle, IonToolbar } from '@ionic/react';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
-import { arrowBackOutline, chevronForwardOutline, shieldHalf, star, trendingUp, lockClosed, bagHandle, eye } from 'ionicons/icons';
+import { arrowBackOutline, chevronForwardOutline, shieldHalf, star, trendingUp, lockClosed, bagHandle, eye, compass } from 'ionicons/icons';
 import { LogoutButton } from "../authentication/logOut";
-import { TipoCuenta } from './submenus de modal/tipoCuenta';
+import { TipoCuenta } from './submenus/tipoCuenta';
 import { useAuth } from '../../context/contextUsuario';
-import { SubmodalHeader } from './submenus de modal/submodalHeader';
+import { SubmodalHeader } from './submenus/submodalHeader';
+// import { CambiarUbicacion } from './submenus/cambiarUbicacion';
+import { useHistory } from 'react-router';
 interface ModalContentProps {
   isOpen: boolean;
   onClose: () => void;
@@ -15,6 +17,11 @@ const ModalContent: React.FC<ModalContentProps> = ({ isOpen, onClose }) => {
   const { rol } = useAuth();
   const [submenuActivo, setSubmenuActivo] = useState<string | null>(null);
 
+  const [modalAbierto, setModalAbierto] = useState(false);
+  const history = useHistory();
+
+
+
   const abrirSubmenu = (id: string) => {
     setSubmenuActivo(id);
   };
@@ -22,6 +29,13 @@ const ModalContent: React.FC<ModalContentProps> = ({ isOpen, onClose }) => {
   const cerrarSubmenu = () => {
     setSubmenuActivo(null);
   };
+
+  useEffect(() => {
+  if (submenuActivo === "cambiar-ubicacion") {
+    history.replace('/cambiar-ubicacion');
+  }
+}, [submenuActivo]);
+
 
   const configuraciones = [
     {
@@ -42,9 +56,9 @@ const ModalContent: React.FC<ModalContentProps> = ({ isOpen, onClose }) => {
     },
     {
       titulo: 'Cuenta',
-      items: [
-        { id: 'cambiar-ubicacion', icon: lockClosed, label: 'Cambiar Ubicación' },
-      ]
+      items: rol === 'ejecutivo'
+      ? [{ id: 'cambiar-ubicacion', icon: compass, label: 'Cambiar Ubicación' }]
+      : []
     },
   ];
 
@@ -152,11 +166,15 @@ const ModalContent: React.FC<ModalContentProps> = ({ isOpen, onClose }) => {
         </IonContent>
         <IonModal
           isOpen={!!submenuActivo}
-          onDidDismiss={cerrarSubmenu}
+         onDidDismiss={() => {
+    cerrarSubmenu();
+    setModalAbierto(false);
+  }}
           enterAnimation={enterAnimation}
           leaveAnimation={leaveAnimation}
           className="custom-font"
           backdropDismiss={false}
+           onDidPresent={() => setModalAbierto(true)}
         >
           {submenuActivo === "cuenta" && <TipoCuenta onClose={cerrarSubmenu} />}
 
@@ -166,7 +184,7 @@ const ModalContent: React.FC<ModalContentProps> = ({ isOpen, onClose }) => {
            {submenuActivo === "vendidos" && <SubmodalHeader titulo='Tus productos vendidos' onClose={cerrarSubmenu} />}
            {submenuActivo === "mas-visto" && <SubmodalHeader titulo='Contenido más visto' onClose={cerrarSubmenu} />}
            
-           {submenuActivo === "cambiar-ubicacion" && <SubmodalHeader titulo='Cambiar Ubicación' onClose={cerrarSubmenu} />}
+           {/* {submenuActivo === "cambiar-ubicacion" && <CambiarUbicacion />} */}
 
         </IonModal>
       </IonModal>

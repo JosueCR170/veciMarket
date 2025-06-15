@@ -11,6 +11,7 @@ import Home from './pages/Home';
 import Agregar from './pages/Agregar';
 import ChatTab from './pages/ChatTab';
 import Perfil from './pages/Perfil'
+import { CambiarUbicacion } from './pages/cambiarUbicacion';
 import { Login } from './pages/Seguro/login'
 import { useAuth } from './context/contextUsuario';
 import { ButonNavegation } from './components/tabs/opciones';
@@ -89,6 +90,9 @@ const App: React.FC = () => {
               <ProtectedRoute exact path="/chat" component={ChatTab} allowedRoles={['usuario', 'ejecutivo']} isAuthenticated={!!user} userRole={rol ?? undefined} />
               <ProtectedRoute exact path="/perfil" component={Perfil} allowedRoles={['usuario', 'ejecutivo']} isAuthenticated={!!user} userRole={rol ?? undefined} />
               
+              <ProtectedRoute exact path="/cambiar-ubicacion" component={CambiarUbicacion} allowedRoles={['ejecutivo']} isAuthenticated={!!user} userRole={rol ?? undefined} />
+              
+
             </IonRouterOutlet>
             {rol && <ButonNavegation />}
             <Route path="*">
