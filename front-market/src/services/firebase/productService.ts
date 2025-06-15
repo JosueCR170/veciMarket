@@ -1,7 +1,7 @@
 // src/services/firebaseProductService.ts
 import { ref, uploadString, getDownloadURL } from 'firebase/storage';
 import { addDoc, collection, where, query, getDocs } from 'firebase/firestore';
-import { storage, db, auth } from './config/firebaseConfig';
+import { storage, db } from './config/firebaseConfig';
 
 
 export const uploadProductImage = async (productName: string, imageDataUrl: string): Promise<string> => {

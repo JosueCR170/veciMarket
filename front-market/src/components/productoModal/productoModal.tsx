@@ -8,13 +8,11 @@ import {
   IonText,
   IonCard,
   IonCardContent,
-  IonCardHeader,
   IonCardTitle,
-  IonCardSubtitle,
   IonIcon,
   IonButton,
 } from '@ionic/react';
-import { callOutline, personCircleOutline, arrowBackOutline, locationOutline } from 'ionicons/icons';
+import { callOutline, personCircleOutline, arrowBackOutline } from 'ionicons/icons';
 import './productoModal.css';
 import { getUser } from '../../services/firebase/userService';
 import { ReactNode, useEffect, useState } from 'react';
@@ -73,7 +71,6 @@ const ProductoModal: React.FC<ProductoModalProps> = ({ isOpen, producto, onClose
 
     const querySnapshot = await getDocs(chatQuery);
 
-    // Verificamos si ya existe un chat con este producto y usuario
     const existingChat = querySnapshot.docs.find(doc => {
       const data = doc.data();
       return (
@@ -91,20 +88,17 @@ const ProductoModal: React.FC<ProductoModalProps> = ({ isOpen, producto, onClose
     let chatDocRef;
 
     if (!existingChat) {
-      // Crear nuevo chat
-      chatDocRef = doc(collection(db, 'chats')); // genera nuevo ID
+      chatDocRef = doc(collection(db, 'chats')); 
       batch.set(chatDocRef, {
         lastMessage: message,
         lastTimestamp: serverTimestamp(),
         participants: [producto?.idVendedor, user?.uid]
       });
     } else {
-      // Actualizar chat existente
       chatDocRef = doc(db, 'chats', existingChat.id);
       batch.update(chatDocRef, {
         lastMessage: message,
         lastTimestamp: serverTimestamp(),
-        // Usar arrayUnion para evitar duplicados por seguridad
         participants: arrayUnion(producto?.idVendedor, user?.uid)
       });
     }
@@ -112,9 +106,8 @@ const ProductoModal: React.FC<ProductoModalProps> = ({ isOpen, producto, onClose
     chatId = chatDocRef.id;
 
     const messagesRef = collection(db, 'chats', chatId, 'messages');
-    const newMessageRef = doc(messagesRef); // genera un id automáticamente
+    const newMessageRef = doc(messagesRef);
 
-    // Prepara el nuevo mensaje
     batch.set(newMessageRef, {
       from: user?.uid,
       text: message,

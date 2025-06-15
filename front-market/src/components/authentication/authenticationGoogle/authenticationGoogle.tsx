@@ -44,7 +44,7 @@ const HandleGoogleSignIn = () => {
       const existingDeviceToken = sessionSnap.exists() ? sessionSnap.data().deviceToken : null;
 
       if (existingDeviceToken === null) {
-        await savePushToken(currentDeviceToken, uid); // guarda el token de sesión
+        await savePushToken(currentDeviceToken, uid);
         history.replace("/home");
       } else if (existingDeviceToken === currentDeviceToken) {
         history.replace("/home");
@@ -54,7 +54,6 @@ const HandleGoogleSignIn = () => {
         return;
       }
 
-      // Verifica si ya existe perfil, si no, lo crea
       const profileRef = doc(db, `userRol/${uid}`);
       const profileSnap = await getDoc(profileRef);
       if (!profileSnap.exists()) {

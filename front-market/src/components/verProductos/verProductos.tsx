@@ -1,12 +1,10 @@
 import React, { useState, useEffect, ReactNode } from 'react';
-import { getFirestore, collection, getDocs } from 'firebase/firestore';
-import { app } from '../../services/firebase/config/firebaseConfig';
 import CardProducto from '../cardProducto/cardProducto';
 import ProductoModal from '../productoModal/productoModal';
 import { IonGrid, IonRow, IonCol, IonContent, IonItem, IonSelect, IonSelectOption, IonSearchbar } from '@ionic/react';
 import { getProductosByVendedorId } from '../../services/firebase/productService';
 
-// Define la interfaz Producto aquí
+
 interface Producto {
   contacto: ReactNode;
   id: string;
@@ -15,7 +13,7 @@ interface Producto {
   descripcion: string;
   precio: number;
   categoria: string;
-  idVendedor?: string; // Store the vendedor's ID
+  idVendedor?: string;
 }
 
 const VerProductos: React.FC<{ idVendedor: string }> = ({ idVendedor }) => {
@@ -76,7 +74,7 @@ const VerProductos: React.FC<{ idVendedor: string }> = ({ idVendedor }) => {
   };
 
   const handleProductoClick = (producto: Producto) => {
-    console.log('Modal abierto:', true); // Agrega esta línea
+    console.log('Modal abierto:', true);
     setProductoSeleccionado(producto);
     setModalAbierto(true);
   };
@@ -89,7 +87,6 @@ const VerProductos: React.FC<{ idVendedor: string }> = ({ idVendedor }) => {
          style={{ '--background': 'white', color: 'black', margin: 10, }}
           value={searchTerm}
           placeholder="Buscar"
-          // debounce={500}
           onIonInput={(e) => setSearchTerm(e.target.value ?? '')}
         />
 

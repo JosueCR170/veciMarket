@@ -107,7 +107,6 @@ ion-modal ion-content::part(background) {
   position: absolute;
   bottom: 1px;
   right: 6px;
-  /* Lo pone hacia afuera a la derecha */
   height: 40px;
   width: 40px;
   background: #868686;

@@ -7,8 +7,6 @@ import { doc, setDoc } from 'firebase/firestore';
 import { IonToast } from "@ionic/react";
 import { getDeviceToken } from '../../services/firebase/tokenUtils';
 
-
-
 const Registrar: React.FC<{ onToggleForm: () => void }> = ({ onToggleForm }) => {
   const [errorMessage, setErrorMessage] = React.useState("");
   const [showToast, setShowToast] = React.useState(false);

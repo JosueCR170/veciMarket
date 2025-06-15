@@ -1,6 +1,6 @@
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
 import ChatList from '../components/chats/ChatList';
-import './ChatTab.css'; // Import your CSS file
+import './ChatTab.css';
 
 const ChatTab: React.FC = () => {
   return (

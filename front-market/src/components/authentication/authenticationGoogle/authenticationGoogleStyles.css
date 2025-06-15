@@ -8,15 +8,15 @@
   color: #5f6368;
   /* font-family: 'Roboto', sans-serif; */
   font-family: "Zain", sans-serif;
-  font-size: 20px; /* reducido */
+  font-size: 20px;
 
   border: 1px solid #dadce0;
-  border-radius: 10px; /* aún redondeado, pero más pequeño */
-  padding: 8px 16px; /* menos espacio interno */
+  border-radius: 10px;
+  padding: 8px 16px; 
   cursor: pointer;
   text-align: center;
   width: 100%;
-  max-width: 240px; /* reducido desde 300px */
+  max-width: 240px; 
   max-height: 50px;
   transition: box-shadow 0.3s ease-in-out, transform 0.1s ease-in-out;
 }
@@ -27,6 +27,6 @@
 }
 
 .google-btn img {
-  width: 18px; /* un poco más pequeño */
+  width: 18px;
   height: 18px;
 }

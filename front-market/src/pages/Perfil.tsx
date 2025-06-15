@@ -1,14 +1,12 @@
 import {
-  IonButton, IonButtons, IonContent, IonHeader, IonIcon,
-  IonModal, IonPage, IonTitle, IonToolbar
+  IonButton, IonButtons, IonContent, IonHeader, IonIcon, IonPage, IonTitle, IonToolbar
 } from '@ionic/react';
 import { menu } from 'ionicons/icons';
 import { useState } from 'react';
-import ModalContent from '../components/modal/ModalContent'; // Ajusta la ruta
+import ModalContent from '../components/modal/ModalContent';
 import CapturaFotoPage from '../components/camara/fotoUser';
 import './perfil.css';
 
-// import './Tab3.css';
 
 const Perfil: React.FC = () => {
     const [showModal, setShowModal] = useState(false);
