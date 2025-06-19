@@ -12,7 +12,7 @@ import {
   IonIcon,
   IonButton,
 } from '@ionic/react';
-import { callOutline, personCircleOutline, arrowBackOutline } from 'ionicons/icons';
+import { callOutline,call, personCircleOutline, arrowBackOutline } from 'ionicons/icons';
 import './productoModal.css';
 import { getUser } from '../../services/firebase/userService';
 import { ReactNode, useEffect, useState } from 'react';
@@ -165,14 +165,14 @@ const ProductoModal: React.FC<ProductoModalProps> = ({ isOpen, producto, onClose
       </IonHeader>
       <IonContent className="modal-product-content">
         <IonCard className="modal-product-card">
-          <IonImg src={producto.img} alt={producto.nombre} />
+          <IonImg className="modal-product-image" src={producto.img} alt={producto.nombre} />
           <IonCardContent className="product-details-content">
             <IonCardTitle style={{ color: '#000' }}>{producto.nombre}</IonCardTitle>
             <IonText className="textInfo"><strong>Precio: </strong>₡{producto.precio}</IonText>
             <IonText className="textInfo"> <strong>Categoría: </strong> {producto.categoria} </IonText>
             <IonText className="textInfo"> <strong>Descripción: </strong> {producto.descripcion} </IonText>
             {vendedorCorreo && (
-              <IonText className="textInfo"> <IonIcon icon={callOutline} /> <strong>Contacto:</strong> {vendedorCorreo} </IonText>
+              <IonText className="textInfo"> <IonIcon icon={call} /> <strong>Contacto:</strong> {vendedorCorreo} </IonText>
             )}
             <IonButton onClick={contactSeller}>
               <IonIcon icon={personCircleOutline} />
