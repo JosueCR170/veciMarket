@@ -4,7 +4,8 @@
 
 .add-product-container {
   background-color: white;
-  height: 100vh;
+  max-height: 100vh;
+  overflow-y: auto
 }
 
 .add-product-form {
@@ -112,7 +113,7 @@
 .add-product-button {
   margin-top: 20px;
   font-size: 1.2em;
-  color: #003EB0;
+  color: #c8d8f6;
   background: white;
   font-family: 'Paytone One', sans-serif; 
 }

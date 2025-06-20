@@ -6,4 +6,19 @@ ion-content.map-page-content {
   --background: transparent !important;
 }
 
+.productos-container {
+  max-height: 100vh; /* Por ejemplo, el 80% de la pantalla */
+  overflow-y: auto;
+}
  
+.productos-row {
+  justify-content: center;
+  align-items: flex-start;
+}
+
+/* Asegurar que cada columna utilice toda su anchura asignada */
+ion-col {
+  
+  width: 100%;
+
+}

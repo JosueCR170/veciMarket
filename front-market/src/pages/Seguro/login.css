@@ -41,6 +41,7 @@
     border-radius: 30px;
     border: 1px solid #ddd;
     padding-left: 1rem;
+   
     background-color: #b88484;
   }
   .login-access  ion-item .item-inner{
@@ -64,7 +65,7 @@
     background-color: #00000084;
     border-bottom: 2px solid #ffffff;
     height: 35px;
-    
+    --color: rgb(255 255 255);
     min-height: 0 !important;
   }
   
@@ -124,9 +125,18 @@
    font-size: 22px;
    color: #f7f7f7;
   }
- .inputColor{
-  color: #f7f7f7;
- }
+
+  .inputColor {
+  --color: rgb(255, 255, 255); /* Texto en RGB */
+}
+
+.inputColor::part(placeholder) {
+  color: rgb(255, 255, 255);
+  opacity: 1;
+}
+
+
+
   ion-item.input-registrar {
     --highlight-height: 0;  
     --inner-border-width: 0; 

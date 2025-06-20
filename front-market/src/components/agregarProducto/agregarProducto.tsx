@@ -19,6 +19,7 @@ const AgregarProducto: React.FC = () => {
     const [category, setCategory] = useState('');
     const [image, setImage] = useState<string | null>(null);
     const [errorMessage, setErrorMessage] = useState('');
+    const [successMessage, setSuccessMessage] = useState('');
     const [showToast, setShowToast] = useState(false);
     const [isUploading, setIsUploading] = useState(false);
 
@@ -64,7 +65,7 @@ const AgregarProducto: React.FC = () => {
             setPrice('');
             setCategory('');
             setImage(null);
-            setErrorMessage('Producto agregado con éxito.');
+            setSuccessMessage('Producto agregado con éxito.');
             setShowToast(true);
         } catch (error: any) {
             console.error('Error al agregar producto:', error);
@@ -187,6 +188,14 @@ const AgregarProducto: React.FC = () => {
                 message={errorMessage}
                 duration={3000}
                 color="danger"
+            />
+               <IonToast
+                position="top"
+                isOpen={showToast}
+                onDidDismiss={() => setShowToast(false)}
+                message={successMessage}
+                duration={3000}
+                color="success"
             />
         </div>
     );

@@ -80,7 +80,7 @@ const HandleGoogleSignIn = () => {
 
     <button className="btn-login google-btn" onClick={signInWithGoogle}>
       <img src="/img/google-logo.png" alt="google" className="img-logo" />
-      <p>Continuar con Google</p>
+      <p>Google</p>
 
     </button>
   );

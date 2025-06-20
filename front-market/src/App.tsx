@@ -82,7 +82,7 @@ const App: React.FC = () => {
         <Route exact path="/">
           <Redirect to={user ? '/home' : '/login'} />
         </Route>
-        {user ? (
+      {user ? (
           <IonTabs>
             <IonRouterOutlet>
               <ProtectedRoute exact path="/home" component={Home} allowedRoles={['usuario', 'ejecutivo']} isAuthenticated={!!user} userRole={rol ?? undefined} />

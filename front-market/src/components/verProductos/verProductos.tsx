@@ -80,7 +80,7 @@ const VerProductos: React.FC<{ idVendedor: string }> = ({ idVendedor }) => {
   };
 
   return (
-    <IonContent style={{ '--background': '#EEEEEE', position: 'relative' }}>
+    <IonContent style={{ '--background': '#EEEEEE'}}>
 
       <IonItem style={{ flex: 1, margin: 0, '--background': 'white', color: 'black' }}>
          <IonSearchbar
@@ -108,9 +108,9 @@ const VerProductos: React.FC<{ idVendedor: string }> = ({ idVendedor }) => {
       </IonItem>
 
 
-
+      <div className="productos-container">
       <IonGrid>
-        <IonRow>
+        <IonRow  className="productos-row"> 
           {productosFiltrados.map(producto => (
             <IonCol size="6" key={producto.id}>
 
@@ -119,7 +119,7 @@ const VerProductos: React.FC<{ idVendedor: string }> = ({ idVendedor }) => {
           ))}
         </IonRow>
       </IonGrid>
-
+    </div>
       <ProductoModal
         isOpen={modalAbierto}
         producto={productoSeleccionado}
