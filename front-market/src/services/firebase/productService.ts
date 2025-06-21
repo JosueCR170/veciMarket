@@ -1,7 +1,7 @@
 // src/services/firebaseProductService.ts
 import { ref, uploadString, getDownloadURL } from 'firebase/storage';
 import { addDoc, collection, where, query, getDocs } from 'firebase/firestore';
-import { storage, db } from './config/firebaseConfig';
+import { storage, db, auth } from './config/firebaseConfig';
 
 
 export const uploadProductImage = async (productName: string, imageDataUrl: string): Promise<string> => {
@@ -18,7 +18,7 @@ export const saveProductData = async (product: {
   precio: string;
   categoria: string;
   img: string;
-  idVendedor:string;
+  idVendedor: string;
 }): Promise<void> => {
   await addDoc(collection(db, 'productos'), product);
 };
@@ -34,13 +34,13 @@ export const getProductosByVendedorId = async (idVendedor: string) => {
     const productos = querySnapshot.docs.map((doc) => {
       const data = doc.data();
       return {
-         id: doc.id,
-          img: data.img || '',
-          nombre: data.nombre || '',
-          descripcion: data.descripcion || '',
-          precio: data.precio || 0,
-          categoria: data.categoria || '',
-          ...data,
+        id: doc.id,
+        img: data.img || '',
+        nombre: data.nombre || '',
+        descripcion: data.descripcion || '',
+        precio: data.precio || 0,
+        categoria: data.categoria || '',
+        ...data,
       };
     });
 

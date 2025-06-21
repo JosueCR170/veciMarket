@@ -1,5 +1,5 @@
 // src/services/registerUser.ts
-import { db } from './config/firebaseConfig';
+import { auth, db } from './config/firebaseConfig';
 import { doc, setDoc, getDoc } from 'firebase/firestore';
 
 interface UserModel {

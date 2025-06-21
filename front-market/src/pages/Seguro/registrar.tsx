@@ -5,7 +5,7 @@ import { createVendedorProfile } from '../../services/firebase/vendedorService';
 import { auth, db } from '../../services/firebase/config/firebaseConfig';
 import { doc, setDoc } from 'firebase/firestore';
 import { IonToast } from "@ionic/react";
-import { getDeviceToken } from '../../services/firebase/tokenUtils';
+import { getDeviceToken, requestPushPermissions } from '../../services/firebase/tokenUtils';
 
 const Registrar: React.FC<{ onToggleForm: () => void }> = ({ onToggleForm }) => {
   const [errorMessage, setErrorMessage] = React.useState("");
@@ -35,6 +35,12 @@ const Registrar: React.FC<{ onToggleForm: () => void }> = ({ onToggleForm }) => 
 
   async function registerUser(name: string, email: string, password: string, rol: string) {
     try {
+      const granted = await requestPushPermissions();
+      if (!granted) {
+        setError('Permisos denegados para notificaciones');
+        return;
+      }
+
       const infoUsuario = await createUserWithEmailAndPassword(auth, email, password);
       await updateProfile(infoUsuario.user, { displayName: name });
       const docuRef = doc(db, `userRol/${infoUsuario.user.uid}`);

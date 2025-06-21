@@ -4,7 +4,7 @@ import { useCallback, useState } from "react";
 import { IonLoading } from "@ionic/react";
 import { auth, authReady } from "../../../services/firebase/config/firebaseConfig";
 import { GoogleAuthProvider, signInWithCredential, signOut } from "firebase/auth";
-import { getDeviceToken, savePushToken } from "../../../services/firebase/tokenUtils";
+import { getDeviceToken, savePushToken, requestPushPermissions } from "../../../services/firebase/tokenUtils";
 import "./authenticationGoogleStyles.css";
 
 import { doc, getDoc, setDoc } from "firebase/firestore";
@@ -16,6 +16,12 @@ const HandleGoogleSignIn = () => {
 
   const signInWithGoogle = useCallback(async () => {
     try {
+      const granted = await requestPushPermissions();
+      if (!granted) {
+        console.log('Permisos denegados para notificaciones');
+        return;
+      }
+
       setLoading(true);
 
       const result = await FirebaseAuthentication.signInWithGoogle();
@@ -44,7 +50,7 @@ const HandleGoogleSignIn = () => {
       const existingDeviceToken = sessionSnap.exists() ? sessionSnap.data().deviceToken : null;
 
       if (existingDeviceToken === null) {
-        await savePushToken(currentDeviceToken, uid);
+        await savePushToken(currentDeviceToken, uid); // guarda el token de sesión
         history.replace("/home");
       } else if (existingDeviceToken === currentDeviceToken) {
         history.replace("/home");
@@ -54,6 +60,7 @@ const HandleGoogleSignIn = () => {
         return;
       }
 
+      // Verifica si ya existe perfil, si no, lo crea
       const profileRef = doc(db, `userRol/${uid}`);
       const profileSnap = await getDoc(profileRef);
       if (!profileSnap.exists()) {
@@ -80,7 +87,7 @@ const HandleGoogleSignIn = () => {
 
     <button className="btn-login google-btn" onClick={signInWithGoogle}>
       <img src="/img/google-logo.png" alt="google" className="img-logo" />
-      <p>Google</p>
+      <p>Continuar con Google</p>
 
     </button>
   );

@@ -111,6 +111,7 @@ const handlePhoto = async (source: CameraSource) => {
       await uploadString(storageRef, photoPreview, 'data_url');
       const url = await getDownloadURL(storageRef);
 
+      // Actualizar Firestore
       const userDocRef = doc(db, 'userRol', user.uid);
       await updateDoc(userDocRef, { fotoPerfil: url });
 
@@ -128,14 +129,14 @@ const handlePhoto = async (source: CameraSource) => {
 
   const handleCancel = () => {
     if (originalPhotoUrl) {
-      setPhotoPreview(originalPhotoUrl);
+      setPhotoPreview(originalPhotoUrl); // Restaurar la original
       setIsPreview(false);
     }
   };
 
   return (
     <div className="captura-foto-container">
-
+      {/* Imagen o Spinner */}
       <div className='foto-container'
         onClick={() => !loadingFoto && setModalVisible(true)}>
         {loadingFoto ? (
@@ -149,6 +150,7 @@ const handlePhoto = async (source: CameraSource) => {
         )}
       </div>
    
+      {/* Card de Usuario */}
       {user && (
       <IonCard style={{ width: '100%', minWidth: '200px', background: 'white', borderRadius: '10px', padding: '10px' }}>
         <IonCardHeader>
@@ -198,6 +200,7 @@ const handlePhoto = async (source: CameraSource) => {
   </IonFooter>
 )}
 
+      {/* Indicador de subida */}
       {isUploading && (
         <div style={{ marginTop: '1rem', textAlign: 'center' }}>
           <IonSpinner name="crescent" color="primary" />
@@ -205,6 +208,7 @@ const handlePhoto = async (source: CameraSource) => {
         </div>
       )}
 
+      {/* Modal para seleccionar origen */}
       <IonModal isOpen={modalVisible} onDidDismiss={() => setModalVisible(false)} initialBreakpoint={0.50} breakpoints={[0, 0.25, 0.5, 0.75]}
       >
         <div style={{ padding: '2rem', textAlign: 'center', background: '#eeee', color: '#000000', height: '-webkit-fill-available'}}>
@@ -218,6 +222,7 @@ const handlePhoto = async (source: CameraSource) => {
         </div>
       </IonModal>
 
+      {/* Alertas */}
       <IonAlert
         isOpen={alertInfo.isOpen}
         header={alertInfo.header}

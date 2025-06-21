@@ -12,14 +12,15 @@ import {
   IonIcon,
   IonButton,
 } from '@ionic/react';
-import { callOutline,call, personCircleOutline, arrowBackOutline } from 'ionicons/icons';
+import { callOutline, personCircleOutline, arrowBackOutline } from 'ionicons/icons';
 import './productoModal.css';
 import { getUser } from '../../services/firebase/userService';
 import { ReactNode, useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
 import { useAuth } from '../../context/contextUsuario';
-import { collection, query, where, doc, getDocs, getDoc, serverTimestamp, writeBatch, arrayUnion } from 'firebase/firestore';
+import { collection, query, where, doc, getDocs, serverTimestamp, writeBatch, arrayUnion } from 'firebase/firestore';
 import { db } from '../../services/firebase/config/firebaseConfig';
+import { detectPresence, sendPushNotification } from '../../services/firebase/chatService';
 
 interface Producto {
   contacto: ReactNode;
@@ -40,8 +41,6 @@ interface ProductoModalProps {
 
 const ProductoModal: React.FC<ProductoModalProps> = ({ isOpen, producto, onClose }) => {
 
-  const API_BASE = 'http://10.0.2.2:3000';
-
   const [vendedorCorreo, setVendedorCorreo] = useState<string | null>(null);
 
   const { user } = useAuth();
@@ -61,9 +60,6 @@ const ProductoModal: React.FC<ProductoModalProps> = ({ isOpen, producto, onClose
   }, [producto]);
 
   const contactSeller = async () => {
-
-    let chatId = "";
-
     const chatQuery = query(
       collection(db, 'chats'),
       where('participants', 'array-contains', user?.uid)
@@ -71,6 +67,7 @@ const ProductoModal: React.FC<ProductoModalProps> = ({ isOpen, producto, onClose
 
     const querySnapshot = await getDocs(chatQuery);
 
+    // Verificamos si ya existe un chat con este producto y usuario
     const existingChat = querySnapshot.docs.find(doc => {
       const data = doc.data();
       return (
@@ -83,12 +80,10 @@ const ProductoModal: React.FC<ProductoModalProps> = ({ isOpen, producto, onClose
 
     const message = "¡Saludos! Tengo interés en el producto: " + producto?.nombre + "-" + producto?.id;
 
-    console.log("Existing chat", existingChat)
-
     let chatDocRef;
 
     if (!existingChat) {
-      chatDocRef = doc(collection(db, 'chats')); 
+      chatDocRef = doc(collection(db, 'chats'));
       batch.set(chatDocRef, {
         lastMessage: message,
         lastTimestamp: serverTimestamp(),
@@ -103,7 +98,7 @@ const ProductoModal: React.FC<ProductoModalProps> = ({ isOpen, producto, onClose
       });
     }
 
-    chatId = chatDocRef.id;
+    const chatId = chatDocRef.id;
 
     const messagesRef = collection(db, 'chats', chatId, 'messages');
     const newMessageRef = doc(messagesRef);
@@ -117,35 +112,12 @@ const ProductoModal: React.FC<ProductoModalProps> = ({ isOpen, producto, onClose
 
     await batch.commit();
 
-    const sessionDocRef = doc(db, "userSessions", producto?.idVendedor!);
-    const sessionSnap = await getDoc(sessionDocRef);
-    const existingDeviceToken = sessionSnap.exists() ? sessionSnap.data().deviceToken : null;
-
-    if (existingDeviceToken) {
-      try {
-        const payload = {
-          token: existingDeviceToken,
-          title: `Nuevo mensaje de ${user?.email}`,
-          body: message,
-          data: { chatId, senderId: user?.uid },
-
-        };
-
-        const res = await fetch(`${API_BASE}/api/send-notification`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        });
-
-        const resData = await res.json();
-        console.log(JSON.stringify(resData, null, 1));
-      } catch (err: any) {
-        console.error('Error al enviar la notificación: ' + err.message);
-      }
-      console.log("Enviando notificación push al usuario:", producto?.idVendedor);
-    }
-
     history.replace("/chat");
+
+    const shouldNotify = await detectPresence(chatId, producto?.idVendedor!);
+    if (shouldNotify) {
+      await sendPushNotification(producto?.idVendedor!, chatId, message, user?.email!, user?.uid!);
+    }
   }
 
   if (!producto) return null;
@@ -165,14 +137,14 @@ const ProductoModal: React.FC<ProductoModalProps> = ({ isOpen, producto, onClose
       </IonHeader>
       <IonContent className="modal-product-content">
         <IonCard className="modal-product-card">
-          <IonImg className="modal-product-image" src={producto.img} alt={producto.nombre} />
+          <IonImg src={producto.img} alt={producto.nombre} />
           <IonCardContent className="product-details-content">
             <IonCardTitle style={{ color: '#000' }}>{producto.nombre}</IonCardTitle>
             <IonText className="textInfo"><strong>Precio: </strong>₡{producto.precio}</IonText>
             <IonText className="textInfo"> <strong>Categoría: </strong> {producto.categoria} </IonText>
             <IonText className="textInfo"> <strong>Descripción: </strong> {producto.descripcion} </IonText>
             {vendedorCorreo && (
-              <IonText className="textInfo"> <IonIcon icon={call} /> <strong>Contacto:</strong> {vendedorCorreo} </IonText>
+              <IonText className="textInfo"> <IonIcon icon={callOutline} /> <strong>Contacto:</strong> {vendedorCorreo} </IonText>
             )}
             <IonButton onClick={contactSeller}>
               <IonIcon icon={personCircleOutline} />

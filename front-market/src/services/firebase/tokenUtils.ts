@@ -13,25 +13,31 @@ export const savePushToken = async (token: string, uid: string) => {
   }
 };
 
-export const getDeviceToken = async (): Promise<string | null> => {
+export const requestPushPermissions = async (): Promise<boolean> => {
   try {
     const result = await PushNotifications.requestPermissions();
-    if (result.receive !== 'granted') return null;
-
-    return new Promise((resolve, reject) => {
-      PushNotifications.addListener('registration', (token) => {
-        resolve(token.value);
-      });
-
-      PushNotifications.addListener('registrationError', (error) => {
-        console.error('Error registrando token:', error);
-        reject(null);
-      });
-
-      PushNotifications.register();
-    });
-  } catch (err) {
-    console.error('Error obteniendo device token:', err);
-    return null;
+    return result.receive === 'granted';
+  } catch (error) {
+    console.error('Error solicitando permisos de notificación:', error);
+    return false;
   }
+};
+
+/**
+ * Registra el dispositivo y retorna el token de notificaciones push.
+ * Solo debe llamarse si ya se tienen los permisos.
+ */
+export const getDeviceToken = async (): Promise<string | null> => {
+  return new Promise((resolve, reject) => {
+    PushNotifications.addListener('registration', (token) => {
+      resolve(token.value);
+    });
+
+    PushNotifications.addListener('registrationError', (error) => {
+      console.error('Error registrando token:', error);
+      reject(null);
+    });
+
+    PushNotifications.register();
+  });
 };

@@ -3,7 +3,7 @@ import { User, onAuthStateChanged, signOut } from "firebase/auth";
 import { auth, db } from "../services/firebase/config/firebaseConfig";
 import { doc, getDoc } from "firebase/firestore";
 import { IonAlert } from "@ionic/react";
-import { getDeviceToken } from "../services/firebase/tokenUtils";
+import { getDeviceToken, requestPushPermissions } from "../services/firebase/tokenUtils";
 
 interface UserContextType {
   user: User | null;
@@ -40,26 +40,32 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [showSessionAlert, setShowSessionAlert] = useState(false);
 
   useEffect(() => {
+
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      //const granted = await requestPushPermissions();
+      //if (!granted) {
+      //  console.log('Permisos denegados para notificaciones');
+      //  return;
+      //}
       if (user) {
         const uid = user.uid;
-        const currentDeviceToken = await getDeviceToken();
+        //const currentDeviceToken = await getDeviceToken();
 
-        if (!currentDeviceToken) {
-          console.warn("No se pudo obtener el token del dispositivo");
-          await signOut(auth);
-          setUser(null);
-          setRol(null);
-          setShowSessionAlert(true);
-          setLoading(false);
-          return;
-        }
+        //if (!currentDeviceToken) {
+        //  console.warn("No se pudo obtener el token del dispositivo");
+        //  await signOut(auth);
+        //  setUser(null);
+        //  setRol(null);
+        //  setShowSessionAlert(true);
+        //  setLoading(false);
+        //  return;
+        //}
 
         const docRef = doc(db, "userSessions", uid);
         const snap = await getDoc(docRef);
         const remoteDeviceToken = snap.exists() ? snap.data().deviceToken : null;
 
-        if (remoteDeviceToken === null || remoteDeviceToken === currentDeviceToken) {
+        if (true) { //remoteDeviceToken === null || remoteDeviceToken === currentDeviceToken
           console.log("No hay sesión activa o el token es igual, sesión válida");
           setUser(user);
           const userRol = await getRol(uid);

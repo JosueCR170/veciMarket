@@ -18,10 +18,11 @@ export const LogoutButton = () => {
     try {
       const user = auth.currentUser;
       if (user) {
-
+        // 🔴 Elimina sesión en Firestore
         await deleteDoc(doc(db, "userSessions", user.uid));
       }
 
+      // 🔴 Logout de Firebase + Capacitor
       await signOut(auth);
       await FirebaseAuthentication.signOut();
 
@@ -35,7 +36,6 @@ export const LogoutButton = () => {
 
   return (
     <>
-
       <IonButton className="bottonLogOut" onClick={() => setShowAlert(true)}>
         <IonIcon icon={logOut} slot="end" />
         <IonLabel >Cerrar sesion</IonLabel>

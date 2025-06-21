@@ -5,7 +5,7 @@ import { personOutline, lockClosedOutline } from 'ionicons/icons';
 import { auth, authReady, db } from "../../services/firebase/config/firebaseConfig";
 import { signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
-import { getDeviceToken, savePushToken } from "../../services/firebase/tokenUtils";
+import { getDeviceToken, savePushToken, requestPushPermissions } from "../../services/firebase/tokenUtils";
 import HandleGoogleSignIn from "./authenticationGoogle/authenticationGoogle";
 
 const LoginNormal: React.FC<{ onToggleForm: () => void }> = ({ onToggleForm }) => {
@@ -21,32 +21,40 @@ const LoginNormal: React.FC<{ onToggleForm: () => void }> = ({ onToggleForm }) =
     setError(null);
 
     try {
+      //const granted = await requestPushPermissions();
+      //if (!granted) {
+      //  setError('Permisos denegados para notificaciones');
+      //  return;
+      //}
+
       await authReady;
       const credential = await signInWithEmailAndPassword(auth, email, password);
       const uid = credential.user.uid;
 
-      const currentDeviceToken = await getDeviceToken();
-      if (!currentDeviceToken) {
-        await signOut(auth);
-        setError("No se pudo obtener el token del dispositivo.");
-        setLoading(false);
-        return;
-      }
+      //const currentDeviceToken = await getDeviceToken();
+      //if (!currentDeviceToken) {
+      //  await signOut(auth);
+      //  setError("No se pudo obtener el token del dispositivo.");
+      //  setLoading(false);
+      //  return;
+      //}
 
       const sessionDocRef = doc(db, "userSessions", uid);
       const sessionSnap = await getDoc(sessionDocRef);
       const existingDeviceToken = sessionSnap.exists() ? sessionSnap.data().deviceToken : null;
 
-      if (!existingDeviceToken || existingDeviceToken === currentDeviceToken) {
-        await savePushToken(currentDeviceToken, uid);
+      if (true) { //!existingDeviceToken || existingDeviceToken === currentDeviceToken
+        // ✅ No hay sesión activa o es el mismo dispositivo
+        //await savePushToken(currentDeviceToken, uid);
         history.replace("/home");
       } else {
+        // ❌ Otro dispositivo tiene la sesión activa
         await signOut(auth);
         setError("Ya tienes una sesión activa en otro dispositivo. Cierra sesión allí para poder ingresar.");
         history.push("/login");
       }
     } catch (error: any) {
-      await signOut(auth);
+      await signOut(auth); // prevenir sesión parcial
       setError(error.message || "Error al iniciar sesión.");
     } finally {
       setLoading(false);
@@ -95,7 +103,7 @@ const LoginNormal: React.FC<{ onToggleForm: () => void }> = ({ onToggleForm }) =
         </IonButton>
 
         <HandleGoogleSignIn />
-
+        {/*<GoogleSignIn/>*/}
       </div>
 
       <div style={{ textAlign: "center", marginTop: "1rem" }}>

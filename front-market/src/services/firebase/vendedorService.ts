@@ -1,4 +1,5 @@
-import { db } from "./config/firebaseConfig";
+// src/services/registerUser.ts
+import { auth, db } from "./config/firebaseConfig";
 import {
   doc,
   setDoc,
