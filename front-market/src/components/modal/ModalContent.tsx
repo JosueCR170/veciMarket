@@ -2,7 +2,7 @@ import { createAnimation, IonContent, IonHeader, IonIcon, IonItem, IonItemDivide
 
 import { useState, useEffect } from 'react';
 
-import { arrowBackOutline, chevronForwardOutline, shieldHalf, star, trendingUp, lockClosed, bagHandle, eye, compass } from 'ionicons/icons';
+import { arrowBackOutline, chevronForwardOutline, shieldHalf, star, trendingUp, lockClosed, bagHandle, eye, compass, cube } from 'ionicons/icons';
 import { LogoutButton } from "../authentication/logOut";
 import { TipoCuenta } from './submenus/tipoCuenta';
 import { useAuth } from '../../context/contextUsuario';
@@ -38,29 +38,35 @@ const ModalContent: React.FC<ModalContentProps> = ({ isOpen, onClose }) => {
 
 
   const configuraciones = [
-    {
-      titulo: 'Como usas ViceMarket',
-      items: [
-        { id: 'cuenta', icon: shieldHalf, label: 'Tipo de cuenta' },
-        { id: 'favoritos', icon: star, label: 'Productos favoritos' },
-        { id: 'actividad', icon: trendingUp, label: 'Tu actividad' },
-      ]
-    },
-    {
-      titulo: 'Como ven tu contenido',
-      items: [
-        { id: 'privacidad', icon: lockClosed, label: 'Privacidad de contenido' },
-        { id: 'vendidos', icon: bagHandle, label: 'Tus productos vendidos' },
-        { id: 'mas-visto', icon: eye, label: 'Contenido más visto' },
-      ]
-    },
-    {
-      titulo: 'Cuenta',
-      items: rol === 'ejecutivo'
+  {
+    titulo: 'Como usas ViceMarket',
+    items: [
+      { id: 'cuenta', icon: shieldHalf, label: 'Tipo de cuenta' },
+      { id: 'favoritos', icon: star, label: 'Productos favoritos' },
+      { id: 'actividad', icon: trendingUp, label: 'Tu actividad' },
+    ]
+  },
+
+  ...(rol === 'ejecutivo'
+    ? [{
+        titulo: 'Como ven tu contenido',
+        items: [
+          { id: 'privacidad', icon: lockClosed, label: 'Privacidad de contenido' },
+          { id: 'tus-productos', icon: cube, label: 'Tus productos' },
+          { id: 'vendidos', icon: bagHandle, label: 'Tus productos vendidos' },
+          { id: 'mas-visto', icon: eye, label: 'Contenido más visto' },
+        ]
+      }]
+    : []
+  ),
+  {
+    titulo: 'Cuenta',
+    items: rol === 'ejecutivo'
       ? [{ id: 'cambiar-ubicacion', icon: compass, label: 'Cambiar Ubicación' }]
       : []
-    },
-  ];
+  },
+];
+
 
   const enterAnimation = (baseEl: HTMLElement) => {
     const root = baseEl.shadowRoot || baseEl;
@@ -181,6 +187,9 @@ const ModalContent: React.FC<ModalContentProps> = ({ isOpen, onClose }) => {
            {submenuActivo === "favoritos" && <SubmodalHeader titulo='Productos Favoritos' onClose={cerrarSubmenu} />}
            {submenuActivo === "actividad" && <SubmodalHeader titulo='Tu actividad' onClose={cerrarSubmenu} />}
            {submenuActivo === "privacidad" && <SubmodalHeader titulo='Privacidad de contenido' onClose={cerrarSubmenu} />}
+
+            {submenuActivo === "tus-productos" && <SubmodalHeader titulo='Tus productos' onClose={cerrarSubmenu} />}
+
            {submenuActivo === "vendidos" && <SubmodalHeader titulo='Tus productos vendidos' onClose={cerrarSubmenu} />}
            {submenuActivo === "mas-visto" && <SubmodalHeader titulo='Contenido más visto' onClose={cerrarSubmenu} />}
            

@@ -2,23 +2,24 @@
   background-color: transparent !important;
 }
 
-ion-content.map-page-content {
-  --background: transparent !important;
+ion-searchbar::part(native) {
+  padding-left: 0px;
+}
+.productos-container {
+     height: 100%;
+    overflow-y: scroll;
+        BACKGROUND: #c0d9ef;
 }
 
-.productos-container {
-  max-height: 100vh; /* Por ejemplo, el 80% de la pantalla */
-  overflow-y: auto;
+ion-searchbar {
+  --padding-start: 0px;
 }
- 
 .productos-row {
-  justify-content: center;
   align-items: flex-start;
 }
 
 /* Asegurar que cada columna utilice toda su anchura asignada */
 ion-col {
-  
+  padding: 4px;
   width: 100%;
-
 }
