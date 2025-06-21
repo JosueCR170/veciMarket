@@ -53,6 +53,9 @@ ion-modal {
 
 .button-Contact {
   color: rgb(255, 255, 255);
+}
+
+.button-delete {
   --background: #e7211e;
   --background-activated: #961f1f;
 }

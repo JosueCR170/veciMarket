@@ -92,7 +92,7 @@ const ProductoAdminModal: React.FC<ProductoModalProps> = ({ isOpen, producto, on
                         <IonText className="textInfo"><strong>Precio:</strong> ₡{producto.precio}</IonText>
                         <IonText className="textInfo"><strong>Categoría:</strong> {producto.categoria}</IonText>
                         <IonText className="textInfo"><strong>Descripción:</strong> {producto.descripcion}</IonText>
-                        <IonButton onClick={() => setMostrarAlerta(true)} className="button-Contact">
+                        <IonButton onClick={() => setMostrarAlerta(true)} className="button-Contact button-delete">
                             <IonIcon icon={trashOutline} />
                             <strong className="text-Contact">Eliminar</strong>
                         </IonButton>
