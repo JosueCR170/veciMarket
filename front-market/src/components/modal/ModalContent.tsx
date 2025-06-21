@@ -9,6 +9,7 @@ import { useAuth } from '../../context/contextUsuario';
 import { SubmodalHeader } from './submenus/submodalHeader';
 // import { CambiarUbicacion } from './submenus/cambiarUbicacion';
 import { useHistory } from 'react-router';
+import { EliminarProducto } from './submenus/eliminarProducto';
 interface ModalContentProps {
   isOpen: boolean;
   onClose: () => void;
@@ -31,24 +32,24 @@ const ModalContent: React.FC<ModalContentProps> = ({ isOpen, onClose }) => {
   };
 
   useEffect(() => {
-  if (submenuActivo === "cambiar-ubicacion") {
-    history.replace('/cambiar-ubicacion');
-  }
-}, [submenuActivo]);
+    if (submenuActivo === "cambiar-ubicacion") {
+      history.replace('/cambiar-ubicacion');
+    }
+  }, [submenuActivo]);
 
 
   const configuraciones = [
-  {
-    titulo: 'Como usas ViceMarket',
-    items: [
-      { id: 'cuenta', icon: shieldHalf, label: 'Tipo de cuenta' },
-      { id: 'favoritos', icon: star, label: 'Productos favoritos' },
-      { id: 'actividad', icon: trendingUp, label: 'Tu actividad' },
-    ]
-  },
+    {
+      titulo: 'Como usas ViceMarket',
+      items: [
+        { id: 'cuenta', icon: shieldHalf, label: 'Tipo de cuenta' },
+        { id: 'favoritos', icon: star, label: 'Productos favoritos' },
+        { id: 'actividad', icon: trendingUp, label: 'Tu actividad' },
+      ]
+    },
 
-  ...(rol === 'ejecutivo'
-    ? [{
+    ...(rol === 'ejecutivo'
+      ? [{
         titulo: 'Como ven tu contenido',
         items: [
           { id: 'privacidad', icon: lockClosed, label: 'Privacidad de contenido' },
@@ -57,15 +58,15 @@ const ModalContent: React.FC<ModalContentProps> = ({ isOpen, onClose }) => {
           { id: 'mas-visto', icon: eye, label: 'Contenido más visto' },
         ]
       }]
-    : []
-  ),
-  {
-    titulo: 'Cuenta',
-    items: rol === 'ejecutivo'
-      ? [{ id: 'cambiar-ubicacion', icon: compass, label: 'Cambiar Ubicación' }]
       : []
-  },
-];
+    ),
+    {
+      titulo: 'Cuenta',
+      items: rol === 'ejecutivo'
+        ? [{ id: 'cambiar-ubicacion', icon: compass, label: 'Cambiar Ubicación' }]
+        : []
+    },
+  ];
 
 
   const enterAnimation = (baseEl: HTMLElement) => {
@@ -172,28 +173,28 @@ const ModalContent: React.FC<ModalContentProps> = ({ isOpen, onClose }) => {
         </IonContent>
         <IonModal
           isOpen={!!submenuActivo}
-         onDidDismiss={() => {
-    cerrarSubmenu();
-    setModalAbierto(false);
-  }}
+          onDidDismiss={() => {
+            cerrarSubmenu();
+            setModalAbierto(false);
+          }}
           enterAnimation={enterAnimation}
           leaveAnimation={leaveAnimation}
           className="custom-font"
           backdropDismiss={false}
-           onDidPresent={() => setModalAbierto(true)}
+          onDidPresent={() => setModalAbierto(true)}
         >
           {submenuActivo === "cuenta" && <TipoCuenta onClose={cerrarSubmenu} />}
 
-           {submenuActivo === "favoritos" && <SubmodalHeader titulo='Productos Favoritos' onClose={cerrarSubmenu} />}
-           {submenuActivo === "actividad" && <SubmodalHeader titulo='Tu actividad' onClose={cerrarSubmenu} />}
-           {submenuActivo === "privacidad" && <SubmodalHeader titulo='Privacidad de contenido' onClose={cerrarSubmenu} />}
+          {submenuActivo === "favoritos" && <SubmodalHeader titulo='Productos Favoritos' onClose={cerrarSubmenu} />}
+          {submenuActivo === "actividad" && <SubmodalHeader titulo='Tu actividad' onClose={cerrarSubmenu} />}
+          {submenuActivo === "privacidad" && <SubmodalHeader titulo='Privacidad de contenido' onClose={cerrarSubmenu} />}
 
-            {submenuActivo === "tus-productos" && <SubmodalHeader titulo='Tus productos' onClose={cerrarSubmenu} />}
+          {submenuActivo === "tus-productos" && <EliminarProducto onClose={cerrarSubmenu} />}
 
-           {submenuActivo === "vendidos" && <SubmodalHeader titulo='Tus productos vendidos' onClose={cerrarSubmenu} />}
-           {submenuActivo === "mas-visto" && <SubmodalHeader titulo='Contenido más visto' onClose={cerrarSubmenu} />}
-           
-           {/* {submenuActivo === "cambiar-ubicacion" && <CambiarUbicacion />} */}
+          {submenuActivo === "vendidos" && <SubmodalHeader titulo='Tus productos vendidos' onClose={cerrarSubmenu} />}
+          {submenuActivo === "mas-visto" && <SubmodalHeader titulo='Contenido más visto' onClose={cerrarSubmenu} />}
+
+          {/* {submenuActivo === "cambiar-ubicacion" && <CambiarUbicacion />} */}
 
         </IonModal>
       </IonModal>
