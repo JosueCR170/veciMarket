@@ -84,7 +84,7 @@ const VerProductos: React.FC<{ idVendedor: string }> = ({ idVendedor }) => {
 
       <IonItem style={{ flex: 1, margin: 0, '--background': 'white', color: 'black' }}>
          <IonSearchbar
-         style={{ '--background': 'white', color: 'black', margin: 10, }}
+         style={{ '--background': 'white', color: 'black', margin: 10,'--padding-start': '0px'}}
           value={searchTerm}
           placeholder="Buscar"
           onIonInput={(e) => setSearchTerm(e.target.value ?? '')}

@@ -34,10 +34,10 @@ const CardProducto: React.FC<CardProductoProps> = ({ producto, onClick }) => {
           <IonImg className="imgProducto" src={producto.img} />
         </div>
         <div className="text-content">
-          <IonCardHeader>
+          <IonCardHeader className="product-header">
             <IonText className="product-name">{producto.nombre}</IonText>
           </IonCardHeader>
-          <IonCardContent>
+          <IonCardContent className="product-description">
             <IonText className="product-info">
               ${producto.precio} - {producto.categoria}
             </IonText>

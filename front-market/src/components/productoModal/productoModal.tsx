@@ -137,18 +137,18 @@ const ProductoModal: React.FC<ProductoModalProps> = ({ isOpen, producto, onClose
       </IonHeader>
       <IonContent className="modal-product-content">
         <IonCard className="modal-product-card">
-          <IonImg src={producto.img} alt={producto.nombre} />
+          <IonImg className='modal-product-image' src={producto.img} alt={producto.nombre} />
           <IonCardContent className="product-details-content">
             <IonCardTitle style={{ color: '#000' }}>{producto.nombre}</IonCardTitle>
             <IonText className="textInfo"><strong>Precio: </strong>₡{producto.precio}</IonText>
             <IonText className="textInfo"> <strong>Categoría: </strong> {producto.categoria} </IonText>
             <IonText className="textInfo"> <strong>Descripción: </strong> {producto.descripcion} </IonText>
             {vendedorCorreo && (
-              <IonText className="textInfo"> <IonIcon icon={callOutline} /> <strong>Contacto:</strong> {vendedorCorreo} </IonText>
+              <IonText className="textInfo"> <strong>Contacto:</strong> {vendedorCorreo} </IonText>
             )}
-            <IonButton onClick={contactSeller}>
+            <IonButton onClick={contactSeller} className=" button-Contact">
               <IonIcon icon={personCircleOutline} />
-              <strong>Vendedor</strong>
+              <strong className='text-Contact'>Vendedor</strong>
             </IonButton>
 
           </IonCardContent>
