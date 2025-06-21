@@ -3,11 +3,11 @@ import { IonList, IonItem, IonTextarea, IonIcon } from '@ionic/react';
 import { send } from 'ionicons/icons';
 import { useAuth } from '../../context/contextUsuario';
 import { db } from '../../services/firebase/config/firebaseConfig';
-import { collection, query, orderBy, onSnapshot} from 'firebase/firestore';
+import { collection, query, orderBy, onSnapshot } from 'firebase/firestore';
 import { ChatPreview } from './chatPreviewInterface';
-import { getDatabase, ref, onDisconnect, set} from 'firebase/database';
+import { getDatabase, ref, onDisconnect, set } from 'firebase/database';
 import { getApp } from 'firebase/app';
-import { convertDate ,saveMessage, detectPresence, sendPushNotification } from '../../services/firebase/chatService';
+import { convertDate, saveMessage, detectPresence, sendPushNotification } from '../../services/firebase/chatService';
 
 const realtimeDb = getDatabase(getApp());
 
