@@ -67,7 +67,7 @@ export async function detectPresence(chatId: string, otherUserId: string): Promi
 
 
 // --- 3. Enviar la notificación push ---
-export async function sendPushNotification(otherUserId: string, chatId: string, text: string, senderEmail: string, senderId: string) {
+export async function sendPushNotification(otherUserId: string, chatId: string, text: string, senderName: string, senderId: string) {
     console.log(`[sendPushNotification] Enviando notificación a ${otherUserId}`);
     const sessionDocRef = doc(db, "userSessions", otherUserId);
     const sessionSnap = await getDoc(sessionDocRef);
@@ -87,7 +87,7 @@ export async function sendPushNotification(otherUserId: string, chatId: string, 
 
     const payload = {
         token: existingDeviceToken,
-        title: `Nuevo mensaje de ${senderEmail}`,
+        title: `Nuevo mensaje de ${senderName}`,
         body: text,
         data: { chatId, senderId },
     };

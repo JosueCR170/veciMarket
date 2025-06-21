@@ -116,7 +116,7 @@ const ProductoModal: React.FC<ProductoModalProps> = ({ isOpen, producto, onClose
 
     const shouldNotify = await detectPresence(chatId, producto?.idVendedor!);
     if (shouldNotify) {
-      await sendPushNotification(producto?.idVendedor!, chatId, message, user?.email!, user?.uid!);
+      await sendPushNotification(producto?.idVendedor!, chatId, message, user?.displayName!, user?.uid!);
     }
   }
 

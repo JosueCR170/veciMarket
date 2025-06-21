@@ -89,7 +89,7 @@ const Chat: React.FC<ChatPreview> = (chatPreview) => {
             return;
         }
 
-        await sendPushNotification(otherUserId, chatId, text, user?.email || "Usuario", userId);
+        await sendPushNotification(otherUserId, chatId, text, user?.displayName || "Usuario", userId);
     }
 
 

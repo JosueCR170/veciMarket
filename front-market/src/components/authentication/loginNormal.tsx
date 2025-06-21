@@ -21,31 +21,31 @@ const LoginNormal: React.FC<{ onToggleForm: () => void }> = ({ onToggleForm }) =
     setError(null);
 
     try {
-      //const granted = await requestPushPermissions();
-      //if (!granted) {
-      //  setError('Permisos denegados para notificaciones');
-      //  return;
-      //}
+      const granted = await requestPushPermissions();
+      if (!granted) {
+       setError('Permisos denegados para notificaciones');
+       return;
+      }
 
       await authReady;
       const credential = await signInWithEmailAndPassword(auth, email, password);
       const uid = credential.user.uid;
 
-      //const currentDeviceToken = await getDeviceToken();
-      //if (!currentDeviceToken) {
-      //  await signOut(auth);
-      //  setError("No se pudo obtener el token del dispositivo.");
-      //  setLoading(false);
-      //  return;
-      //}
+      const currentDeviceToken = await getDeviceToken();
+      if (!currentDeviceToken) {
+       await signOut(auth);
+       setError("No se pudo obtener el token del dispositivo.");
+       setLoading(false);
+       return;
+      }
 
       const sessionDocRef = doc(db, "userSessions", uid);
       const sessionSnap = await getDoc(sessionDocRef);
       const existingDeviceToken = sessionSnap.exists() ? sessionSnap.data().deviceToken : null;
 
-      if (true) { //!existingDeviceToken || existingDeviceToken === currentDeviceToken
+      if (!existingDeviceToken || existingDeviceToken === currentDeviceToken) { 
         // ✅ No hay sesión activa o es el mismo dispositivo
-        //await savePushToken(currentDeviceToken, uid);
+        await savePushToken(currentDeviceToken, uid);
         history.replace("/home");
       } else {
         // ❌ Otro dispositivo tiene la sesión activa
