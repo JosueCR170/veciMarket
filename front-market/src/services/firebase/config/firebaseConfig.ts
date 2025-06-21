@@ -22,7 +22,6 @@ const vertexAI = getVertexAI(app);
 const model = getGenerativeModel(vertexAI, { model: 'gemini-2.0-flash' });
 const storage = getStorage(app);
 
-// 🛡️ Protección contra errores en entornos de test
 let messaging: ReturnType<typeof getMessaging> | null = null;
 if (typeof window !== 'undefined' && 'Notification' in window && 'serviceWorker' in navigator) {
   messaging = getMessaging(app);
